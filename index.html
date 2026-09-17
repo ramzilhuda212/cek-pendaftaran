@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cek Pendaftaran & Portal Admin - KEMBARANAS III</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- SheetJS untuk Export Excel -->
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+  <style>
+    @media print {
+      body * { visibility: hidden; }
+      #kartuArea, #kartuArea * { visibility: visible; }
+      #kartuArea { position: absolute; left: 0; top: 0; width: 100%; }
+    }
+  </style>
+</head>
+<body class="bg-amber-50/50 min-h-screen font-sans">
+  
+  <!-- NAVBAR UTAMA -->
+  <nav class="bg-amber-950 text-white shadow-md">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-compass text-amber-400 text-2xl"></i>
+        <span class="font-bold text-lg tracking-wide">KEMBARANAS III - 2026</span>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="switchTab('userTab')" id="btnUserTab" class="px-4 py-2 rounded-xl text-xs font-bold bg-amber-800 text-white transition-all shadow">
+          <i class="fa-solid fa-magnifying-glass mr-1"></i> Cek Pendaftaran
+        </button>
+        <button onclick="switchTab('adminTab')" id="btnAdminTab" class="px-4 py-2 rounded-xl text-xs font-bold bg-amber-900/40 text-amber-200 hover:bg-amber-800 transition-all">
+          <i class="fa-solid fa-user-lock mr-1"></i> Portal Admin
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-5xl mx-auto p-4 sm:p-6">
+    
+    <!-- TAB 1: CEK PENDAFTARAN (PUBLIK) -->
+    <div id="userTab" class="space-y-6">
+      <div class="bg-white p-6 rounded-3xl shadow-lg border border-amber-200 text-center">
+        <h2 class="text-2xl font-extrabold text-amber-950 mb-2">Cek Status Pendaftaran</h2>
+        <p class="text-xs text-gray-600 mb-6">Masukkan Nama Lengkap, Nomor KTA, atau Asal Sekolah yang terdaftar</p>
+        
+        <form onsubmit="handleSearch(event)" class="max-w-md mx-auto flex gap-2">
+          <input type="text" id="searchKeyword" required placeholder="Ketik Nama / KTA / Sekolah..." 
+                 class="w-full px-4 py-3 rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 uppercase font-medium text-sm">
+          <button type="submit" id="btnCari" class="bg-amber-800 hover:bg-amber-900 text-white px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 shadow-md">
+            <i class="fa-solid fa-search"></i> Cari
+          </button>
+        </form>
+      </div>
+
+      <!-- Hasil Pencarian -->
+      <div id="searchResult" class="hidden space-y-4"></div>
+    </div>
+
+    <!-- TAB 2: PORTAL ADMIN -->
+    <div id="adminTab" class="hidden space-y-6">
+      <!-- FORM LOGIN ADMIN -->
+      <div id="adminLoginForm" class="max-w-md mx-auto bg-white p-6 sm:p-8 rounded-3xl shadow-xl border border-amber-200">
+        <div class="text-center mb-6">
+          <i class="fa-solid fa-shield-halved text-amber-800 text-4xl mb-2"></i>
+          <h2 class="text-xl font-bold text-gray-800">Login Administrator</h2>
+        </div>
+        <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Username</label>
+            <input type="text" id="adminUser" required class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-amber-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Password</label>
+            <input type="password" id="adminPass" required class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-amber-500">
+          </div>
+          <button type="submit" id="btnLogin" class="w-full bg-amber-800 hover:bg-amber-900 text-white font-bold py-3 rounded-xl text-sm transition-all shadow-md">
+            Masuk Portal Admin
+          </button>
+        </form>
+      </div>
+
+      <!-- DASHBOARD ADMIN (REKAP DATA) -->
+      <div id="adminDashboard" class="hidden space-y-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-4 rounded-2xl border border-amber-200 gap-4 shadow-sm">
+          <div>
+            <h3 class="font-bold text-lg text-amber-950">Rekap Data Pendaftaran</h3>
+            <p class="text-xs text-gray-500">Seluruh data yang telah tersimpan di Google Spreadsheet</p>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="exportToExcel()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 shadow">
+              <i class="fa-solid fa-file-excel"></i> Unduh Excel
+            </button>
+            <button onclick="logoutAdmin()" class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">
+              Keluar
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-amber-200 overflow-x-auto shadow">
+          <table id="tableAdmin" class="w-full text-left border-collapse text-xs">
+            <thead id="tableHeader" class="bg-amber-100/70 border-b border-amber-200 text-amber-950 uppercase font-bold"></thead>
+            <tbody id="tableBody" class="divide-y divide-gray-100"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL CETAK KARTU PENDAFTAR -->
+  <div id="modalKartu" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex justify-center items-center p-4 z-50">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full relative shadow-2xl">
+      <button onclick="closeModalKartu()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700"><i class="fa-solid fa-xmark text-xl"></i></button>
+
+      <!-- Area Kartu Pendaftar -->
+      <div id="kartuArea" class="border-2 border-amber-800 rounded-2xl p-5 bg-gradient-to-b from-amber-50 to-white relative overflow-hidden space-y-4">
+        <div class="flex items-center gap-3 border-b-2 border-amber-800 pb-3">
+          <i class="fa-solid fa-award text-amber-800 text-3xl"></i>
+          <div>
+            <h4 class="font-extrabold text-amber-950 text-sm leading-tight uppercase">KARTU PESERTA KEMBARANAS III</h4>
+            <p class="text-[10px] text-amber-800 font-bold">SAKO SIT INDONESIA - 2026</p>
+          </div>
+        </div>
+
+        <div class="space-y-2 text-xs text-gray-800">
+          <div class="flex justify-between border-b pb-1"><span class="text-gray-500">ID Registrasi:</span><span id="cardId" class="font-bold text-amber-900"></span></div>
+          <div class="flex justify-between border-b pb-1"><span class="text-gray-500">Nama Lengkap:</span><span id="cardNama" class="font-bold uppercase"></span></div>
+          <div class="flex justify-between border-b pb-1"><span class="text-gray-500">Status / Peran:</span><span id="cardStatus" class="font-bold"></span></div>
+          <div class="flex justify-between border-b pb-1"><span class="text-gray-500">Pangkalan:</span><span id="cardSekolah" class="font-bold uppercase"></span></div>
+          <div class="flex justify-between border-b pb-1"><span class="text-gray-500">Provinsi / Kota:</span><span id="cardLokasi" class="font-bold"></span></div>
+          <div class="flex justify-between"><span class="text-gray-500">Ukuran Kaos:</span><span id="cardKaos" class="font-bold"></span></div>
+        </div>
+
+        <div class="pt-2 text-center border-t border-dashed border-amber-300">
+          <p class="text-[9px] text-gray-400 italic">Tunjukkan kartu ini saat pendaftaran ulang di lokasi perkemahan.</p>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <button onclick="window.print()" class="w-full bg-amber-800 hover:bg-amber-900 text-white font-bold py-2.5 rounded-xl text-xs flex justify-center items-center gap-2 shadow">
+          <i class="fa-solid fa-print"></i> Cetak / Unduh PDF
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // TEMPELKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI SINI
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx.../exec"; 
+    
+    let rawAdminData = [];
+
+    function switchTab(tabName) {
+      document.getElementById('userTab').classList.toggle('hidden', tabName !== 'userTab');
+      document.getElementById('adminTab').classList.toggle('hidden', tabName !== 'adminTab');
+      
+      const btnUser = document.getElementById('btnUserTab');
+      const btnAdmin = document.getElementById('btnAdminTab');
+
+      if (tabName === 'userTab') {
+        btnUser.className = "px-4 py-2 rounded-xl text-xs font-bold bg-amber-800 text-white transition-all shadow";
+        btnAdmin.className = "px-4 py-2 rounded-xl text-xs font-bold bg-amber-900/40 text-amber-200 hover:bg-amber-800 transition-all";
+      } else {
+        btnAdmin.className = "px-4 py-2 rounded-xl text-xs font-bold bg-amber-800 text-white transition-all shadow";
+        btnUser.className = "px-4 py-2 rounded-xl text-xs font-bold bg-amber-900/40 text-amber-200 hover:bg-amber-800 transition-all";
+      }
+    }
+
+    async function handleSearch(e) {
+      e.preventDefault();
+      const kw = document.getElementById('searchKeyword').value;
+      const btn = document.getElementById('btnCari');
+      const resBox = document.getElementById('searchResult');
+
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>`;
+      resBox.classList.add('hidden');
+
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'search', keyword: kw })
+        });
+        const res = await response.json();
+
+        resBox.innerHTML = '';
+        resBox.classList.remove('hidden');
+
+        if (res.success) {
+          res.data.forEach(item => {
+            resBox.innerHTML += `
+              <div class="bg-white p-6 rounded-2xl shadow-md border border-amber-200 space-y-4">
+                <div class="flex justify-between items-start border-b pb-3">
+                  <div>
+                    <span class="bg-amber-100 text-amber-900 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase">${item.jenisPendaftaran}</span>
+                    <h3 class="text-lg font-bold text-gray-800 mt-1">${item.nama !== '-' ? item.nama : 'Pendaftaran Kolektif'}</h3>
+                    <p class="text-xs text-gray-500">${item.asalSekolah} • ${item.provinsi}</p>
+                  </div>
+                  <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-lg border border-emerald-200">Terdaftar</span>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                  <div><span class="text-gray-400 block">KTA</span><span class="font-semibold">${item.nomorKta}</span></div>
+                  <div><span class="text-gray-400 block">Peran</span><span class="font-semibold">${item.statusPendaftaran}</span></div>
+                  <div><span class="text-gray-400 block">Ukuran Kaos</span><span class="font-semibold">${item.ukuranKaos}</span></div>
+                  <div><span class="text-gray-400 block">No. HP</span><span class="font-semibold">${item.nomorHp}</span></div>
+                </div>
+
+                <div class="flex flex-wrap gap-2 pt-2 border-t">
+                  ${item.linkBukti !== '-' ? `<a href="${item.linkBukti}" target="_blank" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5"><i class="fa-solid fa-image"></i> Bukti Transfer</a>` : ''}
+                  ${item.linkKolektif !== '-' ? `<a href="${item.linkKolektif}" target="_blank" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5"><i class="fa-solid fa-file-excel"></i> Berkas Kolektif</a>` : ''}
+                  <button onclick="openModalKartu('${item.id}', '${item.nama}', '${item.statusPendaftaran}', '${item.asalSekolah}', '${item.provinsi}', '${item.kotaKabupaten}', '${item.ukuranKaos}')" class="bg-amber-800 hover:bg-amber-900 text-white px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 ml-auto shadow-sm">
+                    <i class="fa-solid fa-id-card"></i> Unduh Kartu Peserta
+                  </button>
+                </div>
+              </div>
+            `;
+          });
+        } else {
+          resBox.innerHTML = `
+            <div class="bg-white p-6 rounded-2xl text-center border border-red-200 text-red-600">
+              <i class="fa-solid fa-circle-xmark text-3xl mb-2"></i>
+              <p class="text-sm font-semibold">${res.message}</p>
+            </div>
+          `;
+        }
+      } catch (err) {
+        alert("Gagal terhubung ke server: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-search"></i> Cari`;
+      }
+    }
+
+    function openModalKartu(id, nama, status, sekolah, prov, kota, kaos) {
+      document.getElementById('cardId').innerText = id;
+      document.getElementById('cardNama').innerText = nama;
+      document.getElementById('cardStatus').innerText = status;
+      document.getElementById('cardSekolah').innerText = sekolah;
+      document.getElementById('cardLokasi').innerText = `${kota}, ${prov}`;
+      document.getElementById('cardKaos').innerText = kaos;
+      document.getElementById('modalKartu').classList.remove('hidden');
+    }
+
+    function closeModalKartu() {
+      document.getElementById('modalKartu').classList.add('hidden');
+    }
+
+    async function handleAdminLogin(e) {
+      e.preventDefault();
+      const u = document.getElementById('adminUser').value;
+      const p = document.getElementById('adminPass').value;
+      const btn = document.getElementById('btnLogin');
+
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Memeriksa...`;
+
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'loginAdmin', username: u, password: p })
+        });
+        const res = await response.json();
+
+        if (res.success) {
+          document.getElementById('adminLoginForm').classList.add('hidden');
+          document.getElementById('adminDashboard').classList.remove('hidden');
+          loadAdminData();
+        } else {
+          alert(res.message);
+        }
+      } catch (err) {
+        alert("Terjadi kesalahan login: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Masuk Portal Admin";
+      }
+    }
+
+    async function loadAdminData() {
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'getAdminData' })
+        });
+        const res = await response.json();
+
+        if (res.success) {
+          rawAdminData = [res.headers, ...res.rows];
+
+          const thead = document.getElementById('tableHeader');
+          thead.innerHTML = '<tr>' + res.headers.map(h => `<th class="px-4 py-3">${h}</th>`).join('') + '</tr>';
+
+          const tbody = document.getElementById('tableBody');
+          tbody.innerHTML = res.rows.map(row => 
+            `<tr class="hover:bg-amber-50/50">` + 
+              row.map(cell => `<td class="px-4 py-3 border-b">${String(cell).startsWith('http') ? `<a href="${cell}" target="_blank" class="text-blue-600 font-bold underline">Buka Link</a>` : cell}</td>`).join('') + 
+            `</tr>`
+          ).join('');
+        }
+      } catch (err) {
+        alert("Gagal memuat data: " + err.message);
+      }
+    }
+
+    function exportToExcel() {
+      if (rawAdminData.length === 0) return alert("Data tidak tersedia.");
+      const worksheet = XLSX.utils.aoa_to_sheet(rawAdminData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Rekap Pendaftaran");
+      XLSX.writeFile(workbook, "Rekap_Pendaftaran_KEMBARANAS_III.xlsx");
+    }
+
+    function logoutAdmin() {
+      document.getElementById('adminDashboard').classList.add('hidden');
+      document.getElementById('adminLoginForm').classList.remove('hidden');
+      document.getElementById('adminUser').value = '';
+      document.getElementById('adminPass').value = '';
+    }
+  </script>
+</body>
+</html>
