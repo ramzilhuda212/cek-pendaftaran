@@ -79,6 +79,9 @@
         <div class="absolute -right-8 -bottom-8 text-amber-500/10 text-9xl pointer-events-none">
           <i class="fa-solid fa-campground"></i>
         </div>
+        <div class="absolute right-1/4 -top-8 text-amber-400/5 text-8xl pointer-events-none">
+          <i class="fa-solid fa-fire-flame-curved"></i>
+        </div>
 
         <div class="relative z-10 max-w-2xl space-y-3">
           <div class="inline-flex items-center gap-2 bg-amber-500/20 border border-amber-400/30 px-3 py-1 rounded-full text-xs font-semibold text-amber-300">
@@ -165,12 +168,14 @@
           
           <!-- Stat Cards -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            
             <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md flex items-center justify-between relative overflow-hidden">
               <div class="space-y-1">
                 <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Total Terdaftar</p>
                 <h3 id="statTotal" class="text-3xl font-black text-amber-950">0</h3>
+                <span class="text-[10px] text-amber-800 font-semibold bg-amber-50 px-2 py-0.5 rounded-md">Seluruh Pendaftar</span>
               </div>
-              <div class="w-14 h-14 rounded-2xl bg-amber-900 text-amber-300 flex items-center justify-center text-2xl shadow-md">
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-800 to-amber-950 text-amber-300 flex items-center justify-center text-2xl shadow-md">
                 <i class="fa-solid fa-fire-flame-curved"></i>
               </div>
             </div>
@@ -179,8 +184,9 @@
               <div class="space-y-1">
                 <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Jumlah Peserta</p>
                 <h3 id="statPeserta" class="text-3xl font-black text-blue-950">0</h3>
+                <span class="text-[10px] text-blue-800 font-semibold bg-blue-50 px-2 py-0.5 rounded-md">Penggalang / Penegak</span>
               </div>
-              <div class="w-14 h-14 rounded-2xl bg-blue-800 text-blue-200 flex items-center justify-center text-2xl shadow-md">
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-700 to-blue-900 text-blue-200 flex items-center justify-center text-2xl shadow-md">
                 <i class="fa-solid fa-child-reaching"></i>
               </div>
             </div>
@@ -189,42 +195,52 @@
               <div class="space-y-1">
                 <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Pembina Pendamping</p>
                 <h3 id="statPembina" class="text-3xl font-black text-emerald-950">0</h3>
+                <span class="text-[10px] text-emerald-800 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md">Pendamping Kontingen</span>
               </div>
-              <div class="w-14 h-14 rounded-2xl bg-emerald-800 text-emerald-200 flex items-center justify-center text-2xl shadow-md">
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-700 to-emerald-900 text-emerald-200 flex items-center justify-center text-2xl shadow-md">
                 <i class="fa-solid fa-user-shield"></i>
               </div>
             </div>
+
           </div>
 
           <!-- Filter & Action Panel -->
           <div class="bg-white p-5 sm:p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
+            
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
               <div>
                 <h3 class="font-extrabold text-amber-950 text-base flex items-center gap-2">
                   <i class="fa-solid fa-filter text-amber-800"></i> Filter & Rekapitulasi Data
                 </h3>
+                <p class="text-xs text-gray-500">Filter data secara spesifik lalu unduh hasilnya</p>
               </div>
+
               <div class="flex items-center gap-2 w-full sm:w-auto">
-                <button onclick="exportToExcel()" class="flex-1 sm:flex-none bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow">
+                <button onclick="exportToExcel()" class="flex-1 sm:flex-none bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow transition-all">
                   <i class="fa-solid fa-file-excel"></i> Unduh Excel
                 </button>
-                <button onclick="exportToPDF()" class="flex-1 sm:flex-none bg-red-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow">
+                <button onclick="exportToPDF()" class="flex-1 sm:flex-none bg-red-700 hover:bg-red-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow transition-all">
                   <i class="fa-solid fa-file-pdf"></i> Unduh PDF
                 </button>
-                <button onclick="logoutAdmin()" class="bg-slate-200 text-slate-700 px-3 py-2.5 rounded-xl text-xs font-bold shadow">
+                <button onclick="logoutAdmin()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-2.5 rounded-xl text-xs font-bold shadow transition-all">
                   <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
               </div>
             </div>
 
+            <!-- Select Filters -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
               <div>
                 <label class="block font-bold text-gray-700 mb-1">Provinsi</label>
-                <select id="filterProvinsi" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white font-medium"><option value="">Semua Provinsi</option></select>
+                <select id="filterProvinsi" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white font-medium">
+                  <option value="">Semua Provinsi</option>
+                </select>
               </div>
               <div>
                 <label class="block font-bold text-gray-700 mb-1">Kota / Kabupaten</label>
-                <select id="filterKota" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white font-medium"><option value="">Semua Kota/Kab</option></select>
+                <select id="filterKota" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white font-medium">
+                  <option value="">Semua Kota/Kab</option>
+                </select>
               </div>
               <div>
                 <label class="block font-bold text-gray-700 mb-1">Jenis Kelamin</label>
@@ -236,9 +252,12 @@
               </div>
               <div>
                 <label class="block font-bold text-gray-700 mb-1">Ukuran Kaos</label>
-                <select id="filterKaos" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white font-medium"><option value="">Semua Ukuran</option></select>
+                <select id="filterKaos" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white font-medium">
+                  <option value="">Semua Ukuran</option>
+                </select>
               </div>
             </div>
+
           </div>
 
           <!-- Table Admin -->
@@ -369,7 +388,7 @@
       }
     }
 
-    // SEARCH PUBLIK (PERBAIKAN FITUR AMBIL NAMA PEMBINA / PESERTA)
+    // SEARCH PUBLIK
     async function handleSearch(e) {
       e.preventDefault();
       const kw = document.getElementById('searchKeyword').value;
@@ -390,14 +409,9 @@
         resBox.innerHTML = '';
         resBox.classList.remove('hidden');
 
-        if (res.success && res.data.length > 0) {
+        if (res.success) {
           res.data.forEach(item => {
             const isPembina = String(item.statusPendaftaran).toLowerCase().includes('pembina');
-            
-            // Logika Fallback Pengambilan Nama Lengkap
-            const namaLengkapFinal = item.nama || (isPembina ? item.namaPembina : item.namaPeserta) || '-';
-            const namaSafe = namaLengkapFinal.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-
             const badgeStyle = isPembina 
               ? 'bg-emerald-100 text-emerald-900 border-emerald-300' 
               : 'bg-blue-100 text-blue-900 border-blue-300';
@@ -410,7 +424,7 @@
                     <span class="${badgeStyle} border text-[10px] font-black px-3 py-1 rounded-full uppercase inline-flex items-center gap-1.5 shadow-xs">
                       <i class="fa-solid ${roleIcon}"></i> ${item.statusPendaftaran || 'Peserta'}
                     </span>
-                    <h3 class="text-lg font-extrabold text-amber-950 mt-2 uppercase tracking-wide">${namaLengkapFinal}</h3>
+                    <h3 class="text-lg font-extrabold text-amber-950 mt-2 uppercase tracking-wide">${item.nama}</h3>
                   </div>
                   <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-xl border border-emerald-200 flex items-center gap-1">
                     <i class="fa-solid fa-circle-check"></i> Terverifikasi
@@ -419,15 +433,15 @@
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
                   <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100"><span class="text-gray-400 block text-[10px]">Jenis Kelamin</span><span class="font-bold text-slate-800">${item.jenisKelamin || '-'}</span></div>
-                  <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100"><span class="text-gray-400 block text-[10px]">Asal Sekolah / Pangkalan</span><span class="font-bold uppercase text-slate-800">${item.asalSekolah || '-'}</span></div>
-                  <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100"><span class="text-gray-400 block text-[10px]">Ukuran Kaos</span><span class="font-bold text-slate-800">${item.ukuranKaos || '-'}</span></div>
-                  <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100"><span class="text-gray-400 block text-[10px]">Provinsi</span><span class="font-bold text-slate-800">${item.provinsi || '-'}</span></div>
-                  <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100 col-span-2 sm:col-span-1"><span class="text-gray-400 block text-[10px]">Kota / Kabupaten</span><span class="font-bold text-slate-800">${item.kotaKabupaten || '-'}</span></div>
+                  <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100"><span class="text-gray-400 block text-[10px]">Asal Sekolah / Pangkalan</span><span class="font-bold uppercase text-slate-800">${item.asalSekolah}</span></div>
+                  <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100"><span class="text-gray-400 block text-[10px]">Ukuran Kaos</span><span class="font-bold text-slate-800">${item.ukuranKaos}</span></div>
+                  <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100"><span class="text-gray-400 block text-[10px]">Provinsi</span><span class="font-bold text-slate-800">${item.provinsi}</span></div>
+                  <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100 col-span-2 sm:col-span-1"><span class="text-gray-400 block text-[10px]">Kota / Kabupaten</span><span class="font-bold text-slate-800">${item.kotaKabupaten}</span></div>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100">
-                  ${item.linkBukti && item.linkBukti !== '-' ? `<a href="${item.linkBukti}" target="_blank" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all"><i class="fa-solid fa-receipt text-amber-800"></i> Bukti Pembayaran</a>` : ''}
-                  <button onclick="openModalKartu('${item.id}', '${namaSafe}', '${item.statusPendaftaran}', '${item.jenisKelamin}', '${item.asalSekolah}', '${item.provinsi}', '${item.kotaKabupaten}', '${item.ukuranKaos}')" class="bg-amber-900 hover:bg-amber-950 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 ml-auto shadow-md transition-all">
+                  ${item.linkBukti !== '-' ? `<a href="${item.linkBukti}" target="_blank" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all"><i class="fa-solid fa-receipt text-amber-800"></i> Bukti Pembayaran</a>` : ''}
+                  <button onclick="openModalKartu('${item.id}', '${item.nama}', '${item.statusPendaftaran}', '${item.jenisKelamin}', '${item.asalSekolah}', '${item.provinsi}', '${item.kotaKabupaten}', '${item.ukuranKaos}')" class="bg-amber-900 hover:bg-amber-950 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 ml-auto shadow-md transition-all">
                     <i class="fa-solid fa-id-card"></i> Cetak Lembar Pendaftaran
                   </button>
                 </div>
@@ -438,7 +452,7 @@
           resBox.innerHTML = `
             <div class="bg-white p-8 rounded-3xl text-center border border-red-200 text-red-600 space-y-2 shadow-sm">
               <i class="fa-solid fa-circle-xmark text-4xl mb-1"></i>
-              <p class="text-sm font-bold">${res.message || 'Data pendaftaran tidak ditemukan.'}</p>
+              <p class="text-sm font-bold">${res.message}</p>
             </div>
           `;
         }
@@ -451,14 +465,14 @@
     }
 
     function openModalKartu(id, nama, status, jk, sekolah, prov, kota, kaos) {
-      document.getElementById('cardId').innerText = id || '-';
-      document.getElementById('cardNama').innerText = nama || '-';
-      document.getElementById('cardStatus').innerText = status || '-';
+      document.getElementById('cardId').innerText = id;
+      document.getElementById('cardNama').innerText = nama;
+      document.getElementById('cardStatus').innerText = status;
       document.getElementById('cardJK').innerText = jk || '-';
-      document.getElementById('cardSekolah').innerText = sekolah || '-';
-      document.getElementById('cardProv').innerText = prov || '-';
-      document.getElementById('cardKota').innerText = kota || '-';
-      document.getElementById('cardKaos').innerText = kaos || '-';
+      document.getElementById('cardSekolah').innerText = sekolah;
+      document.getElementById('cardProv').innerText = prov;
+      document.getElementById('cardKota').innerText = kota;
+      document.getElementById('cardKaos').innerText = kaos;
       document.getElementById('modalKartu').classList.remove('hidden');
     }
 
@@ -466,7 +480,7 @@
       document.getElementById('modalKartu').classList.add('hidden');
     }
 
-    // FUNGSI UNDUH KARTU PDF DIRECT VECTOR
+    // FUNGSI UNDUH KARTU PDF DIRECT VECTOR (PASTI HILANGKAN ISSUES BLANK/KOSONG)
     function downloadKartuPDF() {
       const btn = document.getElementById('btnDownloadPDF');
       const originalText = btn.innerHTML;
@@ -491,8 +505,8 @@
           const kota = document.getElementById('cardKota').innerText || '-';
           const kaos = document.getElementById('cardKaos').innerText || '-';
 
-          // Frame Bingkai Luar
-          doc.setDrawColor(120, 53, 15);
+          // Frame Bingkai Luar (A5: 148 mm x 210 mm)
+          doc.setDrawColor(120, 53, 15); // Amber-900
           doc.setLineWidth(1.2);
           doc.roundedRect(8, 8, 132, 194, 4, 4, 'S');
 
@@ -507,7 +521,7 @@
           doc.text("LEMBAR BUKTI PENDAFTARAN", 74, 18, { align: "center" });
 
           doc.setFontSize(9);
-          doc.setTextColor(251, 191, 36);
+          doc.setTextColor(251, 191, 36); // Amber-400
           doc.text("KEMBARANAS III - SAKO SIT 2026", 74, 26, { align: "center" });
 
           // Garis Pembatas Header
@@ -530,16 +544,19 @@
           let startY = 48;
 
           items.forEach(([label, val], idx) => {
+            // Selang-seling warna baris
             if (idx % 2 === 0) {
-              doc.setFillColor(254, 243, 199);
+              doc.setFillColor(254, 243, 199); // Light Amber
               doc.rect(12, startY - 5, 124, 10, 'F');
             }
 
+            // Label Kiri
             doc.setFont("helvetica", "normal");
             doc.setFontSize(9);
             doc.setTextColor(100, 116, 139);
             doc.text(label, 15, startY + 1);
 
+            // Nilai Kanan (potong jika terlalu panjang)
             doc.setFont("helvetica", "bold");
             doc.setFontSize(9);
             doc.setTextColor(15, 23, 42);
@@ -550,6 +567,7 @@
             }
             doc.text(displayVal, 133, startY + 1, { align: "right" });
 
+            // Garis Tipis Pemisah
             doc.setDrawColor(226, 232, 240);
             doc.setLineWidth(0.2);
             doc.line(12, startY + 5, 136, startY + 5);
@@ -558,8 +576,8 @@
           });
 
           // Badge Box Status
-          doc.setFillColor(236, 253, 245);
-          doc.setDrawColor(16, 185, 129);
+          doc.setFillColor(236, 253, 245); // Emerald light
+          doc.setDrawColor(16, 185, 129); // Emerald border
           doc.setLineWidth(0.5);
           doc.roundedRect(12, startY + 4, 124, 13, 3, 3, 'FD');
 
@@ -575,6 +593,7 @@
           doc.text("Harap membawa dokumen cetak ini saat melakukan registrasi ulang", 74, 188, { align: "center" });
           doc.text("di lokasi perkemahan.", 74, 193, { align: "center" });
 
+          // Simpan Dokumen
           const fileNameClean = nama.trim().replace(/[^a-zA-Z0-9]/g, '_');
           doc.save(`Bukti_Pendaftaran_${fileNameClean}_${id}.pdf`);
 
@@ -667,9 +686,9 @@
       const setKaos = new Set();
 
       rawAdminRows.forEach(row => {
-        if (row[11]) setProv.add(row[11]);
-        if (row[12]) setKota.add(row[12]);
-        if (row[13]) setKaos.add(row[13]);
+        if (row[10]) setProv.add(row[10]);
+        if (row[11]) setKota.add(row[11]);
+        if (row[12]) setKaos.add(row[12]);
       });
 
       fillSelect('filterProvinsi', Array.from(setProv).sort());
@@ -693,10 +712,10 @@
       const kaos = document.getElementById('filterKaos').value;
 
       filteredRows = rawAdminRows.filter(row => {
-        const matchProv = !prov || String(row[11]) === prov;
-        const matchKota = !kota || String(row[12]) === kota;
-        const matchJK = !jk || String(row[9]).toLowerCase() === jk.toLowerCase();
-        const matchKaos = !kaos || String(row[13]) === kaos;
+        const matchProv = !prov || String(row[10]) === prov;
+        const matchKota = !kota || String(row[11]) === kota;
+        const matchJK = !jk || String(row[8]).toLowerCase() === jk.toLowerCase();
+        const matchKaos = !kaos || String(row[12]) === kaos;
 
         return matchProv && matchKota && matchJK && matchKaos;
       });
