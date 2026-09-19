@@ -109,7 +109,7 @@
               <i class="fa-solid fa-id-card-clip"></i>
             </div>
             <h2 class="text-xl font-extrabold text-amber-950">Pencarian Data Pendaftar</h2>
-            <p class="text-xs text-gray-500">Ketikkan Nama Lengkap, Nomor KTA, atau Asal Sekolah/Pangkalan</p>
+            <p class="text-xs text-gray-500">Ketikkan Nama Lengkap, Email, atau Asal Sekolah/Pangkalan</p>
           </div>
 
           <form onsubmit="handleSearch(event)" class="space-y-3">
@@ -117,8 +117,8 @@
               <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
                 <i class="fa-solid fa-search"></i>
               </div>
-              <input type="text" id="searchKeyword" required placeholder="Contoh: Ahmad / SDIT Al-Hikmah / KTA-123" 
-                     class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-amber-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-amber-500 focus:border-amber-500 uppercase font-medium text-sm transition-all">
+              <input type="text" id="searchKeyword" required placeholder="Contoh: Ahmad / email@domain.com / SDIT Al-Hikmah" 
+                     class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-amber-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-amber-500 focus:border-amber-500 font-medium text-sm transition-all">
             </div>
             <button type="submit" id="btnCari" class="w-full bg-gradient-to-r from-amber-800 to-amber-900 hover:from-amber-900 hover:to-amber-950 text-white font-bold py-3.5 rounded-2xl text-sm transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
               <i class="fa-solid fa-magnifying-glass"></i> Cari Data Pendaftar
@@ -288,16 +288,17 @@
           <p class="text-[8px] text-amber-200/80 italic font-medium mt-0.5">Bumi Perkemahan Lampung • 27 - 31 Oktober 2026</p>
         </div>
 
-        <!-- STAMP / BADGE STATUS (SEPERTI GAMBAR 2) -->
+        <!-- STAMP / BADGE STATUS -->
         <div class="border-2 border-emerald-500 bg-emerald-50/90 rounded-2xl py-2 px-3 text-center shadow-xs">
           <span class="font-extrabold text-emerald-800 text-xs sm:text-sm tracking-wider uppercase flex items-center justify-center gap-1.5">
             <i class="fa-solid fa-circle-check text-emerald-600"></i> STATUS: TERVERIFIKASI SISTEM
           </span>
         </div>
 
-        <!-- DATA ITEM PENDAFTAR (SCOUT STYLE TABLE) -->
+        <!-- DATA ITEM PENDAFTAR -->
         <div class="space-y-1.5 text-[11px] text-slate-800 bg-white/80 p-3 rounded-xl border border-amber-800/20 shadow-xs">
-          <div class="flex justify-between border-b border-amber-100 pb-1"><span class="text-slate-500 font-medium">ID Registrasi</span><span id="cardId" class="font-bold text-amber-950"></span></div>
+          <div class="flex justify-between border-b border-amber-100 pb-1"><span class="text-slate-500 font-medium">ID Registrasi</span><span id="cardId" class="font-bold text-amber-950 font-mono"></span></div>
+          <div id="cardEmailContainer" class="flex justify-between border-b border-amber-100 pb-1"><span class="text-slate-500 font-medium">Email</span><span id="cardEmail" class="font-semibold text-slate-800"></span></div>
           <div class="flex justify-between border-b border-amber-100 pb-1"><span class="text-slate-500 font-medium">Status / Peran</span><span id="cardStatus" class="font-black text-amber-900 uppercase"></span></div>
           <div class="flex justify-between border-b border-amber-100 pb-1"><span class="text-slate-500 font-medium">Nama Lengkap</span><span id="cardNama" class="font-bold uppercase text-slate-900"></span></div>
           <div class="flex justify-between border-b border-amber-100 pb-1"><span class="text-slate-500 font-medium">Jenis Kelamin</span><span id="cardJK" class="font-semibold"></span></div>
@@ -307,7 +308,7 @@
           <div class="flex justify-between"><span class="text-slate-500 font-medium">Ukuran Kaos</span><span id="cardKaos" class="font-bold text-amber-950"></span></div>
         </div>
 
-        <!-- INSTRUKSI DOKUMEN CETAK (SEPERTI GAMBAR 2) -->
+        <!-- INSTRUKSI DOKUMEN CETAK -->
         <div class="pt-1 text-center space-y-1 border-t-2 border-dashed border-amber-800/20">
           <p class="italic text-slate-600 text-[10px] font-medium leading-tight">
             Harap membawa dokumen cetak ini saat melakukan registrasi ulang di lokasi perkemahan.
@@ -405,6 +406,31 @@
     let rawAdminRows = [];
     let filteredRows = [];
 
+    // FUNGSI MEMBERSIHKAN TIMESTAMP MENJADI ID REGISTRASI RAPI
+    function formatID(raw) {
+      if (!raw || raw === '-') return 'REG-2026-001';
+      
+      const str = String(raw).trim();
+      // Jika sudah berupa ID khusus (misal REG-..., KTA-...)
+      if (str.startsWith('REG-') || str.startsWith('KMB-') || str.startsWith('KTA-')) {
+        return str;
+      }
+
+      // Jika format Timestamp Google Form, ubah ke nomor cantik REG-2026-TGLJAM
+      const d = new Date(str);
+      if (!isNaN(d.getTime())) {
+        const pad = (n) => String(n).padStart(2, '0');
+        const tgl = pad(d.getDate());
+        const jam = pad(d.getHours());
+        const min = pad(d.getMinutes());
+        const sec = pad(d.getSeconds());
+        return `REG-2026-${tgl}${jam}${min}${sec}`;
+      }
+
+      // Jika teks acak biasa
+      return str.length > 15 ? 'REG-2026-' + str.substring(0, 6).toUpperCase() : str;
+    }
+
     function switchTab(tabName) {
       document.getElementById('userTab').classList.toggle('hidden', tabName !== 'userTab');
       document.getElementById('adminTab').classList.toggle('hidden', tabName !== 'adminTab');
@@ -447,6 +473,7 @@
             const isPembina = String(item.statusPendaftaran).toLowerCase().includes('pembina');
             const namaLengkapFinal = item.nama || (isPembina ? item.namaPembina : item.namaPeserta) || '-';
             const namaSafe = String(namaLengkapFinal).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            const emailVal = item.email || item.emailAddress || '-';
 
             const badgeStyle = isPembina 
               ? 'bg-emerald-100 text-emerald-900 border-emerald-300' 
@@ -477,7 +504,7 @@
 
                 <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100">
                   ${item.linkBukti && item.linkBukti !== '-' ? `<a href="${item.linkBukti}" target="_blank" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all"><i class="fa-solid fa-receipt text-amber-800"></i> Bukti Pembayaran</a>` : ''}
-                  <button onclick="openModalKartu('${item.id}', '${namaSafe}', '${item.statusPendaftaran}', '${item.jenisKelamin}', '${item.asalSekolah}', '${item.provinsi}', '${item.kotaKabupaten}', '${item.ukuranKaos}')" class="bg-amber-900 hover:bg-amber-950 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 ml-auto shadow-md transition-all">
+                  <button onclick="openModalKartu('${item.id}', '${namaSafe}', '${item.statusPendaftaran}', '${item.jenisKelamin}', '${item.asalSekolah}', '${item.provinsi}', '${item.kotaKabupaten}', '${item.ukuranKaos}', '${emailVal}')" class="bg-amber-900 hover:bg-amber-950 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 ml-auto shadow-md transition-all">
                     <i class="fa-solid fa-id-card"></i> Cetak Lembar Pendaftaran
                   </button>
                 </div>
@@ -500,8 +527,11 @@
       }
     }
 
-    function openModalKartu(id, nama, status, jk, sekolah, prov, kota, kaos) {
-      document.getElementById('cardId').innerText = id;
+    function openModalKartu(id, nama, status, jk, sekolah, prov, kota, kaos, email = '-') {
+      // Mengubah ID Timestamp menjadi format ID Registrasi rapi
+      const cleanId = formatID(id);
+      
+      document.getElementById('cardId').innerText = cleanId;
       document.getElementById('cardNama').innerText = nama;
       document.getElementById('cardStatus').innerText = status;
       document.getElementById('cardJK').innerText = jk || '-';
@@ -509,6 +539,16 @@
       document.getElementById('cardProv').innerText = prov;
       document.getElementById('cardKota').innerText = kota;
       document.getElementById('cardKaos').innerText = kaos;
+
+      const emailEl = document.getElementById('cardEmail');
+      const emailBox = document.getElementById('cardEmailContainer');
+      if (email && email !== '-') {
+        emailEl.innerText = email;
+        emailBox.classList.remove('hidden');
+      } else {
+        emailBox.classList.add('hidden');
+      }
+
       document.getElementById('modalKartu').classList.remove('hidden');
     }
 
@@ -516,7 +556,7 @@
       document.getElementById('modalKartu').classList.add('hidden');
     }
 
-    // GENERATE PDF KERTAS A5 DENGAN GAYA KEPANDUAN / SURVIVAL PRAMUKA
+    // GENERATE PDF KERTAS A5
     function downloadKartuPDF() {
       const btn = document.getElementById('btnDownloadPDF');
       const originalText = btn.innerHTML;
@@ -526,7 +566,6 @@
       setTimeout(() => {
         try {
           const { jsPDF } = window.jspdf;
-          // Ukuran Kertas A5 (148mm x 210mm)
           const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a5' });
 
           const nama = document.getElementById('cardNama').innerText || '-';
@@ -539,15 +578,15 @@
           const kaos = document.getElementById('cardKaos').innerText || '-';
 
           // BINGKAI LUAR KHAS PRAMUKA / SURVIVAL
-          doc.setDrawColor(120, 53, 15); // Warna Amber Cokelat
+          doc.setDrawColor(120, 53, 15);
           doc.setLineWidth(1.5);
           doc.roundedRect(6, 6, 136, 198, 5, 5, 'S');
 
-          doc.setDrawColor(16, 185, 129); // Garis Dalam Hijau
+          doc.setDrawColor(16, 185, 129);
           doc.setLineWidth(0.5);
           doc.roundedRect(8, 8, 132, 194, 4, 4, 'S');
 
-          // HEADER BAND (FOREST GREEN & AMBER)
+          // HEADER BAND
           doc.setFillColor(15, 44, 28);
           doc.rect(8, 8, 132, 32, 'F');
 
@@ -568,15 +607,15 @@
           doc.setFont("helvetica", "italic");
           doc.text("Bumi Perkemahan Lampung • 27 - 31 Oktober 2026", 74, 31, { align: "center" });
 
-          // KOTAK STATUS VERIFIKASI (SESUAI GAMBAR 2)
-          doc.setFillColor(236, 253, 245); // Emerald-50
-          doc.setDrawColor(16, 185, 129);  // Emerald-500
+          // KOTAK STATUS VERIFIKASI
+          doc.setFillColor(236, 253, 245);
+          doc.setDrawColor(16, 185, 129);
           doc.setLineWidth(0.8);
           doc.roundedRect(14, 45, 120, 12, 3, 3, 'FD');
 
           doc.setFont("helvetica", "bold");
           doc.setFontSize(10);
-          doc.setTextColor(6, 78, 59); // Emerald-900
+          doc.setTextColor(6, 78, 59);
           doc.text("STATUS: TERVERIFIKASI SISTEM", 74, 52.5, { align: "center" });
 
           // TABEL DATA PENDAFTAR
@@ -594,7 +633,7 @@
           let startY = 66;
           items.forEach(([label, val], idx) => {
             if (idx % 2 === 0) {
-              doc.setFillColor(254, 243, 199); // Light Amber
+              doc.setFillColor(254, 243, 199);
               doc.rect(12, startY - 4, 124, 10, 'F');
             }
 
@@ -611,7 +650,7 @@
             startY += 11;
           });
 
-          // PESAN REGISTRASI ULANG (SESUAI GAMBAR 2)
+          // PESAN REGISTRASI ULANG
           doc.setDrawColor(217, 119, 6);
           doc.setLineWidth(0.3);
           doc.line(14, 162, 134, 162);
@@ -772,7 +811,7 @@
         const safeNama = String(namaVal).replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
         return `<tr class="hover:bg-amber-50/50 transition-colors">` + 
-          row.map(cell => `<td class="px-4 py-3 border-b border-gray-100">${String(cell).startsWith('http') ? `<a href="${cell}" target="_blank" class="text-blue-600 font-bold underline">Buka Link</a>` : cell}</td>`).join('') + 
+          row.map((cell, cIdx) => `<td class="px-4 py-3 border-b border-gray-100">${cIdx === 0 ? formatID(cell) : (String(cell).startsWith('http') ? `<a href="${cell}" target="_blank" class="text-blue-600 font-bold underline">Buka Link</a>` : cell)}</td>`).join('') + 
           `<td class="px-4 py-3 border-b border-gray-100 text-center">
             <div class="flex justify-center items-center gap-1.5">
               <button onclick="editDataByRow(${idx})" class="bg-amber-100 hover:bg-amber-200 text-amber-900 px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all" title="Edit Data">
