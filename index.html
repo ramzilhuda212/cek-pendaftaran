@@ -15,8 +15,6 @@
   <!-- jsPDF & AutoTable -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-  <!-- html2pdf.js (Untuk Cetak/Unduh PDF Kartu/Lembar) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -291,7 +289,7 @@
   </footer>
 
   <!-- MODAL CETAK LEMBAR PENDAFTARAN -->
-  <div id="modalKartu" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs hidden flex justify-center items-center p-4 z-50">
+  <div id="modalKartu" class="fixed inset-0 bg-slate-900/60 hidden flex justify-center items-center p-4 z-50">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full relative shadow-2xl border border-amber-200">
       
       <button onclick="closeModalKartu()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
@@ -299,7 +297,7 @@
       </button>
 
       <!-- Printable Area -->
-      <div id="kartuArea" class="border-2 border-amber-900 rounded-2xl p-5 bg-gradient-to-b from-amber-50/90 via-white to-amber-50/50 relative space-y-4 shadow-inner">
+      <div id="kartuArea" class="border-2 border-amber-900 rounded-2xl p-5 bg-amber-50/50 relative space-y-4">
         
         <div class="flex items-center justify-between border-b-2 border-amber-900 pb-3">
           <div class="flex items-center gap-2.5">
@@ -367,7 +365,7 @@
 
   <!-- JAVASCRIPT LOGIC -->
   <script>
-    // PASTI-KAN URL WEB APP GOOGLE APPS SCRIPT ANDA SUDAH BENAR DI SINI
+    // MASUKKAN SCRIPT_URL WEB APP GOOGLE APPS SCRIPT ANDA
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzf--1wboUIdCwdj1heGN4H8RncnX80kltG9E2UjrrlGimW5-W5ifsQhQ4sYn0_GfPe/exec"; 
     
     let rawHeaders = [];
@@ -482,35 +480,130 @@
       document.getElementById('modalKartu').classList.add('hidden');
     }
 
-    // FUNGSI UNDUH KARTU DALAM BENTUK PDF
+    // FUNGSI UNDUH KARTU PDF DIRECT VECTOR (PASTI HILANGKAN ISSUES BLANK/KOSONG)
     function downloadKartuPDF() {
-      const element = document.getElementById('kartuArea');
-      const nama = document.getElementById('cardNama').innerText || 'Pendaftar';
-      const id = document.getElementById('cardId').innerText || 'REG';
       const btn = document.getElementById('btnDownloadPDF');
-
       const originalText = btn.innerHTML;
       btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Mengunduh...`;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Memuat PDF...`;
 
-      const fileNameClean = nama.trim().replace(/[^a-zA-Z0-9]/g, '_');
+      setTimeout(() => {
+        try {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a5'
+          });
 
-      const opt = {
-        margin:       [10, 10, 10, 10], // Margin (mm)
-        filename:     `Bukti_Pendaftaran_${fileNameClean}_${id}.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, logging: false, useCORS: true },
-        jsPDF:        { unit: 'mm', format: 'a5', orientation: 'portrait' }
-      };
+          const nama = document.getElementById('cardNama').innerText || '-';
+          const id = document.getElementById('cardId').innerText || '-';
+          const status = document.getElementById('cardStatus').innerText || '-';
+          const jk = document.getElementById('cardJK').innerText || '-';
+          const sekolah = document.getElementById('cardSekolah').innerText || '-';
+          const prov = document.getElementById('cardProv').innerText || '-';
+          const kota = document.getElementById('cardKota').innerText || '-';
+          const kaos = document.getElementById('cardKaos').innerText || '-';
 
-      html2pdf().set(opt).from(element).save().then(() => {
-        btn.disabled = false;
-        btn.innerHTML = originalText;
-      }).catch((err) => {
-        alert("Gagal mengunduh PDF: " + err.message);
-        btn.disabled = false;
-        btn.innerHTML = originalText;
-      });
+          // Frame Bingkai Luar (A5: 148 mm x 210 mm)
+          doc.setDrawColor(120, 53, 15); // Amber-900
+          doc.setLineWidth(1.2);
+          doc.roundedRect(8, 8, 132, 194, 4, 4, 'S');
+
+          // Header Background Box
+          doc.setFillColor(120, 53, 15);
+          doc.rect(8, 8, 132, 28, 'F');
+
+          // Judul Utama Header
+          doc.setTextColor(255, 255, 255);
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(13);
+          doc.text("LEMBAR BUKTI PENDAFTARAN", 74, 18, { align: "center" });
+
+          doc.setFontSize(9);
+          doc.setTextColor(251, 191, 36); // Amber-400
+          doc.text("KEMBARANAS III - SAKO SIT 2026", 74, 26, { align: "center" });
+
+          // Garis Pembatas Header
+          doc.setDrawColor(245, 158, 11);
+          doc.setLineWidth(0.8);
+          doc.line(12, 40, 136, 40);
+
+          // Data Pendaftar
+          const items = [
+            ["ID Registrasi", id],
+            ["Status / Peran", status],
+            ["Nama Lengkap", nama],
+            ["Jenis Kelamin", jk],
+            ["Asal Sekolah / Pangkalan", sekolah],
+            ["Provinsi", prov],
+            ["Kota / Kabupaten", kota],
+            ["Ukuran Kaos", kaos]
+          ];
+
+          let startY = 48;
+
+          items.forEach(([label, val], idx) => {
+            // Selang-seling warna baris
+            if (idx % 2 === 0) {
+              doc.setFillColor(254, 243, 199); // Light Amber
+              doc.rect(12, startY - 5, 124, 10, 'F');
+            }
+
+            // Label Kiri
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(9);
+            doc.setTextColor(100, 116, 139);
+            doc.text(label, 15, startY + 1);
+
+            // Nilai Kanan (potong jika terlalu panjang)
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(9);
+            doc.setTextColor(15, 23, 42);
+
+            let displayVal = String(val);
+            if (displayVal.length > 32) {
+              displayVal = displayVal.substring(0, 30) + '...';
+            }
+            doc.text(displayVal, 133, startY + 1, { align: "right" });
+
+            // Garis Tipis Pemisah
+            doc.setDrawColor(226, 232, 240);
+            doc.setLineWidth(0.2);
+            doc.line(12, startY + 5, 136, startY + 5);
+
+            startY += 12;
+          });
+
+          // Badge Box Status
+          doc.setFillColor(236, 253, 245); // Emerald light
+          doc.setDrawColor(16, 185, 129); // Emerald border
+          doc.setLineWidth(0.5);
+          doc.roundedRect(12, startY + 4, 124, 13, 3, 3, 'FD');
+
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(9);
+          doc.setTextColor(6, 95, 70);
+          doc.text("STATUS: TERVERIFIKASI SISTEM", 74, startY + 12, { align: "center" });
+
+          // Catatan Kaki (Footer)
+          doc.setFont("helvetica", "italic");
+          doc.setFontSize(8);
+          doc.setTextColor(100, 116, 139);
+          doc.text("Harap membawa dokumen cetak ini saat melakukan registrasi ulang", 74, 188, { align: "center" });
+          doc.text("di lokasi perkemahan.", 74, 193, { align: "center" });
+
+          // Simpan Dokumen
+          const fileNameClean = nama.trim().replace(/[^a-zA-Z0-9]/g, '_');
+          doc.save(`Bukti_Pendaftaran_${fileNameClean}_${id}.pdf`);
+
+        } catch (err) {
+          alert("Gagal membuat PDF: " + err.message);
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+        }
+      }, 100);
     }
 
     // LOGIN ADMIN
