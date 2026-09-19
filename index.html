@@ -212,17 +212,21 @@
                 <h3 class="font-extrabold text-amber-950 text-base flex items-center gap-2">
                   <i class="fa-solid fa-filter text-amber-800"></i> Filter & Rekapitulasi Data
                 </h3>
-                <p class="text-xs text-gray-500">Filter data secara spesifik lalu unduh hasilnya</p>
+                <p class="text-xs text-gray-500">Kelola pendaftar, filter data, atau unduh laporan</p>
               </div>
 
-              <div class="flex items-center gap-2 w-full sm:w-auto">
+              <!-- Tombol Tambah Manual & Akses Lainnya -->
+              <div class="flex items-center gap-2 w-full sm:w-auto flex-wrap">
+                <button onclick="openModalForm()" class="flex-1 sm:flex-none bg-amber-800 hover:bg-amber-900 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow transition-all">
+                  <i class="fa-solid fa-user-plus"></i> Tambah Manual
+                </button>
                 <button onclick="exportToExcel()" class="flex-1 sm:flex-none bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow transition-all">
                   <i class="fa-solid fa-file-excel"></i> Unduh Excel
                 </button>
                 <button onclick="exportToPDF()" class="flex-1 sm:flex-none bg-red-700 hover:bg-red-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow transition-all">
                   <i class="fa-solid fa-file-pdf"></i> Unduh PDF
                 </button>
-                <button onclick="logoutAdmin()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-2.5 rounded-xl text-xs font-bold shadow transition-all">
+                <button onclick="logoutAdmin()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-2.5 rounded-xl text-xs font-bold shadow transition-all" title="Keluar Admin">
                   <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
               </div>
@@ -276,6 +280,17 @@
 
     </main>
   </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-900 text-slate-400 text-xs py-6 mt-12 border-t border-slate-800 relative z-10">
+    <div class="max-w-6xl mx-auto px-4 text-center space-y-2">
+      <div class="flex items-center justify-center gap-2 text-amber-400 font-bold">
+        <i class="fa-solid fa-campground"></i>
+        <span>KEMBARANAS III - 2026</span>
+      </div>
+      <p class="text-[11px] text-slate-500">Sistem Informasi Pendaftaran & Verifikasi Kontingen Pramuka SAKO SIT Indonesia</p>
+    </div>
+  </footer>
 
   <!-- MODAL CETAK LEMBAR PENDAFTARAN -->
   <div id="modalKartu" class="fixed inset-0 bg-slate-900/60 hidden flex justify-center items-center p-4 z-50">
@@ -352,9 +367,78 @@
     </div>
   </div>
 
+  <!-- MODAL FORM TAMBAH / EDIT DATA ADMIN -->
+  <div id="modalFormAdmin" class="fixed inset-0 bg-slate-900/60 hidden flex justify-center items-center p-4 z-50 overflow-y-auto">
+    <div class="bg-white rounded-3xl p-6 max-w-lg w-full relative shadow-2xl border border-amber-200 my-8">
+      
+      <button onclick="closeModalForm()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="mb-4 border-b pb-3">
+        <h3 id="modalFormTitle" class="text-lg font-bold text-amber-950">Tambah Data Manual</h3>
+        <p class="text-xs text-gray-500">Isi formulir pendaftar atau pembina pendamping secara langsung.</p>
+      </div>
+
+      <form onsubmit="handleSaveData(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="formRowIndex" value="">
+        <input type="hidden" id="formId" value="">
+
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Status Pendaftaran</label>
+          <select id="formStatus" required class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white font-medium">
+            <option value="Peserta Penggalang">Peserta Penggalang</option>
+            <option value="Peserta Penegak">Peserta Penegak</option>
+            <option value="Pembina Pendamping">Pembina Pendamping</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Nama Lengkap</label>
+          <input type="text" id="formNama" required placeholder="NAMA LENGKAP" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white uppercase font-medium">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Jenis Kelamin</label>
+            <select id="formJK" required class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white font-medium">
+              <option value="Laki-laki">Laki-laki</option>
+              <option value="Perempuan">Perempuan</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Ukuran Kaos</label>
+            <input type="text" id="formKaos" required placeholder="M / L / XL / XXL" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white uppercase font-medium">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Asal Sekolah / Pangkalan</label>
+          <input type="text" id="formSekolah" required placeholder="NAMA SCHOOL / PANGKALAN" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white uppercase font-medium">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Provinsi</label>
+            <input type="text" id="formProv" required placeholder="PROVINSI" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white uppercase font-medium">
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Kota / Kabupaten</label>
+            <input type="text" id="formKota" required placeholder="KOTA / KABUPATEN" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white uppercase font-medium">
+          </div>
+        </div>
+
+        <div class="pt-4 flex gap-2">
+          <button type="button" onclick="closeModalForm()" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2.5 rounded-xl transition-all">Batal</button>
+          <button type="submit" id="btnSaveData" class="flex-1 bg-amber-900 hover:bg-amber-950 text-white font-bold py-2.5 rounded-xl shadow-md transition-all">Simpan Data</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
   <!-- JAVASCRIPT LOGIC -->
   <script>
-    // MASUKKAN SCRIPT_URL WEB APP GOOGLE APPS SCRIPT ANDA
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzf--1wboUIdCwdj1heGN4H8RncnX80kltG9E2UjrrlGimW5-W5ifsQhQ4sYn0_GfPe/exec"; 
     
     let rawHeaders = [];
@@ -398,9 +482,12 @@
         resBox.innerHTML = '';
         resBox.classList.remove('hidden');
 
-        if (res.success) {
+        if (res.success && Array.isArray(res.data) && res.data.length > 0) {
           res.data.forEach(item => {
             const isPembina = String(item.statusPendaftaran).toLowerCase().includes('pembina');
+            const namaLengkapFinal = item.nama || (isPembina ? item.namaPembina : item.namaPeserta) || '-';
+            const namaSafe = namaLengkapFinal.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
             const badgeStyle = isPembina 
               ? 'bg-emerald-100 text-emerald-900 border-emerald-300' 
               : 'bg-blue-100 text-blue-900 border-blue-300';
@@ -413,7 +500,7 @@
                     <span class="${badgeStyle} border text-[10px] font-black px-3 py-1 rounded-full uppercase inline-flex items-center gap-1.5 shadow-xs">
                       <i class="fa-solid ${roleIcon}"></i> ${item.statusPendaftaran || 'Peserta'}
                     </span>
-                    <h3 class="text-lg font-extrabold text-amber-950 mt-2 uppercase tracking-wide">${item.nama}</h3>
+                    <h3 class="text-lg font-extrabold text-amber-950 mt-2 uppercase tracking-wide">${namaLengkapFinal}</h3>
                   </div>
                   <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-xl border border-emerald-200 flex items-center gap-1">
                     <i class="fa-solid fa-circle-check"></i> Terverifikasi
@@ -422,15 +509,15 @@
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
                   <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100"><span class="text-gray-400 block text-[10px]">Jenis Kelamin</span><span class="font-bold text-slate-800">${item.jenisKelamin || '-'}</span></div>
-                  <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100"><span class="text-gray-400 block text-[10px]">Asal Sekolah / Pangkalan</span><span class="font-bold uppercase text-slate-800">${item.asalSekolah}</span></div>
-                  <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100"><span class="text-gray-400 block text-[10px]">Ukuran Kaos</span><span class="font-bold text-slate-800">${item.ukuranKaos}</span></div>
-                  <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100"><span class="text-gray-400 block text-[10px]">Provinsi</span><span class="font-bold text-slate-800">${item.provinsi}</span></div>
-                  <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100 col-span-2 sm:col-span-1"><span class="text-gray-400 block text-[10px]">Kota / Kabupaten</span><span class="font-bold text-slate-800">${item.kotaKabupaten}</span></div>
+                  <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100"><span class="text-gray-400 block text-[10px]">Asal Sekolah / Pangkalan</span><span class="font-bold uppercase text-slate-800">${item.asalSekolah || '-'}</span></div>
+                  <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100"><span class="text-gray-400 block text-[10px]">Ukuran Kaos</span><span class="font-bold text-slate-800">${item.ukuranKaos || '-'}</span></div>
+                  <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100"><span class="text-gray-400 block text-[10px]">Provinsi</span><span class="font-bold text-slate-800">${item.provinsi || '-'}</span></div>
+                  <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100 col-span-2 sm:col-span-1"><span class="text-gray-400 block text-[10px]">Kota / Kabupaten</span><span class="font-bold text-slate-800">${item.kotaKabupaten || '-'}</span></div>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100">
-                  ${item.linkBukti !== '-' ? `<a href="${item.linkBukti}" target="_blank" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all"><i class="fa-solid fa-receipt text-amber-800"></i> Bukti Pembayaran</a>` : ''}
-                  <button onclick="openModalKartu('${item.id}', '${item.nama}', '${item.statusPendaftaran}', '${item.jenisKelamin}', '${item.asalSekolah}', '${item.provinsi}', '${item.kotaKabupaten}', '${item.ukuranKaos}')" class="bg-amber-900 hover:bg-amber-950 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 ml-auto shadow-md transition-all">
+                  ${item.linkBukti && item.linkBukti !== '-' ? `<a href="${item.linkBukti}" target="_blank" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all"><i class="fa-solid fa-receipt text-amber-800"></i> Bukti Pembayaran</a>` : ''}
+                  <button onclick="openModalKartu('${item.id}', '${namaSafe}', '${item.statusPendaftaran}', '${item.jenisKelamin}', '${item.asalSekolah}', '${item.provinsi}', '${item.kotaKabupaten}', '${item.ukuranKaos}')" class="bg-amber-900 hover:bg-amber-950 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 ml-auto shadow-md transition-all">
                     <i class="fa-solid fa-id-card"></i> Cetak Lembar Pendaftaran
                   </button>
                 </div>
@@ -441,7 +528,7 @@
           resBox.innerHTML = `
             <div class="bg-white p-8 rounded-3xl text-center border border-red-200 text-red-600 space-y-2 shadow-sm">
               <i class="fa-solid fa-circle-xmark text-4xl mb-1"></i>
-              <p class="text-sm font-bold">${res.message}</p>
+              <p class="text-sm font-bold">${res.message || 'Data pendaftaran tidak ditemukan.'}</p>
             </div>
           `;
         }
@@ -469,7 +556,6 @@
       document.getElementById('modalKartu').classList.add('hidden');
     }
 
-    // FUNGSI UNDUH KARTU PDF DIRECT VECTOR (PASTI HILANGKAN ISSUES BLANK/KOSONG)
     function downloadKartuPDF() {
       const btn = document.getElementById('btnDownloadPDF');
       const originalText = btn.innerHTML;
@@ -494,31 +580,26 @@
           const kota = document.getElementById('cardKota').innerText || '-';
           const kaos = document.getElementById('cardKaos').innerText || '-';
 
-          // Frame Bingkai Luar (A5: 148 mm x 210 mm)
-          doc.setDrawColor(120, 53, 15); // Amber-900
+          doc.setDrawColor(120, 53, 15);
           doc.setLineWidth(1.2);
           doc.roundedRect(8, 8, 132, 194, 4, 4, 'S');
 
-          // Header Background Box
           doc.setFillColor(120, 53, 15);
           doc.rect(8, 8, 132, 28, 'F');
 
-          // Judul Utama Header
           doc.setTextColor(255, 255, 255);
           doc.setFont("helvetica", "bold");
           doc.setFontSize(13);
           doc.text("LEMBAR BUKTI PENDAFTARAN", 74, 18, { align: "center" });
 
           doc.setFontSize(9);
-          doc.setTextColor(251, 191, 36); // Amber-400
+          doc.setTextColor(251, 191, 36);
           doc.text("KEMBARANAS III - SAKO SIT 2026", 74, 26, { align: "center" });
 
-          // Garis Pembatas Header
           doc.setDrawColor(245, 158, 11);
           doc.setLineWidth(0.8);
           doc.line(12, 40, 136, 40);
 
-          // Data Pendaftar
           const items = [
             ["ID Registrasi", id],
             ["Status / Peran", status],
@@ -533,19 +614,16 @@
           let startY = 48;
 
           items.forEach(([label, val], idx) => {
-            // Selang-seling warna baris
             if (idx % 2 === 0) {
-              doc.setFillColor(254, 243, 199); // Light Amber
+              doc.setFillColor(254, 243, 199);
               doc.rect(12, startY - 5, 124, 10, 'F');
             }
 
-            // Label Kiri
             doc.setFont("helvetica", "normal");
             doc.setFontSize(9);
             doc.setTextColor(100, 116, 139);
             doc.text(label, 15, startY + 1);
 
-            // Nilai Kanan (potong jika terlalu panjang)
             doc.setFont("helvetica", "bold");
             doc.setFontSize(9);
             doc.setTextColor(15, 23, 42);
@@ -556,7 +634,6 @@
             }
             doc.text(displayVal, 133, startY + 1, { align: "right" });
 
-            // Garis Tipis Pemisah
             doc.setDrawColor(226, 232, 240);
             doc.setLineWidth(0.2);
             doc.line(12, startY + 5, 136, startY + 5);
@@ -564,9 +641,8 @@
             startY += 12;
           });
 
-          // Badge Box Status
-          doc.setFillColor(236, 253, 245); // Emerald light
-          doc.setDrawColor(16, 185, 129); // Emerald border
+          doc.setFillColor(236, 253, 245);
+          doc.setDrawColor(16, 185, 129);
           doc.setLineWidth(0.5);
           doc.roundedRect(12, startY + 4, 124, 13, 3, 3, 'FD');
 
@@ -575,14 +651,12 @@
           doc.setTextColor(6, 95, 70);
           doc.text("STATUS: TERVERIFIKASI SISTEM", 74, startY + 12, { align: "center" });
 
-          // Catatan Kaki (Footer)
           doc.setFont("helvetica", "italic");
           doc.setFontSize(8);
           doc.setTextColor(100, 116, 139);
           doc.text("Harap membawa dokumen cetak ini saat melakukan registrasi ulang", 74, 188, { align: "center" });
           doc.text("di lokasi perkemahan.", 74, 193, { align: "center" });
 
-          // Simpan Dokumen
           const fileNameClean = nama.trim().replace(/[^a-zA-Z0-9]/g, '_');
           doc.save(`Bukti_Pendaftaran_${fileNameClean}_${id}.pdf`);
 
@@ -675,9 +749,9 @@
       const setKaos = new Set();
 
       rawAdminRows.forEach(row => {
-        if (row[10]) setProv.add(row[10]);
-        if (row[11]) setKota.add(row[11]);
-        if (row[12]) setKaos.add(row[12]);
+        if (row[11]) setProv.add(row[11]);
+        if (row[12]) setKota.add(row[12]);
+        if (row[13]) setKaos.add(row[13]);
       });
 
       fillSelect('filterProvinsi', Array.from(setProv).sort());
@@ -701,10 +775,10 @@
       const kaos = document.getElementById('filterKaos').value;
 
       filteredRows = rawAdminRows.filter(row => {
-        const matchProv = !prov || String(row[10]) === prov;
-        const matchKota = !kota || String(row[11]) === kota;
-        const matchJK = !jk || String(row[8]).toLowerCase() === jk.toLowerCase();
-        const matchKaos = !kaos || String(row[12]) === kaos;
+        const matchProv = !prov || String(row[11]) === prov;
+        const matchKota = !kota || String(row[12]) === kota;
+        const matchJK = !jk || String(row[9]).toLowerCase() === jk.toLowerCase();
+        const matchKaos = !kaos || String(row[13]) === kaos;
 
         return matchProv && matchKota && matchJK && matchKaos;
       });
@@ -712,21 +786,129 @@
       renderTable();
     }
 
+    // RENDER TABEL DENGAN TOMBOL EDIT & HAPUS
     function renderTable() {
       const thead = document.getElementById('tableHeader');
-      thead.innerHTML = '<tr>' + rawHeaders.map(h => `<th class="px-4 py-3">${h}</th>`).join('') + '</tr>';
+      thead.innerHTML = '<tr>' + rawHeaders.map(h => `<th class="px-4 py-3">${h}</th>`).join('') + '<th class="px-4 py-3 text-center">Aksi</th></tr>';
 
       const tbody = document.getElementById('tableBody');
       if (filteredRows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="${rawHeaders.length}" class="text-center py-6 text-gray-400">Tidak ada data yang cocok dengan filter.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="${rawHeaders.length + 1}" class="text-center py-6 text-gray-400">Tidak ada data yang cocok dengan filter.</td></tr>`;
         return;
       }
 
-      tbody.innerHTML = filteredRows.map(row => 
-        `<tr class="hover:bg-amber-50/50 transition-colors">` + 
+      tbody.innerHTML = filteredRows.map((row, idx) => {
+        const id = row[0] || ('REG-' + (idx + 1));
+        const namaVal = row[3] || row[7] || '-';
+        const safeNama = String(namaVal).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
+        return `<tr class="hover:bg-amber-50/50 transition-colors">` + 
           row.map(cell => `<td class="px-4 py-3 border-b border-gray-100">${String(cell).startsWith('http') ? `<a href="${cell}" target="_blank" class="text-blue-600 font-bold underline">Buka Link</a>` : cell}</td>`).join('') + 
-        `</tr>`
-      ).join('');
+          `<td class="px-4 py-3 border-b border-gray-100 text-center">
+            <div class="flex justify-center items-center gap-1.5">
+              <button onclick="editDataByRow(${idx})" class="bg-amber-100 hover:bg-amber-200 text-amber-900 px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all" title="Edit Data">
+                <i class="fa-solid fa-pen-to-square"></i> Edit
+              </button>
+              <button onclick="handleDeleteData('${id}', '${safeNama}')" class="bg-red-100 hover:bg-red-200 text-red-700 px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all" title="Hapus Data">
+                <i class="fa-solid fa-trash-can"></i> Hapus
+              </button>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    // MODAL FORM (TAMBAH / EDIT)
+    function openModalForm(row = null, index = null) {
+      const isEdit = row !== null;
+      document.getElementById('modalFormTitle').innerText = isEdit ? 'Edit Data Pendaftar' : 'Tambah Data Manual';
+      document.getElementById('formRowIndex').value = isEdit ? index : '';
+      document.getElementById('formId').value = isEdit ? (row[0] || '') : '';
+      
+      document.getElementById('formStatus').value = isEdit ? (row[2] || 'Peserta Penggalang') : 'Peserta Penggalang';
+      document.getElementById('formNama').value = isEdit ? (row[3] || row[7] || '') : '';
+      document.getElementById('formJK').value = isEdit ? (row[9] || 'Laki-laki') : 'Laki-laki';
+      document.getElementById('formSekolah').value = isEdit ? (row[10] || '') : '';
+      document.getElementById('formProv').value = isEdit ? (row[11] || '') : '';
+      document.getElementById('formKota').value = isEdit ? (row[12] || '') : '';
+      document.getElementById('formKaos').value = isEdit ? (row[13] || '') : '';
+
+      document.getElementById('modalFormAdmin').classList.remove('hidden');
+    }
+
+    function closeModalForm() {
+      document.getElementById('modalFormAdmin').classList.add('hidden');
+    }
+
+    function editDataByRow(idx) {
+      const selectedRow = filteredRows[idx];
+      openModalForm(selectedRow, idx);
+    }
+
+    // SIMPAN (TAMBAH / EDIT) DATA
+    async function handleSaveData(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnSaveData');
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...`;
+
+      const id = document.getElementById('formId').value;
+      const isEdit = Boolean(id);
+
+      const payload = {
+        action: isEdit ? 'editData' : 'addData',
+        id: id,
+        status: document.getElementById('formStatus').value,
+        nama: document.getElementById('formNama').value,
+        jk: document.getElementById('formJK').value,
+        sekolah: document.getElementById('formSekolah').value,
+        prov: document.getElementById('formProv').value,
+        kota: document.getElementById('formKota').value,
+        kaos: document.getElementById('formKaos').value
+      };
+
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+        const res = await response.json();
+
+        if (res.success) {
+          alert(isEdit ? "Data berhasil diperbarui!" : "Data berhasil ditambahkan!");
+          closeModalForm();
+          loadAdminData();
+        } else {
+          alert("Gagal menyimpan: " + res.message);
+        }
+      } catch (err) {
+        alert("Kesalahan koneksi: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Simpan Data";
+      }
+    }
+
+    // HAPUS DATA
+    async function handleDeleteData(id, nama) {
+      if (!confirm(`Apakah Anda yakin ingin menghapus data pendaftaran "${nama}"?`)) return;
+
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'deleteData', id: id })
+        });
+        const res = await response.json();
+
+        if (res.success) {
+          alert("Data berhasil dihapus.");
+          loadAdminData();
+        } else {
+          alert("Gagal menghapus data: " + res.message);
+        }
+      } catch (err) {
+        alert("Kesalahan koneksi: " + err.message);
+      }
     }
 
     function exportToExcel() {
