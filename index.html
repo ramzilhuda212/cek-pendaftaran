@@ -9,7 +9,7 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <!-- SheetJS & jsPDF -->
   <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -22,10 +22,31 @@
       background-size: 24px 24px;
       opacity: 0.03;
     }
+
+    /* PENGATURAN CETAK UKURAN A5 */
     @media print {
+      @page {
+        size: A5 portrait;
+        margin: 0;
+      }
+      body {
+        background: #ffffff !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
       body * { visibility: hidden; }
       #kartuArea, #kartuArea * { visibility: visible; }
-      #kartuArea { position: absolute; left: 0; top: 0; width: 100%; }
+      #kartuArea {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 138mm;
+        height: 198mm;
+        box-shadow: none !important;
+        border-width: 2px !important;
+        margin: 0 !important;
+      }
     }
   </style>
 </head>
@@ -242,44 +263,68 @@
     </main>
   </div>
 
-  <!-- MODAL CETAK LEMBAR PENDAFTARAN -->
-  <div id="modalKartu" class="fixed inset-0 bg-slate-900/60 hidden flex justify-center items-center p-4 z-50">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full relative shadow-2xl border border-amber-200">
-      <button onclick="closeModalKartu()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
+  <!-- MODAL CETAK LEMBAR PENDAFTARAN (UKURAN A5 SCOUT STYLE) -->
+  <div id="modalKartu" class="fixed inset-0 bg-slate-900/70 hidden flex justify-center items-center p-3 sm:p-4 z-50 overflow-y-auto">
+    <div class="bg-white rounded-3xl p-4 sm:p-6 max-w-lg w-full relative shadow-2xl border border-amber-300 my-auto">
+      <button onclick="closeModalKartu()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center z-10">
         <i class="fa-solid fa-xmark"></i>
       </button>
 
-      <div id="kartuArea" class="border-2 border-amber-900 rounded-2xl p-5 bg-amber-50/50 relative space-y-4">
-        <div class="flex items-center justify-between border-b-2 border-amber-900 pb-3">
-          <div class="flex items-center gap-2.5">
-            <div class="w-10 h-10 rounded-xl bg-amber-900 text-amber-300 flex items-center justify-center text-xl font-black">
-              <i class="fa-solid fa-award"></i>
-            </div>
-            <div>
-              <h4 class="font-extrabold text-amber-950 text-xs uppercase">LEMBAR BUKTI PENDAFTARAN</h4>
-              <p class="text-[9px] text-amber-800 font-bold">KEMBARANAS III • SAKO SIT 2026</p>
-            </div>
+      <!-- WADAH DESAIN LEMBAR BUKTI A5 KEPANDUAN / SURVIVAL -->
+      <div id="kartuArea" class="border-4 border-amber-900 rounded-2xl p-4 sm:p-5 bg-gradient-to-b from-amber-50/90 via-orange-50/20 to-amber-100/40 relative space-y-3 shadow-inner">
+        
+        <!-- CORNER SCOUT ACCENTS -->
+        <div class="absolute top-1 left-1.5 text-amber-900/30 text-xs"><i class="fa-solid fa-campground"></i></div>
+        <div class="absolute top-1 right-1.5 text-amber-900/30 text-xs"><i class="fa-solid fa-compass"></i></div>
+
+        <!-- HEADER PENDAFTARAN -->
+        <div class="bg-gradient-to-r from-emerald-950 via-amber-950 to-emerald-900 text-white p-3 rounded-xl border border-amber-500/50 shadow-md text-center relative overflow-hidden">
+          <div class="flex items-center justify-center gap-2 mb-0.5">
+            <i class="fa-solid fa-shield-halved text-amber-400 text-sm"></i>
+            <h4 class="font-extrabold text-amber-100 text-xs sm:text-sm tracking-wide uppercase">LEMBAR BUKTI PENDAFTARAN</h4>
+            <i class="fa-solid fa-tree text-emerald-400 text-sm"></i>
           </div>
+          <p class="text-[10px] text-amber-300 font-bold uppercase tracking-wider">KEMBARANAS III • SAKO SIT INDONESIA 2026</p>
+          <p class="text-[8px] text-amber-200/80 italic font-medium mt-0.5">Bumi Perkemahan Lampung • 27 - 31 Oktober 2026</p>
         </div>
 
-        <div class="space-y-2 text-xs text-slate-800">
-          <div class="flex justify-between border-b border-amber-100 pb-1.5"><span class="text-gray-500">ID Registrasi</span><span id="cardId" class="font-bold text-amber-950"></span></div>
-          <div class="flex justify-between border-b border-amber-100 pb-1.5"><span class="text-gray-500">Status / Peran</span><span id="cardStatus" class="font-extrabold text-amber-900 uppercase"></span></div>
-          <div class="flex justify-between border-b border-amber-100 pb-1.5"><span class="text-gray-500">Nama Lengkap</span><span id="cardNama" class="font-bold uppercase text-slate-900"></span></div>
-          <div class="flex justify-between border-b border-amber-100 pb-1.5"><span class="text-gray-500">Jenis Kelamin</span><span id="cardJK" class="font-semibold"></span></div>
-          <div class="flex justify-between border-b border-amber-100 pb-1.5"><span class="text-gray-500">Asal Sekolah / Pangkalan</span><span id="cardSekolah" class="font-bold uppercase text-slate-900"></span></div>
-          <div class="flex justify-between border-b border-amber-100 pb-1.5"><span class="text-gray-500">Provinsi</span><span id="cardProv" class="font-semibold"></span></div>
-          <div class="flex justify-between border-b border-amber-100 pb-1.5"><span class="text-gray-500">Kota / Kabupaten</span><span id="cardKota" class="font-semibold"></span></div>
-          <div class="flex justify-between"><span class="text-gray-500">Ukuran Kaos</span><span id="cardKaos" class="font-bold text-amber-950"></span></div>
+        <!-- STAMP / BADGE STATUS (SEPERTI GAMBAR 2) -->
+        <div class="border-2 border-emerald-500 bg-emerald-50/90 rounded-2xl py-2 px-3 text-center shadow-xs">
+          <span class="font-extrabold text-emerald-800 text-xs sm:text-sm tracking-wider uppercase flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-circle-check text-emerald-600"></i> STATUS: TERVERIFIKASI SISTEM
+          </span>
+        </div>
+
+        <!-- DATA ITEM PENDAFTAR (SCOUT STYLE TABLE) -->
+        <div class="space-y-1.5 text-[11px] text-slate-800 bg-white/80 p-3 rounded-xl border border-amber-800/20 shadow-xs">
+          <div class="flex justify-between border-b border-amber-100 pb-1"><span class="text-slate-500 font-medium">ID Registrasi</span><span id="cardId" class="font-bold text-amber-950"></span></div>
+          <div class="flex justify-between border-b border-amber-100 pb-1"><span class="text-slate-500 font-medium">Status / Peran</span><span id="cardStatus" class="font-black text-amber-900 uppercase"></span></div>
+          <div class="flex justify-between border-b border-amber-100 pb-1"><span class="text-slate-500 font-medium">Nama Lengkap</span><span id="cardNama" class="font-bold uppercase text-slate-900"></span></div>
+          <div class="flex justify-between border-b border-amber-100 pb-1"><span class="text-slate-500 font-medium">Jenis Kelamin</span><span id="cardJK" class="font-semibold"></span></div>
+          <div class="flex justify-between border-b border-amber-100 pb-1"><span class="text-slate-500 font-medium">Asal Pangkalan / Sekolah</span><span id="cardSekolah" class="font-bold uppercase text-slate-900"></span></div>
+          <div class="flex justify-between border-b border-amber-100 pb-1"><span class="text-slate-500 font-medium">Provinsi</span><span id="cardProv" class="font-semibold"></span></div>
+          <div class="flex justify-between border-b border-amber-100 pb-1"><span class="text-slate-500 font-medium">Kota / Kabupaten</span><span id="cardKota" class="font-semibold"></span></div>
+          <div class="flex justify-between"><span class="text-slate-500 font-medium">Ukuran Kaos</span><span id="cardKaos" class="font-bold text-amber-950"></span></div>
+        </div>
+
+        <!-- INSTRUKSI DOKUMEN CETAK (SEPERTI GAMBAR 2) -->
+        <div class="pt-1 text-center space-y-1 border-t-2 border-dashed border-amber-800/20">
+          <p class="italic text-slate-600 text-[10px] font-medium leading-tight">
+            Harap membawa dokumen cetak ini saat melakukan registrasi ulang di lokasi perkemahan.
+          </p>
+          <p class="text-[9px] font-bold text-amber-900 uppercase tracking-widest pt-0.5">
+            "Satyaku Kudarmakan, Darmaku Kubaktikan"
+          </p>
         </div>
       </div>
 
+      <!-- ACTION BUTTONS -->
       <div class="mt-4 flex gap-2">
         <button onclick="downloadKartuPDF()" id="btnDownloadPDF" class="flex-1 bg-amber-900 hover:bg-amber-950 text-white font-bold py-3 rounded-2xl text-xs flex justify-center items-center gap-2 shadow-md">
-          <i class="fa-solid fa-file-pdf"></i> Unduh Kartu PDF
+          <i class="fa-solid fa-file-pdf"></i> Unduh Lembar A5 (PDF)
         </button>
         <button onclick="window.print()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4 py-3 rounded-2xl text-xs flex justify-center items-center gap-2">
-          <i class="fa-solid fa-print"></i> Cetak
+          <i class="fa-solid fa-print"></i> Cetak A5
         </button>
       </div>
     </div>
@@ -298,7 +343,6 @@
       </div>
 
       <form onsubmit="handleSaveData(event)" class="space-y-3 text-xs">
-        <!-- Field Tersembunyi untuk penanda Edit Mode & Indeks Baris -->
         <input type="hidden" id="formIsEdit" value="false">
         <input type="hidden" id="formId" value="">
 
@@ -472,6 +516,7 @@
       document.getElementById('modalKartu').classList.add('hidden');
     }
 
+    // GENERATE PDF KERTAS A5 DENGAN GAYA KEPANDUAN / SURVIVAL PRAMUKA
     function downloadKartuPDF() {
       const btn = document.getElementById('btnDownloadPDF');
       const originalText = btn.innerHTML;
@@ -481,6 +526,7 @@
       setTimeout(() => {
         try {
           const { jsPDF } = window.jspdf;
+          // Ukuran Kertas A5 (148mm x 210mm)
           const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a5' });
 
           const nama = document.getElementById('cardNama').innerText || '-';
@@ -492,54 +538,98 @@
           const kota = document.getElementById('cardKota').innerText || '-';
           const kaos = document.getElementById('cardKaos').innerText || '-';
 
-          doc.setDrawColor(120, 53, 15);
-          doc.setLineWidth(1.2);
+          // BINGKAI LUAR KHAS PRAMUKA / SURVIVAL
+          doc.setDrawColor(120, 53, 15); // Warna Amber Cokelat
+          doc.setLineWidth(1.5);
+          doc.roundedRect(6, 6, 136, 198, 5, 5, 'S');
+
+          doc.setDrawColor(16, 185, 129); // Garis Dalam Hijau
+          doc.setLineWidth(0.5);
           doc.roundedRect(8, 8, 132, 194, 4, 4, 'S');
 
-          doc.setFillColor(120, 53, 15);
-          doc.rect(8, 8, 132, 28, 'F');
+          // HEADER BAND (FOREST GREEN & AMBER)
+          doc.setFillColor(15, 44, 28);
+          doc.rect(8, 8, 132, 32, 'F');
+
+          doc.setFillColor(217, 119, 6);
+          doc.rect(8, 38, 132, 2, 'F');
 
           doc.setTextColor(255, 255, 255);
           doc.setFont("helvetica", "bold");
-          doc.setFontSize(13);
+          doc.setFontSize(12);
           doc.text("LEMBAR BUKTI PENDAFTARAN", 74, 18, { align: "center" });
 
           doc.setFontSize(9);
           doc.setTextColor(251, 191, 36);
-          doc.text("KEMBARANAS III - SAKO SIT 2026", 74, 26, { align: "center" });
+          doc.text("KEMBARANAS III • SAKO SIT INDONESIA 2026", 74, 25, { align: "center" });
 
+          doc.setFontSize(7.5);
+          doc.setTextColor(209, 250, 229);
+          doc.setFont("helvetica", "italic");
+          doc.text("Bumi Perkemahan Lampung • 27 - 31 Oktober 2026", 74, 31, { align: "center" });
+
+          // KOTAK STATUS VERIFIKASI (SESUAI GAMBAR 2)
+          doc.setFillColor(236, 253, 245); // Emerald-50
+          doc.setDrawColor(16, 185, 129);  // Emerald-500
+          doc.setLineWidth(0.8);
+          doc.roundedRect(14, 45, 120, 12, 3, 3, 'FD');
+
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(10);
+          doc.setTextColor(6, 78, 59); // Emerald-900
+          doc.text("STATUS: TERVERIFIKASI SISTEM", 74, 52.5, { align: "center" });
+
+          // TABEL DATA PENDAFTAR
           const items = [
             ["ID Registrasi", id],
             ["Status / Peran", status],
             ["Nama Lengkap", nama],
             ["Jenis Kelamin", jk],
-            ["Asal Sekolah / Pangkalan", sekolah],
+            ["Asal Pangkalan / Sekolah", sekolah],
             ["Provinsi", prov],
             ["Kota / Kabupaten", kota],
             ["Ukuran Kaos", kaos]
           ];
 
-          let startY = 48;
+          let startY = 66;
           items.forEach(([label, val], idx) => {
             if (idx % 2 === 0) {
-              doc.setFillColor(254, 243, 199);
-              doc.rect(12, startY - 5, 124, 10, 'F');
+              doc.setFillColor(254, 243, 199); // Light Amber
+              doc.rect(12, startY - 4, 124, 10, 'F');
             }
 
             doc.setFont("helvetica", "normal");
-            doc.setFontSize(9);
+            doc.setFontSize(8.5);
             doc.setTextColor(100, 116, 139);
-            doc.text(label, 15, startY + 1);
+            doc.text(label, 15, startY + 2);
 
             doc.setFont("helvetica", "bold");
+            doc.setFontSize(8.5);
             doc.setTextColor(15, 23, 42);
-            doc.text(String(val), 133, startY + 1, { align: "right" });
+            doc.text(String(val), 132, startY + 2, { align: "right" });
 
-            startY += 12;
+            startY += 11;
           });
 
+          // PESAN REGISTRASI ULANG (SESUAI GAMBAR 2)
+          doc.setDrawColor(217, 119, 6);
+          doc.setLineWidth(0.3);
+          doc.line(14, 162, 134, 162);
+
+          doc.setFont("helvetica", "italic");
+          doc.setFontSize(8.5);
+          doc.setTextColor(71, 85, 105);
+          doc.text("Harap membawa dokumen cetak ini saat melakukan registrasi ulang", 74, 172, { align: "center" });
+          doc.text("di lokasi perkemahan.", 74, 177, { align: "center" });
+
+          // MOTTO PRAMUKA
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(8);
+          doc.setTextColor(120, 53, 15);
+          doc.text("\"Satyaku Kudarmakan, Darmaku Kubaktikan\"", 74, 188, { align: "center" });
+
           const fileNameClean = nama.trim().replace(/[^a-zA-Z0-9]/g, '_');
-          doc.save(`Bukti_Pendaftaran_${fileNameClean}_${id}.pdf`);
+          doc.save(`Bukti_Pendaftaran_A5_${fileNameClean}_${id}.pdf`);
         } catch (err) {
           alert("Gagal membuat PDF: " + err.message);
         } finally {
@@ -666,7 +756,6 @@
       renderTable();
     }
 
-    // RENDER TABEL DENGAN PERBAIKAN TOMBOL EDIT & HAPUS
     function renderTable() {
       const thead = document.getElementById('tableHeader');
       thead.innerHTML = '<tr>' + rawHeaders.map(h => `<th class="px-4 py-3">${h}</th>`).join('') + '<th class="px-4 py-3 text-center">Aksi</th></tr>';
@@ -698,14 +787,13 @@
       }).join('');
     }
 
-    // MODAL FORM (TAMBAH / EDIT)
     function openModalForm(row = null) {
       const isEdit = row !== null;
       document.getElementById('modalFormTitle').innerText = isEdit ? 'Edit Data Pendaftar' : 'Tambah Data Manual';
       document.getElementById('formIsEdit').value = isEdit ? "true" : "false";
       document.getElementById('formId').value = isEdit ? (row[0] || '') : '';
       
-      document.getElementById('formStatus').value = isEdit ? (row[2] || 'Peserta Penggalang') : 'Peserta Penggalang';
+      document.getElementById('formStatus').value = isEdit ? (row[2] || 'Peserta Penegak') : 'Peserta Penegak';
       document.getElementById('formNama').value = isEdit ? (row[3] || row[7] || '') : '';
       document.getElementById('formJK').value = isEdit ? (row[9] || 'Laki-laki') : 'Laki-laki';
       document.getElementById('formSekolah').value = isEdit ? (row[10] || '') : '';
@@ -725,7 +813,6 @@
       openModalForm(selectedRow);
     }
 
-    // SIMPAN (TAMBAH / EDIT) DATA DENGAN PAYLOAD RESMI
     async function handleSaveData(e) {
       e.preventDefault();
       const btn = document.getElementById('btnSaveData');
@@ -769,7 +856,6 @@
       }
     }
 
-    // HAPUS DATA
     async function handleDeleteData(id, nama) {
       if (!confirm(`Apakah Anda yakin ingin menghapus data pendaftaran "${nama}"?`)) return;
 
