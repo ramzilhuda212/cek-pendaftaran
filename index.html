@@ -8,23 +8,20 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <!-- Google Fonts (Plus Jakarta Sans) -->
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- SheetJS (Excel) -->
+  <!-- SheetJS & jsPDF -->
   <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
-  <!-- jsPDF & AutoTable -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    
     .scout-bg-pattern {
       background-image: radial-gradient(#78350f 0.5px, transparent 0.5px);
       background-size: 24px 24px;
       opacity: 0.03;
     }
-
     @media print {
       body * { visibility: hidden; }
       #kartuArea, #kartuArea * { visibility: visible; }
@@ -36,14 +33,10 @@
   
   <div class="fixed inset-0 scout-bg-pattern pointer-events-none z-0"></div>
 
-  <!-- CONTENT WRAPPER -->
   <div class="relative z-10">
-    
     <!-- HEADER BAR / NAVBAR -->
     <header class="bg-gradient-to-r from-amber-950 via-amber-900 to-amber-950 text-white shadow-lg sticky top-0 z-40 border-b-2 border-amber-500">
       <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
-        
-        <!-- Logo & Title -->
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-full bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-300 text-xl shadow-inner">
             <i class="fa-solid fa-compass"></i>
@@ -59,7 +52,6 @@
           </div>
         </div>
 
-        <!-- Navigation Tabs -->
         <div class="flex items-center bg-amber-950/80 p-1 rounded-2xl border border-amber-700/50 w-full sm:w-auto justify-center">
           <button onclick="switchTab('userTab')" id="btnUserTab" class="flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 flex items-center justify-center gap-2 bg-amber-500 text-amber-950 shadow-md">
             <i class="fa-solid fa-magnifying-glass"></i> Cek Pendaftaran
@@ -68,21 +60,12 @@
             <i class="fa-solid fa-user-shield"></i> Portal Admin
           </button>
         </div>
-
       </div>
     </header>
 
     <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
-      
-      <!-- HERO BANNER PRAMUKA -->
+      <!-- HERO BANNER -->
       <section class="relative bg-gradient-to-br from-amber-900 via-amber-800 to-amber-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl overflow-hidden border border-amber-700/40">
-        <div class="absolute -right-8 -bottom-8 text-amber-500/10 text-9xl pointer-events-none">
-          <i class="fa-solid fa-campground"></i>
-        </div>
-        <div class="absolute right-1/4 -top-8 text-amber-400/5 text-8xl pointer-events-none">
-          <i class="fa-solid fa-fire-flame-curved"></i>
-        </div>
-
         <div class="relative z-10 max-w-2xl space-y-3">
           <div class="inline-flex items-center gap-2 bg-amber-500/20 border border-amber-400/30 px-3 py-1 rounded-full text-xs font-semibold text-amber-300">
             <i class="fa-solid fa-shield-halved text-emerald-400"></i>
@@ -97,10 +80,8 @@
         </div>
       </section>
 
-      <!-- ================= TAB 1: CEK PENDAFTARAN (PUBLIK) ================= -->
+      <!-- TAB 1: CEK PENDAFTARAN -->
       <section id="userTab" class="space-y-6">
-        
-        <!-- Form Search Card -->
         <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-lg border border-amber-100 relative max-w-2xl mx-auto">
           <div class="text-center space-y-2 mb-6">
             <div class="w-12 h-12 bg-amber-50 text-amber-800 rounded-2xl mx-auto flex items-center justify-center text-xl border border-amber-200">
@@ -124,15 +105,12 @@
           </form>
         </div>
 
-        <!-- Result Container -->
         <div id="searchResult" class="hidden space-y-4 max-w-3xl mx-auto"></div>
-
       </section>
 
-      <!-- ================= TAB 2: PORTAL ADMIN ================= -->
+      <!-- TAB 2: PORTAL ADMIN -->
       <section id="adminTab" class="hidden space-y-6">
-        
-        <!-- Form Login Admin -->
+        <!-- Login Form -->
         <div id="adminLoginForm" class="max-w-md mx-auto bg-white p-6 sm:p-8 rounded-3xl shadow-xl border border-amber-100">
           <div class="text-center space-y-2 mb-6">
             <div class="w-14 h-14 bg-amber-100 text-amber-900 rounded-2xl mx-auto flex items-center justify-center text-2xl border border-amber-300 shadow-sm">
@@ -165,57 +143,44 @@
 
         <!-- Dashboard Admin -->
         <div id="adminDashboard" class="hidden space-y-6">
-          
-          <!-- Stat Cards -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            
-            <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md flex items-center justify-between relative overflow-hidden">
+            <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md flex items-center justify-between">
               <div class="space-y-1">
                 <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Total Terdaftar</p>
                 <h3 id="statTotal" class="text-3xl font-black text-amber-950">0</h3>
-                <span class="text-[10px] text-amber-800 font-semibold bg-amber-50 px-2 py-0.5 rounded-md">Seluruh Pendaftar</span>
               </div>
-              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-800 to-amber-950 text-amber-300 flex items-center justify-center text-2xl shadow-md">
+              <div class="w-14 h-14 rounded-2xl bg-amber-900 text-amber-300 flex items-center justify-center text-2xl">
                 <i class="fa-solid fa-fire-flame-curved"></i>
               </div>
             </div>
-
-            <div class="bg-white p-5 rounded-3xl border border-blue-200/80 shadow-md flex items-center justify-between relative overflow-hidden">
+            <div class="bg-white p-5 rounded-3xl border border-blue-200/80 shadow-md flex items-center justify-between">
               <div class="space-y-1">
                 <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Jumlah Peserta</p>
                 <h3 id="statPeserta" class="text-3xl font-black text-blue-950">0</h3>
-                <span class="text-[10px] text-blue-800 font-semibold bg-blue-50 px-2 py-0.5 rounded-md">Penggalang / Penegak</span>
               </div>
-              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-700 to-blue-900 text-blue-200 flex items-center justify-center text-2xl shadow-md">
+              <div class="w-14 h-14 rounded-2xl bg-blue-800 text-blue-200 flex items-center justify-center text-2xl">
                 <i class="fa-solid fa-child-reaching"></i>
               </div>
             </div>
-
-            <div class="bg-white p-5 rounded-3xl border border-emerald-200/80 shadow-md flex items-center justify-between relative overflow-hidden">
+            <div class="bg-white p-5 rounded-3xl border border-emerald-200/80 shadow-md flex items-center justify-between">
               <div class="space-y-1">
                 <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Pembina Pendamping</p>
                 <h3 id="statPembina" class="text-3xl font-black text-emerald-950">0</h3>
-                <span class="text-[10px] text-emerald-800 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md">Pendamping Kontingen</span>
               </div>
-              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-700 to-emerald-900 text-emerald-200 flex items-center justify-center text-2xl shadow-md">
+              <div class="w-14 h-14 rounded-2xl bg-emerald-800 text-emerald-200 flex items-center justify-center text-2xl">
                 <i class="fa-solid fa-user-shield"></i>
               </div>
             </div>
-
           </div>
 
-          <!-- Filter & Action Panel -->
+          <!-- Action & Filter Panel -->
           <div class="bg-white p-5 sm:p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
-            
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
               <div>
                 <h3 class="font-extrabold text-amber-950 text-base flex items-center gap-2">
-                  <i class="fa-solid fa-filter text-amber-800"></i> Filter & Rekapitulasi Data
+                  <i class="fa-solid fa-filter text-amber-800"></i> Filter & Kelola Data
                 </h3>
-                <p class="text-xs text-gray-500">Kelola pendaftar, filter data, atau unduh laporan</p>
               </div>
-
-              <!-- Tombol Tambah Manual & Akses Lainnya -->
               <div class="flex items-center gap-2 w-full sm:w-auto flex-wrap">
                 <button onclick="openModalForm()" class="flex-1 sm:flex-none bg-amber-800 hover:bg-amber-900 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow transition-all">
                   <i class="fa-solid fa-user-plus"></i> Tambah Manual
@@ -226,29 +191,29 @@
                 <button onclick="exportToPDF()" class="flex-1 sm:flex-none bg-red-700 hover:bg-red-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow transition-all">
                   <i class="fa-solid fa-file-pdf"></i> Unduh PDF
                 </button>
-                <button onclick="logoutAdmin()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-2.5 rounded-xl text-xs font-bold shadow transition-all" title="Keluar Admin">
+                <button onclick="logoutAdmin()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-2.5 rounded-xl text-xs font-bold shadow transition-all">
                   <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
               </div>
             </div>
 
-            <!-- Select Filters -->
+            <!-- Filters -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
               <div>
                 <label class="block font-bold text-gray-700 mb-1">Provinsi</label>
-                <select id="filterProvinsi" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white font-medium">
+                <select id="filterProvinsi" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
                   <option value="">Semua Provinsi</option>
                 </select>
               </div>
               <div>
                 <label class="block font-bold text-gray-700 mb-1">Kota / Kabupaten</label>
-                <select id="filterKota" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white font-medium">
+                <select id="filterKota" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
                   <option value="">Semua Kota/Kab</option>
                 </select>
               </div>
               <div>
                 <label class="block font-bold text-gray-700 mb-1">Jenis Kelamin</label>
-                <select id="filterJK" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white font-medium">
+                <select id="filterJK" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
                   <option value="">Semua Gender</option>
                   <option value="Laki-laki">Laki-laki</option>
                   <option value="Perempuan">Perempuan</option>
@@ -256,12 +221,11 @@
               </div>
               <div>
                 <label class="block font-bold text-gray-700 mb-1">Ukuran Kaos</label>
-                <select id="filterKaos" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white font-medium">
+                <select id="filterKaos" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
                   <option value="">Semua Ukuran</option>
                 </select>
               </div>
             </div>
-
           </div>
 
           <!-- Table Admin -->
@@ -273,104 +237,57 @@
               </table>
             </div>
           </div>
-
         </div>
-
       </section>
-
     </main>
   </div>
-
-  <!-- FOOTER -->
-  <footer class="bg-slate-900 text-slate-400 text-xs py-6 mt-12 border-t border-slate-800 relative z-10">
-    <div class="max-w-6xl mx-auto px-4 text-center space-y-2">
-      <div class="flex items-center justify-center gap-2 text-amber-400 font-bold">
-        <i class="fa-solid fa-campground"></i>
-        <span>KEMBARANAS III - 2026</span>
-      </div>
-      <p class="text-[11px] text-slate-500">Sistem Informasi Pendaftaran & Verifikasi Kontingen Pramuka SAKO SIT Indonesia</p>
-    </div>
-  </footer>
 
   <!-- MODAL CETAK LEMBAR PENDAFTARAN -->
   <div id="modalKartu" class="fixed inset-0 bg-slate-900/60 hidden flex justify-center items-center p-4 z-50">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full relative shadow-2xl border border-amber-200">
-      
       <button onclick="closeModalKartu()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
         <i class="fa-solid fa-xmark"></i>
       </button>
 
-      <!-- Printable Area -->
       <div id="kartuArea" class="border-2 border-amber-900 rounded-2xl p-5 bg-amber-50/50 relative space-y-4">
-        
         <div class="flex items-center justify-between border-b-2 border-amber-900 pb-3">
           <div class="flex items-center gap-2.5">
             <div class="w-10 h-10 rounded-xl bg-amber-900 text-amber-300 flex items-center justify-center text-xl font-black">
               <i class="fa-solid fa-award"></i>
             </div>
             <div>
-              <h4 class="font-extrabold text-amber-950 text-xs uppercase tracking-wider">LEMBAR BUKTI PENDAFTARAN</h4>
+              <h4 class="font-extrabold text-amber-950 text-xs uppercase">LEMBAR BUKTI PENDAFTARAN</h4>
               <p class="text-[9px] text-amber-800 font-bold">KEMBARANAS III • SAKO SIT 2026</p>
             </div>
           </div>
         </div>
 
         <div class="space-y-2 text-xs text-slate-800">
-          <div class="flex justify-between border-b border-amber-100 pb-1.5">
-            <span class="text-gray-500">ID Registrasi</span>
-            <span id="cardId" class="font-bold text-amber-950"></span>
-          </div>
-          <div class="flex justify-between border-b border-amber-100 pb-1.5">
-            <span class="text-gray-500">Status / Peran</span>
-            <span id="cardStatus" class="font-extrabold text-amber-900 uppercase"></span>
-          </div>
-          <div class="flex justify-between border-b border-amber-100 pb-1.5">
-            <span class="text-gray-500">Nama Lengkap</span>
-            <span id="cardNama" class="font-bold uppercase text-slate-900"></span>
-          </div>
-          <div class="flex justify-between border-b border-amber-100 pb-1.5">
-            <span class="text-gray-500">Jenis Kelamin</span>
-            <span id="cardJK" class="font-semibold"></span>
-          </div>
-          <div class="flex justify-between border-b border-amber-100 pb-1.5">
-            <span class="text-gray-500">Asal Sekolah / Pangkalan</span>
-            <span id="cardSekolah" class="font-bold uppercase text-slate-900"></span>
-          </div>
-          <div class="flex justify-between border-b border-amber-100 pb-1.5">
-            <span class="text-gray-500">Provinsi</span>
-            <span id="cardProv" class="font-semibold"></span>
-          </div>
-          <div class="flex justify-between border-b border-amber-100 pb-1.5">
-            <span class="text-gray-500">Kota / Kabupaten</span>
-            <span id="cardKota" class="font-semibold"></span>
-          </div>
-          <div class="flex justify-between">
-            <span class="text-gray-500">Ukuran Kaos</span>
-            <span id="cardKaos" class="font-bold text-amber-950"></span>
-          </div>
-        </div>
-
-        <div class="pt-3 text-center border-t border-dashed border-amber-300">
-          <p class="text-[9px] text-gray-500 italic">Harap membawa dokumen cetak ini saat melakukan registrasi ulang di lokasi perkemahan.</p>
+          <div class="flex justify-between border-b border-amber-100 pb-1.5"><span class="text-gray-500">ID Registrasi</span><span id="cardId" class="font-bold text-amber-950"></span></div>
+          <div class="flex justify-between border-b border-amber-100 pb-1.5"><span class="text-gray-500">Status / Peran</span><span id="cardStatus" class="font-extrabold text-amber-900 uppercase"></span></div>
+          <div class="flex justify-between border-b border-amber-100 pb-1.5"><span class="text-gray-500">Nama Lengkap</span><span id="cardNama" class="font-bold uppercase text-slate-900"></span></div>
+          <div class="flex justify-between border-b border-amber-100 pb-1.5"><span class="text-gray-500">Jenis Kelamin</span><span id="cardJK" class="font-semibold"></span></div>
+          <div class="flex justify-between border-b border-amber-100 pb-1.5"><span class="text-gray-500">Asal Sekolah / Pangkalan</span><span id="cardSekolah" class="font-bold uppercase text-slate-900"></span></div>
+          <div class="flex justify-between border-b border-amber-100 pb-1.5"><span class="text-gray-500">Provinsi</span><span id="cardProv" class="font-semibold"></span></div>
+          <div class="flex justify-between border-b border-amber-100 pb-1.5"><span class="text-gray-500">Kota / Kabupaten</span><span id="cardKota" class="font-semibold"></span></div>
+          <div class="flex justify-between"><span class="text-gray-500">Ukuran Kaos</span><span id="cardKaos" class="font-bold text-amber-950"></span></div>
         </div>
       </div>
 
       <div class="mt-4 flex gap-2">
-        <button onclick="downloadKartuPDF()" id="btnDownloadPDF" class="flex-1 bg-amber-900 hover:bg-amber-950 text-white font-bold py-3 rounded-2xl text-xs flex justify-center items-center gap-2 shadow-md transition-all">
+        <button onclick="downloadKartuPDF()" id="btnDownloadPDF" class="flex-1 bg-amber-900 hover:bg-amber-950 text-white font-bold py-3 rounded-2xl text-xs flex justify-center items-center gap-2 shadow-md">
           <i class="fa-solid fa-file-pdf"></i> Unduh Kartu PDF
         </button>
-        <button onclick="window.print()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4 py-3 rounded-2xl text-xs flex justify-center items-center gap-2 shadow-sm transition-all">
+        <button onclick="window.print()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4 py-3 rounded-2xl text-xs flex justify-center items-center gap-2">
           <i class="fa-solid fa-print"></i> Cetak
         </button>
       </div>
-
     </div>
   </div>
 
   <!-- MODAL FORM TAMBAH / EDIT DATA ADMIN -->
   <div id="modalFormAdmin" class="fixed inset-0 bg-slate-900/60 hidden flex justify-center items-center p-4 z-50 overflow-y-auto">
     <div class="bg-white rounded-3xl p-6 max-w-lg w-full relative shadow-2xl border border-amber-200 my-8">
-      
       <button onclick="closeModalForm()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
         <i class="fa-solid fa-xmark"></i>
       </button>
@@ -381,12 +298,13 @@
       </div>
 
       <form onsubmit="handleSaveData(event)" class="space-y-3 text-xs">
-        <input type="hidden" id="formRowIndex" value="">
+        <!-- Field Tersembunyi untuk penanda Edit Mode & Indeks Baris -->
+        <input type="hidden" id="formIsEdit" value="false">
         <input type="hidden" id="formId" value="">
 
         <div>
           <label class="block font-bold text-gray-700 mb-1">Status Pendaftaran</label>
-          <select id="formStatus" required class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white font-medium">
+          <select id="formStatus" required class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
             <option value="Peserta Penggalang">Peserta Penggalang</option>
             <option value="Peserta Penegak">Peserta Penegak</option>
             <option value="Pembina Pendamping">Pembina Pendamping</option>
@@ -395,51 +313,50 @@
 
         <div>
           <label class="block font-bold text-gray-700 mb-1">Nama Lengkap</label>
-          <input type="text" id="formNama" required placeholder="NAMA LENGKAP" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white uppercase font-medium">
+          <input type="text" id="formNama" required placeholder="NAMA LENGKAP" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 uppercase font-medium">
         </div>
 
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block font-bold text-gray-700 mb-1">Jenis Kelamin</label>
-            <select id="formJK" required class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white font-medium">
+            <select id="formJK" required class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
               <option value="Laki-laki">Laki-laki</option>
               <option value="Perempuan">Perempuan</option>
             </select>
           </div>
           <div>
             <label class="block font-bold text-gray-700 mb-1">Ukuran Kaos</label>
-            <input type="text" id="formKaos" required placeholder="M / L / XL / XXL" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white uppercase font-medium">
+            <input type="text" id="formKaos" required placeholder="M / L / XL / XXL" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 uppercase font-medium">
           </div>
         </div>
 
         <div>
           <label class="block font-bold text-gray-700 mb-1">Asal Sekolah / Pangkalan</label>
-          <input type="text" id="formSekolah" required placeholder="NAMA SCHOOL / PANGKALAN" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white uppercase font-medium">
+          <input type="text" id="formSekolah" required placeholder="NAMA SCHOOL / PANGKALAN" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 uppercase font-medium">
         </div>
 
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block font-bold text-gray-700 mb-1">Provinsi</label>
-            <input type="text" id="formProv" required placeholder="PROVINSI" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white uppercase font-medium">
+            <input type="text" id="formProv" required placeholder="PROVINSI" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 uppercase font-medium">
           </div>
           <div>
             <label class="block font-bold text-gray-700 mb-1">Kota / Kabupaten</label>
-            <input type="text" id="formKota" required placeholder="KOTA / KABUPATEN" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 focus:bg-white uppercase font-medium">
+            <input type="text" id="formKota" required placeholder="KOTA / KABUPATEN" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 uppercase font-medium">
           </div>
         </div>
 
         <div class="pt-4 flex gap-2">
-          <button type="button" onclick="closeModalForm()" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2.5 rounded-xl transition-all">Batal</button>
-          <button type="submit" id="btnSaveData" class="flex-1 bg-amber-900 hover:bg-amber-950 text-white font-bold py-2.5 rounded-xl shadow-md transition-all">Simpan Data</button>
+          <button type="button" onclick="closeModalForm()" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2.5 rounded-xl">Batal</button>
+          <button type="submit" id="btnSaveData" class="flex-1 bg-amber-900 hover:bg-amber-950 text-white font-bold py-2.5 rounded-xl shadow-md">Simpan Data</button>
         </div>
       </form>
-
     </div>
   </div>
 
   <!-- JAVASCRIPT LOGIC -->
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2Poc--NeuyhGB-HJpzz7OQ878lo6pLsMhBgCfn9XXo3eMHW0l-DoO2pGvd7m0SX5z/exec"; 
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbznFj-ndl5ArO7N5lnwy7EYnChwbV8slndN0EWlOZ5lXEYauoInw6WZHfFwgN1O7TEV/exec"; 
     
     let rawHeaders = [];
     let rawAdminRows = [];
@@ -486,7 +403,7 @@
           res.data.forEach(item => {
             const isPembina = String(item.statusPendaftaran).toLowerCase().includes('pembina');
             const namaLengkapFinal = item.nama || (isPembina ? item.namaPembina : item.namaPeserta) || '-';
-            const namaSafe = namaLengkapFinal.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            const namaSafe = String(namaLengkapFinal).replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
             const badgeStyle = isPembina 
               ? 'bg-emerald-100 text-emerald-900 border-emerald-300' 
@@ -565,11 +482,7 @@
       setTimeout(() => {
         try {
           const { jsPDF } = window.jspdf;
-          const doc = new jsPDF({
-            orientation: 'portrait',
-            unit: 'mm',
-            format: 'a5'
-          });
+          const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a5' });
 
           const nama = document.getElementById('cardNama').innerText || '-';
           const id = document.getElementById('cardId').innerText || '-';
@@ -596,10 +509,6 @@
           doc.setTextColor(251, 191, 36);
           doc.text("KEMBARANAS III - SAKO SIT 2026", 74, 26, { align: "center" });
 
-          doc.setDrawColor(245, 158, 11);
-          doc.setLineWidth(0.8);
-          doc.line(12, 40, 136, 40);
-
           const items = [
             ["ID Registrasi", id],
             ["Status / Peran", status],
@@ -612,7 +521,6 @@
           ];
 
           let startY = 48;
-
           items.forEach(([label, val], idx) => {
             if (idx % 2 === 0) {
               doc.setFillColor(254, 243, 199);
@@ -625,41 +533,14 @@
             doc.text(label, 15, startY + 1);
 
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(9);
             doc.setTextColor(15, 23, 42);
-
-            let displayVal = String(val);
-            if (displayVal.length > 32) {
-              displayVal = displayVal.substring(0, 30) + '...';
-            }
-            doc.text(displayVal, 133, startY + 1, { align: "right" });
-
-            doc.setDrawColor(226, 232, 240);
-            doc.setLineWidth(0.2);
-            doc.line(12, startY + 5, 136, startY + 5);
+            doc.text(String(val), 133, startY + 1, { align: "right" });
 
             startY += 12;
           });
 
-          doc.setFillColor(236, 253, 245);
-          doc.setDrawColor(16, 185, 129);
-          doc.setLineWidth(0.5);
-          doc.roundedRect(12, startY + 4, 124, 13, 3, 3, 'FD');
-
-          doc.setFont("helvetica", "bold");
-          doc.setFontSize(9);
-          doc.setTextColor(6, 95, 70);
-          doc.text("STATUS: TERVERIFIKASI SISTEM", 74, startY + 12, { align: "center" });
-
-          doc.setFont("helvetica", "italic");
-          doc.setFontSize(8);
-          doc.setTextColor(100, 116, 139);
-          doc.text("Harap membawa dokumen cetak ini saat melakukan registrasi ulang", 74, 188, { align: "center" });
-          doc.text("di lokasi perkemahan.", 74, 193, { align: "center" });
-
           const fileNameClean = nama.trim().replace(/[^a-zA-Z0-9]/g, '_');
           doc.save(`Bukti_Pendaftaran_${fileNameClean}_${id}.pdf`);
-
         } catch (err) {
           alert("Gagal membuat PDF: " + err.message);
         } finally {
@@ -786,7 +667,7 @@
       renderTable();
     }
 
-    // RENDER TABEL DENGAN TOMBOL EDIT & HAPUS
+    // RENDER TABEL DENGAN PERBAIKAN TOMBOL EDIT & HAPUS
     function renderTable() {
       const thead = document.getElementById('tableHeader');
       thead.innerHTML = '<tr>' + rawHeaders.map(h => `<th class="px-4 py-3">${h}</th>`).join('') + '<th class="px-4 py-3 text-center">Aksi</th></tr>';
@@ -798,7 +679,7 @@
       }
 
       tbody.innerHTML = filteredRows.map((row, idx) => {
-        const id = row[0] || ('REG-' + (idx + 1));
+        const id = row[0] || '';
         const namaVal = row[3] || row[7] || '-';
         const safeNama = String(namaVal).replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
@@ -819,10 +700,10 @@
     }
 
     // MODAL FORM (TAMBAH / EDIT)
-    function openModalForm(row = null, index = null) {
+    function openModalForm(row = null) {
       const isEdit = row !== null;
       document.getElementById('modalFormTitle').innerText = isEdit ? 'Edit Data Pendaftar' : 'Tambah Data Manual';
-      document.getElementById('formRowIndex').value = isEdit ? index : '';
+      document.getElementById('formIsEdit').value = isEdit ? "true" : "false";
       document.getElementById('formId').value = isEdit ? (row[0] || '') : '';
       
       document.getElementById('formStatus').value = isEdit ? (row[2] || 'Peserta Penggalang') : 'Peserta Penggalang';
@@ -842,18 +723,18 @@
 
     function editDataByRow(idx) {
       const selectedRow = filteredRows[idx];
-      openModalForm(selectedRow, idx);
+      openModalForm(selectedRow);
     }
 
-    // SIMPAN (TAMBAH / EDIT) DATA
+    // SIMPAN (TAMBAH / EDIT) DATA DENGAN PAYLOAD RESMI
     async function handleSaveData(e) {
       e.preventDefault();
       const btn = document.getElementById('btnSaveData');
       btn.disabled = true;
       btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...`;
 
+      const isEdit = document.getElementById('formIsEdit').value === "true";
       const id = document.getElementById('formId').value;
-      const isEdit = Boolean(id);
 
       const payload = {
         action: isEdit ? 'editData' : 'addData',
@@ -896,7 +777,7 @@
       try {
         const response = await fetch(SCRIPT_URL, {
           method: 'POST',
-          body: JSON.stringify({ action: 'deleteData', id: id })
+          body: JSON.stringify({ action: 'deleteData', id: id, nama: nama })
         });
         const res = await response.json();
 
@@ -922,12 +803,9 @@
 
     function exportToPDF() {
       if (filteredRows.length === 0) return alert("Tidak ada data untuk diunduh.");
-      
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({ orientation: 'landscape' });
-
       doc.text("Rekap Data Pendaftaran KEMBARANAS III - 2026", 14, 12);
-      
       doc.autoTable({
         head: [rawHeaders],
         body: filteredRows,
@@ -935,7 +813,6 @@
         styles: { fontSize: 7, cellPadding: 2 },
         headStyles: { fillColor: [120, 53, 15] }
       });
-
       doc.save("Rekap_Filtered_KEMBARANAS_III.pdf");
     }
 
