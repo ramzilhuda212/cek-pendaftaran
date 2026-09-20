@@ -23,13 +23,14 @@
       opacity: 0.03;
     }
 
-    /* FORMAT CETAK A4 (PASTI 1 HALAMAN PAS - ATAS BAWAH) */
+    /* FORMAT CETAK A4 (FULL 1 HALAMAN PAS ATAS-BAWAH TANPA TERSISA) */
     @media print {
       @page {
         size: A4 portrait;
-        margin: 4mm;
+        margin: 3mm;
       }
-      body {
+      html, body {
+        height: 100%;
         background: #ffffff !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
@@ -42,10 +43,14 @@
         top: 0;
         width: 100% !important;
         max-width: 100% !important;
+        height: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
         box-shadow: none !important;
         border: none !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
       }
       .no-print { display: none !important; }
     }
@@ -259,38 +264,38 @@
     </main>
   </div>
 
-  <!-- MODAL CETAK LEMBAR PENDAFTARAN (DENGAN 12 CHECKLIST FASILITAS & PRAMUKA SURVIVAL TEMA - PAS 1 HALAMAN A4) -->
+  <!-- MODAL CETAK LEMBAR PENDAFTARAN (FULL 1 HALAMAN A4 DENGAN KOLOM KOTAK KOSONG CEKLIST MANUAL) -->
   <div id="modalKartu" class="fixed inset-0 bg-slate-900/80 hidden flex justify-center items-start sm:items-center p-2 sm:p-4 z-50 overflow-y-auto">
-    <div id="modalKartuContent" class="bg-amber-50/20 rounded-2xl p-2 sm:p-3 max-w-2xl w-full relative shadow-2xl border-2 border-amber-800 my-auto">
+    <div id="modalKartuContent" class="bg-amber-50/20 rounded-2xl p-3 sm:p-4 max-w-2xl w-full relative shadow-2xl border-2 border-amber-800 my-auto flex flex-col justify-between min-h-[95vh] sm:min-h-0">
       
       <!-- TOMBOL CLOSE (TIDAK TERCETAK) -->
       <button onclick="closeModalKartu()" class="no-print absolute top-3 right-3 text-slate-500 hover:text-slate-900 w-8 h-8 rounded-full bg-white shadow flex items-center justify-center z-20">
         <i class="fa-solid fa-xmark text-lg"></i>
       </button>
 
-      <div class="space-y-2">
+      <div class="flex-1 flex flex-col justify-between space-y-3">
         
         <!-- ==================== KARTU 1: LEMBAR PESERTA ==================== -->
-        <div class="border-2 border-amber-900 bg-amber-50/90 rounded-xl p-2.5 relative space-y-1.5 shadow-xs">
+        <div class="border-2 border-amber-900 bg-amber-50/90 rounded-xl p-3 relative flex flex-col justify-between space-y-2 shadow-xs flex-1">
           
           <!-- HEADER PRAMUKA SURVIVAL EXPEDITION -->
-          <div class="bg-gradient-to-r from-amber-950 via-amber-900 to-emerald-950 text-amber-100 p-2 rounded-lg border-b-2 border-amber-500 shadow-sm relative overflow-hidden">
+          <div class="bg-gradient-to-r from-amber-950 via-amber-900 to-emerald-950 text-amber-100 p-2.5 rounded-lg border-b-2 border-amber-500 shadow-sm relative overflow-hidden">
             <div class="flex items-center justify-between gap-2">
-              <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-full bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center text-amber-300 text-base shadow-inner">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-full bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center text-amber-300 text-lg shadow-inner">
                   <i class="fa-solid fa-compass"></i>
                 </div>
                 <div>
                   <div class="flex items-center gap-1.5">
-                    <h4 class="font-black text-amber-100 text-[11px] tracking-wider uppercase">PERKEMAHAN UKHUWAH KEMBARANAS III</h4>
-                    <span class="bg-amber-500 text-amber-950 text-[8px] font-extrabold px-1.5 py-0.2 rounded uppercase">2026</span>
+                    <h4 class="font-black text-amber-100 text-xs sm:text-sm tracking-wider uppercase">PERKEMAHAN UKHUWAH KEMBARANAS III</h4>
+                    <span class="bg-amber-500 text-amber-950 text-[9px] font-extrabold px-1.5 py-0.2 rounded uppercase">2026</span>
                   </div>
-                  <p class="text-[8.5px] text-amber-200/90 font-semibold tracking-wide flex items-center gap-1">
+                  <p class="text-[9px] sm:text-[10px] text-amber-200/90 font-semibold tracking-wide flex items-center gap-1">
                     <i class="fa-solid fa-campground text-emerald-400"></i> SAKO SIT INDONESIA • SCOUT & SURVIVAL EXPEDITION
                   </p>
                 </div>
               </div>
-              <span class="bg-amber-500 text-amber-950 font-black text-[8.5px] px-2 py-0.5 rounded border border-amber-300 uppercase tracking-wider shadow-xs">
+              <span class="bg-amber-500 text-amber-950 font-black text-[9px] sm:text-[10px] px-2.5 py-1 rounded border border-amber-300 uppercase tracking-wider shadow-xs">
                 LEMBAR PESERTA
               </span>
             </div>
@@ -298,17 +303,17 @@
 
           <!-- KOTAK STATUS TERVERIFIKASI SISTEM -->
           <div class="space-y-0.5">
-            <div class="border-2 border-emerald-500 bg-emerald-50/90 text-emerald-800 font-extrabold text-center py-1 rounded-xl text-[11px] uppercase tracking-wider shadow-xs flex items-center justify-center gap-2">
-              <i class="fa-solid fa-circle-check text-emerald-600 text-xs"></i>
+            <div class="border-2 border-emerald-500 bg-emerald-50/90 text-emerald-800 font-extrabold text-center py-1.5 rounded-xl text-xs uppercase tracking-wider shadow-xs flex items-center justify-center gap-2">
+              <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
               <span>STATUS: TERVERIFIKASI SISTEM</span>
             </div>
-            <p class="text-[8px] text-slate-500 italic text-center font-medium">
+            <p class="text-[9px] text-slate-500 italic text-center font-medium">
               Harap membawa dokumen cetak ini saat melakukan registrasi ulang di lokasi perkemahan.
             </p>
           </div>
 
           <!-- DATA GRID BUKTI PENDAFTARAN -->
-          <div class="grid grid-cols-2 gap-x-2 gap-y-0.5 text-[9.5px] text-slate-800 bg-white/95 p-1.5 rounded-lg border border-amber-900/20 shadow-xs">
+          <div class="grid grid-cols-2 gap-x-3 gap-y-1 text-[10px] sm:text-[11px] text-slate-800 bg-white/95 p-2 rounded-lg border border-amber-900/20 shadow-xs">
             <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">ID Registrasi</span><span id="card1Id" class="font-bold text-amber-950 font-mono"></span></div>
             <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">Peran / Status</span><span id="card1Status" class="font-black text-amber-900 uppercase"></span></div>
             <div class="flex justify-between border-b border-amber-100 pb-0.5 col-span-2"><span class="text-slate-500 font-medium">Nama Lengkap</span><span id="card1Nama" class="font-bold uppercase text-slate-900"></span></div>
@@ -319,64 +324,64 @@
             <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">Email</span><span id="card1Email" class="font-semibold text-slate-800"></span></div>
           </div>
 
-          <!-- 12 POINT CHECKLIST FASILITAS / TERVERIFIKASI -->
-          <div class="bg-white/90 p-1.5 rounded-lg border border-amber-900/20">
-            <p class="text-[8.5px] font-black text-amber-950 uppercase mb-1 flex items-center gap-1">
-              <i class="fa-solid fa-square-check text-emerald-600"></i> Fasilitas & Hak Peserta (Terverifikasi Sistem):
+          <!-- 12 POINT KOTAK CEKLIST KOSONG (UNTUK VERIFIKASI MANUAL) -->
+          <div class="bg-white/95 p-2 rounded-lg border border-amber-900/20 space-y-1">
+            <p class="text-[9.5px] sm:text-[10px] font-black text-amber-950 uppercase flex items-center gap-1.5">
+              <i class="fa-regular fa-square-check text-amber-800"></i> Checklist Verifikasi Lapangan (Diisi Panitia Saat Penyerahan):
             </p>
-            <div class="grid grid-cols-3 gap-x-2 gap-y-0.5 text-[8px] text-slate-800 font-medium">
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Sewa Tapak Perkemahan</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Tiket Masuk Buper Kwarda</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Sewa Tenda Dome 3–4 Orang</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Scarf Kegiatan</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">ID Card Peserta & Bindamping</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Kaos Kegiatan</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Topi Kegiatan</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Tas Daypack</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Tiska Kembaranas III</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Konsumsi selama Kegiatan</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Paket Trip Pahawang</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Sertifikat & Instruktur Muda</span></div>
+            <div class="grid grid-cols-3 gap-x-2 gap-y-1 text-[8.5px] sm:text-[9.5px] text-slate-800 font-medium">
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Sewa Tapak Perkemahan</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Tiket Masuk Buper Kwarda</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Sewa Tenda Dome 3–4 Orang</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Scarf Kegiatan</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">ID Card Peserta & Bindamping</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Kaos Kegiatan</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Topi Kegiatan</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Tas Daypack</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Tiska Kembaranas III</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Konsumsi selama Kegiatan</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Paket Trip Pahawang</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Sertifikat & Instruktur Muda</span></div>
             </div>
           </div>
 
           <!-- SCOUT FOOTER STAMP / MOTTO -->
-          <div class="flex justify-between items-center text-[8px] text-amber-900 font-semibold px-1 pt-0.5 border-t border-amber-800/10">
+          <div class="flex justify-between items-center text-[8.5px] text-amber-900 font-semibold px-1 pt-1 border-t border-amber-800/10">
             <span class="flex items-center gap-1"><i class="fa-solid fa-mountain-sun text-amber-800"></i> Satyaku Kudarmakan, Darmaku Kubaktikan</span>
             <span class="font-mono text-amber-950 font-bold">KEMBARANAS-2026-OFFICIAL</span>
           </div>
         </div>
 
         <!-- GARIS POTONG / CUT LINE -->
-        <div class="relative flex py-0.5 items-center justify-center">
-          <div class="flex-grow border-t-2 border-dashed border-amber-800/40"></div>
-          <span class="flex-shrink mx-3 text-[8px] font-bold text-amber-900 uppercase tracking-widest bg-amber-100 px-2 py-0.5 border border-amber-800/30 rounded-full flex items-center gap-1">
-            <i class="fa-solid fa-scissors"></i> Gunting Di Sini (Potongan Arsip Panitia)
+        <div class="relative flex py-1 items-center justify-center">
+          <div class="flex-grow border-t-2 border-dashed border-amber-800/50"></div>
+          <span class="flex-shrink mx-3 text-[9px] font-bold text-amber-950 uppercase tracking-widest bg-amber-100 px-3 py-1 border border-amber-800/40 rounded-full flex items-center gap-1.5 shadow-xs">
+            <i class="fa-solid fa-scissors"></i> GUNTING DI SINI (POTONGAN ARSIP PANITIA)
           </span>
-          <div class="flex-grow border-t-2 border-dashed border-amber-800/40"></div>
+          <div class="flex-grow border-t-2 border-dashed border-amber-800/50"></div>
         </div>
 
         <!-- ==================== KARTU 2: ARSIP PANITIA ==================== -->
-        <div class="border-2 border-slate-700 bg-slate-50/90 rounded-xl p-2.5 relative space-y-1.5 shadow-xs">
+        <div class="border-2 border-slate-700 bg-slate-50/90 rounded-xl p-3 relative flex flex-col justify-between space-y-2 shadow-xs flex-1">
           
           <!-- HEADER PRAMUKA ARSIP PANITIA -->
-          <div class="bg-gradient-to-r from-slate-950 via-slate-900 to-amber-950 text-slate-100 p-2 rounded-lg border-b-2 border-amber-500 shadow-sm relative overflow-hidden">
+          <div class="bg-gradient-to-r from-slate-950 via-slate-900 to-amber-950 text-slate-100 p-2.5 rounded-lg border-b-2 border-amber-500 shadow-sm relative overflow-hidden">
             <div class="flex items-center justify-between gap-2">
-              <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-full bg-slate-700/50 border-2 border-slate-400 flex items-center justify-center text-amber-300 text-base shadow-inner">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-full bg-slate-700/50 border-2 border-slate-400 flex items-center justify-center text-amber-300 text-lg shadow-inner">
                   <i class="fa-solid fa-tree"></i>
                 </div>
                 <div>
                   <div class="flex items-center gap-1.5">
-                    <h4 class="font-black text-slate-100 text-[11px] tracking-wider uppercase">PERKEMAHAN UKHUWAH KEMBARANAS III</h4>
-                    <span class="bg-emerald-500 text-emerald-950 text-[8px] font-extrabold px-1.5 py-0.2 rounded uppercase">2026</span>
+                    <h4 class="font-black text-slate-100 text-xs sm:text-sm tracking-wider uppercase">PERKEMAHAN UKHUWAH KEMBARANAS III</h4>
+                    <span class="bg-emerald-500 text-emerald-950 text-[9px] font-extrabold px-1.5 py-0.2 rounded uppercase">2026</span>
                   </div>
-                  <p class="text-[8.5px] text-slate-300 font-semibold tracking-wide flex items-center gap-1">
+                  <p class="text-[9px] sm:text-[10px] text-slate-300 font-semibold tracking-wide flex items-center gap-1">
                     <i class="fa-solid fa-shield-halved text-emerald-400"></i> REGISTRASI PANITIA LAPANGAN • SAKO SIT INDONESIA
                   </p>
                 </div>
               </div>
-              <span class="bg-emerald-500 text-emerald-950 font-black text-[8.5px] px-2 py-0.5 rounded border border-emerald-300 uppercase tracking-wider shadow-xs">
+              <span class="bg-emerald-500 text-emerald-950 font-black text-[9px] sm:text-[10px] px-2.5 py-1 rounded border border-emerald-300 uppercase tracking-wider shadow-xs">
                 ARSIP PANITIA
               </span>
             </div>
@@ -384,17 +389,17 @@
 
           <!-- KOTAK STATUS TERVERIFIKASI SISTEM -->
           <div class="space-y-0.5">
-            <div class="border-2 border-emerald-500 bg-emerald-50/90 text-emerald-800 font-extrabold text-center py-1 rounded-xl text-[11px] uppercase tracking-wider shadow-xs flex items-center justify-center gap-2">
-              <i class="fa-solid fa-circle-check text-emerald-600 text-xs"></i>
+            <div class="border-2 border-emerald-500 bg-emerald-50/90 text-emerald-800 font-extrabold text-center py-1.5 rounded-xl text-xs uppercase tracking-wider shadow-xs flex items-center justify-center gap-2">
+              <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
               <span>STATUS: TERVERIFIKASI SISTEM</span>
             </div>
-            <p class="text-[8px] text-slate-500 italic text-center font-medium">
+            <p class="text-[9px] text-slate-500 italic text-center font-medium">
               Harap membawa dokumen cetak ini saat melakukan registrasi ulang di lokasi perkemahan.
             </p>
           </div>
 
           <!-- DATA GRID ARSIP -->
-          <div class="grid grid-cols-2 gap-x-2 gap-y-0.5 text-[9.5px] text-slate-800 bg-white/95 p-1.5 rounded-lg border border-slate-300 shadow-xs">
+          <div class="grid grid-cols-2 gap-x-3 gap-y-1 text-[10px] sm:text-[11px] text-slate-800 bg-white/95 p-2 rounded-lg border border-slate-300 shadow-xs">
             <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">ID Registrasi</span><span id="card2Id" class="font-bold text-amber-950 font-mono"></span></div>
             <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Peran / Status</span><span id="card2Status" class="font-black text-amber-900 uppercase"></span></div>
             <div class="flex justify-between border-b border-gray-100 pb-0.5 col-span-2"><span class="text-slate-500 font-medium">Nama Lengkap</span><span id="card2Nama" class="font-bold uppercase text-slate-900"></span></div>
@@ -405,29 +410,29 @@
             <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Email</span><span id="card2Email" class="font-semibold text-slate-800"></span></div>
           </div>
 
-          <!-- 12 POINT CHECKLIST ARSIP PANITIA -->
-          <div class="bg-white/90 p-1.5 rounded-lg border border-slate-300">
-            <p class="text-[8.5px] font-black text-slate-900 uppercase mb-1 flex items-center gap-1">
-              <i class="fa-solid fa-square-check text-emerald-600"></i> Ceklist Penyerahan Perlengkapan Lapangan:
+          <!-- 12 POINT KOTAK CEKLIST ARSIP PANITIA -->
+          <div class="bg-white/95 p-2 rounded-lg border border-slate-300 space-y-1">
+            <p class="text-[9.5px] sm:text-[10px] font-black text-slate-900 uppercase flex items-center gap-1.5">
+              <i class="fa-regular fa-square-check text-slate-700"></i> Checklist Penyerahan Perlengkapan Lapangan (Verifikasi Manual):
             </p>
-            <div class="grid grid-cols-3 gap-x-2 gap-y-0.5 text-[8px] text-slate-800 font-medium">
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Sewa Tapak Perkemahan</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Tiket Masuk Buper Kwarda</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Sewa Tenda Dome 3–4 Orang</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Scarf Kegiatan</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">ID Card Peserta & Bindamping</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Kaos Kegiatan</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Topi Kegiatan</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Tas Daypack</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Tiska Kembaranas III</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Konsumsi selama Kegiatan</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Paket Trip Pahawang</span></div>
-              <div class="flex items-center gap-1"><i class="fa-solid fa-square-check text-emerald-600 text-[9px]"></i> <span class="truncate">Sertifikat & Instruktur Muda</span></div>
+            <div class="grid grid-cols-3 gap-x-2 gap-y-1 text-[8.5px] sm:text-[9.5px] text-slate-800 font-medium">
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Sewa Tapak Perkemahan</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Tiket Masuk Buper Kwarda</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Sewa Tenda Dome 3–4 Orang</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Scarf Kegiatan</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">ID Card Peserta & Bindamping</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Kaos Kegiatan</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Topi Kegiatan</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Tas Daypack</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Tiska Kembaranas III</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Konsumsi selama Kegiatan</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Paket Trip Pahawang</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Sertifikat & Instruktur Muda</span></div>
             </div>
           </div>
 
           <!-- FOOTER PANITIA -->
-          <div class="flex justify-between items-center text-[8px] text-slate-600 font-semibold px-1 pt-0.5 border-t border-slate-200">
+          <div class="flex justify-between items-center text-[8.5px] text-slate-600 font-semibold px-1 pt-1 border-t border-slate-200">
             <span class="flex items-center gap-1"><i class="fa-solid fa-map-location-dot text-slate-700"></i> Posko Sekretariat KEMBARANAS III 2026</span>
             <span class="font-mono text-slate-800 font-bold">VERIFIED-BY-SYSTEM</span>
           </div>
@@ -438,7 +443,7 @@
       <!-- ACTION BUTTONS (TIDAK TERCETAK) -->
       <div class="no-print mt-3 flex gap-2">
         <button onclick="downloadKartuPDF()" id="btnDownloadPDF" class="flex-1 bg-amber-900 hover:bg-amber-950 text-white font-bold py-3 rounded-2xl text-xs flex justify-center items-center gap-2 shadow-md transition-all">
-          <i class="fa-solid fa-file-pdf"></i> Unduh PDF (1 Lembar A4)
+          <i class="fa-solid fa-file-pdf"></i> Unduh PDF (Full 1 Halaman A4)
         </button>
         <button onclick="window.print()" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-5 py-3 rounded-2xl text-xs flex justify-center items-center gap-2 shadow-md transition-all">
           <i class="fa-solid fa-print"></i> Cetak A4 Langsung
@@ -661,7 +666,7 @@
       document.getElementById('modalKartu').classList.add('hidden');
     }
 
-    // GENERATE PDF UKURAN A4 PAS 1 HALAMAN (2 LEMBAR PESERTA & PANITIA + 12 CHECKLIST ITEM)
+    // GENERATE PDF FULL 1 HALAMAN PAS A4 (2 LEMBAR PESERTA & PANITIA + 12 KOLOM KOTAK CEKLIST KOSONG)
     function downloadKartuPDF() {
       const btn = document.getElementById('btnDownloadPDF');
       const originalText = btn.innerHTML;
@@ -685,63 +690,63 @@
           const checklistItems = [
             "1. Sewa Tapak Perkemahan",
             "2. Tiket Masuk Buper Kwarda",
-            "3. Tenda Dome (3–4 Orang)",
+            "3. Sewa Tenda Dome (3–4 Orang)",
             "4. Scarf Kegiatan",
             "5. ID Card Peserta & Bindamping",
             "6. Kaos Kegiatan",
             "7. Topi Kegiatan",
             "8. Tas Daypack",
             "9. Tiska Kembaranas III",
-            "10. Konsumsi Kegiatan",
+            "10. Konsumsi selama Kegiatan",
             "11. Paket Trip Pahawang",
-            "12. Sertifikat & PPIM / Instruktur"
+            "12. Sertifikat & Instruktur Muda"
           ];
 
           const drawCardPDF = (startY, badgeText, isPanitia = false) => {
-            // Frame Luar
+            // Frame Luar Diperbesar Menyesuaikan Full A4 (Tinggi 137mm per kartu)
             doc.setDrawColor(isPanitia ? 51 : 120, isPanitia ? 65 : 53, isPanitia ? 85 : 15);
-            doc.setLineWidth(0.7);
-            doc.roundedRect(10, startY, 190, 131, 3, 3, 'S');
+            doc.setLineWidth(0.8);
+            doc.roundedRect(8, startY, 194, 137, 3, 3, 'S');
 
             // Header Banner Scout
             doc.setFillColor(isPanitia ? 15 : 44, isPanitia ? 23 : 28, isPanitia ? 42 : 15);
-            doc.rect(10, startY, 190, 16, 'F');
+            doc.rect(8, startY, 194, 17, 'F');
 
             doc.setTextColor(255, 255, 255);
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(9.5);
-            doc.text(`PERKEMAHAN UKHUWAH KEMBARANAS III 2026`, 14, startY + 7);
+            doc.setFontSize(10);
+            doc.text(`PERKEMAHAN UKHUWAH KEMBARANAS III 2026`, 12, startY + 7.5);
             
-            doc.setFontSize(7);
+            doc.setFontSize(7.5);
             doc.setFont("helvetica", "normal");
             doc.setTextColor(251, 191, 36);
-            doc.text(`SAKO SIT INDONESIA • SCOUT & SURVIVAL EXPEDITION`, 14, startY + 12);
+            doc.text(`SAKO SIT INDONESIA • SCOUT & SURVIVAL EXPEDITION`, 12, startY + 13);
 
             // Badge Tipe (Peserta / Panitia)
             doc.setFillColor(isPanitia ? 16 : 245, isPanitia ? 185 : 158, isPanitia ? 129 : 11);
-            doc.roundedRect(152, startY + 4, 43, 8, 2, 2, 'F');
+            doc.roundedRect(154, startY + 4, 44, 9, 2, 2, 'F');
             doc.setTextColor(15, 23, 42);
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(7.5);
-            doc.text(badgeText, 173.5, startY + 9.5, { align: "center" });
+            doc.setFontSize(8);
+            doc.text(badgeText, 176, startY + 10, { align: "center" });
 
             // Kotak Status: Terverifikasi Sistem
             doc.setDrawColor(16, 185, 129);
             doc.setFillColor(236, 253, 245);
             doc.setLineWidth(0.5);
-            doc.roundedRect(14, startY + 19, 182, 8.5, 2, 2, 'FD');
+            doc.roundedRect(12, startY + 20, 186, 9, 2, 2, 'FD');
 
             doc.setTextColor(6, 95, 70);
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(8.5);
-            doc.text("[ V ] STATUS: TERVERIFIKASI SISTEM", 105, startY + 24.5, { align: "center" });
+            doc.setFontSize(9);
+            doc.text("[ V ] STATUS: TERVERIFIKASI SISTEM", 105, startY + 26, { align: "center" });
 
             doc.setFont("helvetica", "italic");
-            doc.setFontSize(6.5);
+            doc.setFontSize(7);
             doc.setTextColor(100, 116, 139);
-            doc.text("Harap membawa dokumen cetak ini saat melakukan registrasi ulang di lokasi perkemahan.", 105, startY + 31, { align: "center" });
+            doc.text("Harap membawa dokumen cetak ini saat melakukan registrasi ulang di lokasi perkemahan.", 105, startY + 33, { align: "center" });
 
-            // Grid Data Items
+            // Grid Data Items (Diperluas Ketinggiannya)
             const items = [
               ["ID Registrasi", id, "Status / Peran", status],
               ["Nama Lengkap", nama, "Jenis Kelamin", jk],
@@ -749,91 +754,90 @@
               ["Prov / KabKota", wilayah, "Email Pendaftar", email]
             ];
 
-            let rowY = startY + 35;
+            let rowY = startY + 37;
             items.forEach(([l1, v1, l2, v2], idx) => {
               if (idx % 2 === 0) {
                 doc.setFillColor(248, 250, 252);
-                doc.rect(14, rowY - 1, 182, 12.5, 'F');
+                doc.rect(12, rowY - 1, 186, 13, 'F');
               }
 
               doc.setFont("helvetica", "normal");
-              doc.setFontSize(6.5);
+              doc.setFontSize(7);
               doc.setTextColor(100, 116, 139);
-              doc.text(l1, 16, rowY + 2.5);
+              doc.text(l1, 15, rowY + 3);
               doc.setFont("helvetica", "bold");
-              doc.setFontSize(7.5);
+              doc.setFontSize(8);
               doc.setTextColor(15, 23, 42);
-              doc.text(String(v1), 16, rowY + 7);
+              doc.text(String(v1), 15, rowY + 8);
 
               doc.setFont("helvetica", "normal");
-              doc.setFontSize(6.5);
+              doc.setFontSize(7);
               doc.setTextColor(100, 116, 139);
-              doc.text(l2, 108, rowY + 2.5);
+              doc.text(l2, 110, rowY + 3);
               doc.setFont("helvetica", "bold");
-              doc.setFontSize(7.5);
+              doc.setFontSize(8);
               doc.setTextColor(15, 23, 42);
-              doc.text(String(v2), 108, rowY + 7);
+              doc.text(String(v2), 110, rowY + 8);
 
-              rowY += 13;
+              rowY += 13.5;
             });
 
-            // Kotak 12 Ceklist Fasilitas
+            // Kotak 12 Ceklist Kosong (Verification Boxes)
             doc.setFillColor(255, 255, 255);
             doc.setDrawColor(203, 213, 225);
-            doc.roundedRect(14, startY + 88, 182, 33, 2, 2, 'FD');
+            doc.setLineWidth(0.4);
+            doc.roundedRect(12, startY + 92, 186, 35, 2, 2, 'FD');
 
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(7);
+            doc.setFontSize(7.5);
             doc.setTextColor(15, 23, 42);
-            doc.text("VERIFIKASI FASILITAS & PERLENGKAPAN KEMBARANAS III (CHECKLIST):", 17, startY + 93);
+            doc.text("CHECKLIST VERIFIKASI LAPANGAN (DIISI PANITIA SAAT PENYERAHAN):", 15, startY + 97);
 
-            // Render 3 Kolom x 4 Baris Checklist
-            let colX = [17, 77, 137];
-            let checkY = startY + 98;
+            // Render 3 Kolom x 4 Baris Kotak Kosong
+            let colX = [15, 78, 140];
+            let checkY = startY + 102.5;
             checklistItems.forEach((item, i) => {
               const colIdx = i % 3;
               const lineIdx = Math.floor(i / 3);
               const currX = colX[colIdx];
-              const currY = checkY + (lineIdx * 5.5);
+              const currY = checkY + (lineIdx * 6);
 
-              // Box Check [V]
-              doc.setFillColor(16, 185, 129);
-              doc.roundedRect(currX, currY - 2.8, 3.2, 3.2, 0.5, 0.5, 'F');
-              doc.setTextColor(255, 255, 255);
-              doc.setFont("helvetica", "bold");
-              doc.setFontSize(5);
-              doc.text("v", currX + 0.9, currY - 0.5);
+              // KOTAK CEKLIST KOSONG SAJA (UNTUK DICENTANG MANUAL)
+              doc.setDrawColor(100, 116, 139);
+              doc.setFillColor(255, 255, 255);
+              doc.setLineWidth(0.4);
+              doc.roundedRect(currX, currY - 3, 3.5, 3.5, 0.5, 0.5, 'FD');
 
               doc.setTextColor(30, 41, 59);
               doc.setFont("helvetica", "normal");
-              doc.setFontSize(6.5);
-              doc.text(item, currX + 4.8, currY);
+              doc.setFontSize(7);
+              doc.text(item, currX + 5, currY);
             });
 
             // Scout Footer Motto
             doc.setDrawColor(226, 232, 240);
-            doc.line(14, startY + 124, 196, startY + 124);
+            doc.line(12, startY + 130, 198, startY + 130);
             doc.setFont("helvetica", "italic");
-            doc.setFontSize(6.5);
+            doc.setFontSize(7);
             doc.setTextColor(120, 53, 15);
-            doc.text("\"Satyaku Kudarmakan, Darmaku Kubaktikan\" • SAKO SIT INDONESIA 2026", 105, startY + 128, { align: "center" });
+            doc.text("\"Satyaku Kudarmakan, Darmaku Kubaktikan\" • SAKO SIT INDONESIA 2026", 105, startY + 134, { align: "center" });
           };
 
-          // Kartu 1 (Top - Peserta)
-          drawCardPDF(6, "LEMBAR PESERTA", false);
+          // Kartu 1 (Top - Peserta) - Pas 5mm dari atas
+          drawCardPDF(5, "LEMBAR PESERTA", false);
 
-          // Garis Potong (Cut Line)
+          // Garis Potong (Cut Line) - Pas di Tengah
           doc.setDrawColor(156, 163, 175);
           doc.setLineDashPattern([2, 2], 0);
-          doc.line(10, 142.5, 200, 142.5);
+          doc.line(8, 145.5, 202, 145.5);
           doc.setFont("helvetica", "bold");
-          doc.setFontSize(6.5);
+          doc.setFontSize(7);
           doc.setTextColor(107, 114, 128);
-          doc.text("- - - GUNTING DI SINI UNTUK ARSIP PANITIA - - -", 105, 141.5, { align: "center" });
+          doc.text("- - - GUNTING DI SINI UNTUK ARSIP PANITIA - - -", 105, 144.5, { align: "center" });
 
-          // Kartu 2 (Bottom - Panitia)
+          // Kartu 2 (Bottom - Panitia) - Pas di bawah garis
           doc.setLineDashPattern([], 0);
-          drawCardPDF(147, "ARSIP PANITIA", true);
+          drawCardPDF(149, "ARSIP PANITIA", true);
 
           const fileNameClean = nama.trim().replace(/[^a-zA-Z0-9]/g, '_');
           doc.save(`Bukti_Pendaftaran_A4_${fileNameClean}_${id}.pdf`);
