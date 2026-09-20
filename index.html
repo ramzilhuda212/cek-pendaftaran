@@ -264,21 +264,19 @@
     </main>
   </div>
 
-  <!-- MODAL CETAK LEMBAR PENDAFTARAN (FULL 1 HALAMAN A4 DENGAN KOLOM KOTAK KOSONG CEKLIST MANUAL) -->
+  <!-- MODAL CETAK LEMBAR PENDAFTARAN -->
   <div id="modalKartu" class="fixed inset-0 bg-slate-900/80 hidden flex justify-center items-start sm:items-center p-2 sm:p-4 z-50 overflow-y-auto">
     <div id="modalKartuContent" class="bg-amber-50/20 rounded-2xl p-3 sm:p-4 max-w-2xl w-full relative shadow-2xl border-2 border-amber-800 my-auto flex flex-col justify-between min-h-[95vh] sm:min-h-0">
       
-      <!-- TOMBOL CLOSE (TIDAK TERCETAK) -->
+      <!-- TOMBOL CLOSE -->
       <button onclick="closeModalKartu()" class="no-print absolute top-3 right-3 text-slate-500 hover:text-slate-900 w-8 h-8 rounded-full bg-white shadow flex items-center justify-center z-20">
         <i class="fa-solid fa-xmark text-lg"></i>
       </button>
 
       <div class="flex-1 flex flex-col justify-between space-y-3">
         
-        <!-- ==================== KARTU 1: LEMBAR PESERTA ==================== -->
+        <!-- KARTU 1: LEMBAR PESERTA -->
         <div class="border-2 border-amber-900 bg-amber-50/90 rounded-xl p-3 relative flex flex-col justify-between space-y-2 shadow-xs flex-1">
-          
-          <!-- HEADER PRAMUKA SURVIVAL EXPEDITION -->
           <div class="bg-gradient-to-r from-amber-950 via-amber-900 to-emerald-950 text-amber-100 p-2.5 rounded-lg border-b-2 border-amber-500 shadow-sm relative overflow-hidden">
             <div class="flex items-center justify-between gap-2">
               <div class="flex items-center gap-2.5">
@@ -301,7 +299,6 @@
             </div>
           </div>
 
-          <!-- KOTAK STATUS TERVERIFIKASI SISTEM -->
           <div class="space-y-0.5">
             <div class="border-2 border-emerald-500 bg-emerald-50/90 text-emerald-800 font-extrabold text-center py-1.5 rounded-xl text-xs uppercase tracking-wider shadow-xs flex items-center justify-center gap-2">
               <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
@@ -312,7 +309,6 @@
             </p>
           </div>
 
-          <!-- DATA GRID BUKTI PENDAFTARAN -->
           <div class="grid grid-cols-2 gap-x-3 gap-y-1 text-[10px] sm:text-[11px] text-slate-800 bg-white/95 p-2 rounded-lg border border-amber-900/20 shadow-xs">
             <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">ID Registrasi</span><span id="card1Id" class="font-bold text-amber-950 font-mono"></span></div>
             <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">Peran / Status</span><span id="card1Status" class="font-black text-amber-900 uppercase"></span></div>
@@ -324,7 +320,6 @@
             <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">Email</span><span id="card1Email" class="font-semibold text-slate-800"></span></div>
           </div>
 
-          <!-- 12 POINT KOTAK CEKLIST KOSONG (UNTUK VERIFIKASI MANUAL) -->
           <div class="bg-white/95 p-2 rounded-lg border border-amber-900/20 space-y-1">
             <p class="text-[9.5px] sm:text-[10px] font-black text-amber-950 uppercase flex items-center gap-1.5">
               <i class="fa-regular fa-square-check text-amber-800"></i> Checklist Verifikasi Lapangan (Diisi Panitia Saat Penyerahan):
@@ -345,14 +340,13 @@
             </div>
           </div>
 
-          <!-- SCOUT FOOTER STAMP / MOTTO -->
           <div class="flex justify-between items-center text-[8.5px] text-amber-900 font-semibold px-1 pt-1 border-t border-amber-800/10">
             <span class="flex items-center gap-1"><i class="fa-solid fa-mountain-sun text-amber-800"></i> Satyaku Kudarmakan, Darmaku Kubaktikan</span>
             <span class="font-mono text-amber-950 font-bold">KEMBARANAS-2026-OFFICIAL</span>
           </div>
         </div>
 
-        <!-- GARIS POTONG / CUT LINE -->
+        <!-- GARIS POTONG -->
         <div class="relative flex py-1 items-center justify-center">
           <div class="flex-grow border-t-2 border-dashed border-amber-800/50"></div>
           <span class="flex-shrink mx-3 text-[9px] font-bold text-amber-950 uppercase tracking-widest bg-amber-100 px-3 py-1 border border-amber-800/40 rounded-full flex items-center gap-1.5 shadow-xs">
@@ -361,10 +355,8 @@
           <div class="flex-grow border-t-2 border-dashed border-amber-800/50"></div>
         </div>
 
-        <!-- ==================== KARTU 2: ARSIP PANITIA ==================== -->
+        <!-- KARTU 2: ARSIP PANITIA -->
         <div class="border-2 border-slate-700 bg-slate-50/90 rounded-xl p-3 relative flex flex-col justify-between space-y-2 shadow-xs flex-1">
-          
-          <!-- HEADER PRAMUKA ARSIP PANITIA -->
           <div class="bg-gradient-to-r from-slate-950 via-slate-900 to-amber-950 text-slate-100 p-2.5 rounded-lg border-b-2 border-amber-500 shadow-sm relative overflow-hidden">
             <div class="flex items-center justify-between gap-2">
               <div class="flex items-center gap-2.5">
@@ -387,7 +379,6 @@
             </div>
           </div>
 
-          <!-- KOTAK STATUS TERVERIFIKASI SISTEM -->
           <div class="space-y-0.5">
             <div class="border-2 border-emerald-500 bg-emerald-50/90 text-emerald-800 font-extrabold text-center py-1.5 rounded-xl text-xs uppercase tracking-wider shadow-xs flex items-center justify-center gap-2">
               <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
@@ -398,7 +389,6 @@
             </p>
           </div>
 
-          <!-- DATA GRID ARSIP -->
           <div class="grid grid-cols-2 gap-x-3 gap-y-1 text-[10px] sm:text-[11px] text-slate-800 bg-white/95 p-2 rounded-lg border border-slate-300 shadow-xs">
             <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">ID Registrasi</span><span id="card2Id" class="font-bold text-amber-950 font-mono"></span></div>
             <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Peran / Status</span><span id="card2Status" class="font-black text-amber-900 uppercase"></span></div>
@@ -410,7 +400,6 @@
             <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Email</span><span id="card2Email" class="font-semibold text-slate-800"></span></div>
           </div>
 
-          <!-- 12 POINT KOTAK CEKLIST ARSIP PANITIA -->
           <div class="bg-white/95 p-2 rounded-lg border border-slate-300 space-y-1">
             <p class="text-[9.5px] sm:text-[10px] font-black text-slate-900 uppercase flex items-center gap-1.5">
               <i class="fa-regular fa-square-check text-slate-700"></i> Checklist Penyerahan Perlengkapan Lapangan (Verifikasi Manual):
@@ -431,7 +420,6 @@
             </div>
           </div>
 
-          <!-- FOOTER PANITIA -->
           <div class="flex justify-between items-center text-[8.5px] text-slate-600 font-semibold px-1 pt-1 border-t border-slate-200">
             <span class="flex items-center gap-1"><i class="fa-solid fa-map-location-dot text-slate-700"></i> Posko Sekretariat KEMBARANAS III 2026</span>
             <span class="font-mono text-slate-800 font-bold">VERIFIED-BY-SYSTEM</span>
@@ -440,7 +428,6 @@
 
       </div>
 
-      <!-- ACTION BUTTONS (TIDAK TERCETAK) -->
       <div class="no-print mt-3 flex gap-2">
         <button onclick="downloadKartuPDF()" id="btnDownloadPDF" class="flex-1 bg-amber-900 hover:bg-amber-950 text-white font-bold py-3 rounded-2xl text-xs flex justify-center items-center gap-2 shadow-md transition-all">
           <i class="fa-solid fa-file-pdf"></i> Unduh PDF (Full 1 Halaman A4)
@@ -452,7 +439,7 @@
     </div>
   </div>
 
-  <!-- MODAL FORM ADMIN -->
+  <!-- MODAL FORM ADMIN (TAMBAH MANUAL & EDIT WITH FILE UPLOAD) -->
   <div id="modalFormAdmin" class="fixed inset-0 bg-slate-900/60 hidden flex justify-center items-center p-4 z-50 overflow-y-auto">
     <div class="bg-white rounded-3xl p-6 max-w-lg w-full relative shadow-2xl border border-amber-200 my-8">
       <button onclick="closeModalForm()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
@@ -511,6 +498,18 @@
           </div>
         </div>
 
+        <!-- FITUR INPUT BUKTI TRANSFER FILE -->
+        <div class="border-t border-gray-100 pt-2 mt-2">
+          <label class="block font-bold text-gray-700 mb-1">Upload Bukti Transfer (Gambar / PDF)</label>
+          <input type="file" id="formBuktiTransfer" accept="image/*,.pdf" class="w-full p-2 border border-gray-300 rounded-xl bg-slate-50 text-xs font-medium file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-100 file:text-amber-900 hover:file:bg-amber-200">
+          <div id="containerBuktiLama" class="mt-1.5 hidden flex items-center gap-1.5">
+            <span class="text-[11px] text-slate-500">Bukti Transfer Saat Ini:</span>
+            <a id="linkBuktiLama" href="#" target="_blank" class="text-[11px] text-blue-600 font-bold underline flex items-center gap-1">
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> Lihat Berkas
+            </a>
+          </div>
+        </div>
+
         <div class="pt-4 flex gap-2">
           <button type="button" onclick="closeModalForm()" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2.5 rounded-xl">Batal</button>
           <button type="submit" id="btnSaveData" class="flex-1 bg-amber-900 hover:bg-amber-950 text-white font-bold py-2.5 rounded-xl shadow-md">Simpan Data</button>
@@ -526,6 +525,24 @@
     let rawHeaders = [];
     let rawAdminRows = [];
     let filteredRows = [];
+
+    // Helper untuk mengubah berkas lokal menjadi Base64
+    function readFileAsBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result;
+          const base64 = result.split(',')[1];
+          resolve({
+            base64: base64,
+            mimeType: file.type,
+            fileName: file.name
+          });
+        };
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+      });
+    }
 
     function formatID(raw) {
       if (!raw || raw === '-') return 'REG-2026-001';
@@ -639,7 +656,6 @@
       const cleanId = formatID(id);
       const wilayahText = `${prov || '-'} / ${kota || '-'}`;
 
-      // Kartu 1 (Peserta)
       document.getElementById('card1Id').innerText = cleanId;
       document.getElementById('card1Nama').innerText = nama;
       document.getElementById('card1Status').innerText = status;
@@ -649,7 +665,6 @@
       document.getElementById('card1Kaos').innerText = kaos;
       document.getElementById('card1Email').innerText = email;
 
-      // Kartu 2 (Arsip Panitia)
       document.getElementById('card2Id').innerText = cleanId;
       document.getElementById('card2Nama').innerText = nama;
       document.getElementById('card2Status').innerText = status;
@@ -666,7 +681,6 @@
       document.getElementById('modalKartu').classList.add('hidden');
     }
 
-    // GENERATE PDF FULL 1 HALAMAN PAS A4 (2 LEMBAR PESERTA & PANITIA + 12 KOLOM KOTAK CEKLIST KOSONG)
     function downloadKartuPDF() {
       const btn = document.getElementById('btnDownloadPDF');
       const originalText = btn.innerHTML;
@@ -703,12 +717,10 @@
           ];
 
           const drawCardPDF = (startY, badgeText, isPanitia = false) => {
-            // Frame Luar Diperbesar Menyesuaikan Full A4 (Tinggi 137mm per kartu)
             doc.setDrawColor(isPanitia ? 51 : 120, isPanitia ? 65 : 53, isPanitia ? 85 : 15);
             doc.setLineWidth(0.8);
             doc.roundedRect(8, startY, 194, 137, 3, 3, 'S');
 
-            // Header Banner Scout
             doc.setFillColor(isPanitia ? 15 : 44, isPanitia ? 23 : 28, isPanitia ? 42 : 15);
             doc.rect(8, startY, 194, 17, 'F');
 
@@ -722,7 +734,6 @@
             doc.setTextColor(251, 191, 36);
             doc.text(`SAKO SIT INDONESIA • SCOUT & SURVIVAL EXPEDITION`, 12, startY + 13);
 
-            // Badge Tipe (Peserta / Panitia)
             doc.setFillColor(isPanitia ? 16 : 245, isPanitia ? 185 : 158, isPanitia ? 129 : 11);
             doc.roundedRect(154, startY + 4, 44, 9, 2, 2, 'F');
             doc.setTextColor(15, 23, 42);
@@ -730,7 +741,6 @@
             doc.setFontSize(8);
             doc.text(badgeText, 176, startY + 10, { align: "center" });
 
-            // Kotak Status: Terverifikasi Sistem
             doc.setDrawColor(16, 185, 129);
             doc.setFillColor(236, 253, 245);
             doc.setLineWidth(0.5);
@@ -746,7 +756,6 @@
             doc.setTextColor(100, 116, 139);
             doc.text("Harap membawa dokumen cetak ini saat melakukan registrasi ulang di lokasi perkemahan.", 105, startY + 33, { align: "center" });
 
-            // Grid Data Items (Diperluas Ketinggiannya)
             const items = [
               ["ID Registrasi", id, "Status / Peran", status],
               ["Nama Lengkap", nama, "Jenis Kelamin", jk],
@@ -782,7 +791,6 @@
               rowY += 13.5;
             });
 
-            // Kotak 12 Ceklist Kosong (Verification Boxes)
             doc.setFillColor(255, 255, 255);
             doc.setDrawColor(203, 213, 225);
             doc.setLineWidth(0.4);
@@ -793,7 +801,6 @@
             doc.setTextColor(15, 23, 42);
             doc.text("CHECKLIST VERIFIKASI LAPANGAN (DIISI PANITIA SAAT PENYERAHAN):", 15, startY + 97);
 
-            // Render 3 Kolom x 4 Baris Kotak Kosong
             let colX = [15, 78, 140];
             let checkY = startY + 102.5;
             checklistItems.forEach((item, i) => {
@@ -802,7 +809,6 @@
               const currX = colX[colIdx];
               const currY = checkY + (lineIdx * 6);
 
-              // KOTAK CEKLIST KOSONG SAJA (UNTUK DICENTANG MANUAL)
               doc.setDrawColor(100, 116, 139);
               doc.setFillColor(255, 255, 255);
               doc.setLineWidth(0.4);
@@ -814,7 +820,6 @@
               doc.text(item, currX + 5, currY);
             });
 
-            // Scout Footer Motto
             doc.setDrawColor(226, 232, 240);
             doc.line(12, startY + 130, 198, startY + 130);
             doc.setFont("helvetica", "italic");
@@ -823,10 +828,8 @@
             doc.text("\"Satyaku Kudarmakan, Darmaku Kubaktikan\" • SAKO SIT INDONESIA 2026", 105, startY + 134, { align: "center" });
           };
 
-          // Kartu 1 (Top - Peserta) - Pas 5mm dari atas
           drawCardPDF(5, "LEMBAR PESERTA", false);
 
-          // Garis Potong (Cut Line) - Pas di Tengah
           doc.setDrawColor(156, 163, 175);
           doc.setLineDashPattern([2, 2], 0);
           doc.line(8, 145.5, 202, 145.5);
@@ -835,7 +838,6 @@
           doc.setTextColor(107, 114, 128);
           doc.text("- - - GUNTING DI SINI UNTUK ARSIP PANITIA - - -", 105, 144.5, { align: "center" });
 
-          // Kartu 2 (Bottom - Panitia) - Pas di bawah garis
           doc.setLineDashPattern([], 0);
           drawCardPDF(149, "ARSIP PANITIA", true);
 
@@ -1010,6 +1012,21 @@
       document.getElementById('formKota').value = isEdit ? (row[12] || '') : '';
       document.getElementById('formKaos').value = isEdit ? (row[13] || '') : '';
 
+      // Reset file input
+      document.getElementById('formBuktiTransfer').value = '';
+
+      // Tampilkan Tautan Bukti Transfer Lama jika sedang Edit Mode
+      const containerBukti = document.getElementById('containerBuktiLama');
+      const linkBukti = document.getElementById('linkBuktiLama');
+
+      if (isEdit && row[14] && String(row[14]).startsWith('http')) {
+        linkBukti.href = row[14];
+        containerBukti.classList.remove('hidden');
+      } else {
+        linkBukti.href = '#';
+        containerBukti.classList.add('hidden');
+      }
+
       document.getElementById('modalFormAdmin').classList.remove('hidden');
     }
 
@@ -1030,6 +1047,21 @@
 
       const isEdit = document.getElementById('formIsEdit').value === "true";
       const id = document.getElementById('formId').value;
+      const fileInput = document.getElementById('formBuktiTransfer');
+
+      let fileData = null;
+      if (fileInput.files && fileInput.files[0]) {
+        try {
+          fileData = await readFileAsBase64(fileInput.files[0]);
+        } catch (err) {
+          alert("Gagal membaca berkas: " + err.message);
+          btn.disabled = false;
+          btn.innerText = "Simpan Data";
+          return;
+        }
+      }
+
+      const linkBuktiLama = document.getElementById('linkBuktiLama').href;
 
       const payload = {
         action: isEdit ? 'editData' : 'addData',
@@ -1040,7 +1072,9 @@
         sekolah: document.getElementById('formSekolah').value,
         prov: document.getElementById('formProv').value,
         kota: document.getElementById('formKota').value,
-        kaos: document.getElementById('formKaos').value
+        kaos: document.getElementById('formKaos').value,
+        fileData: fileData,
+        linkBukti: (isEdit && !fileData && linkBuktiLama !== '#') ? linkBuktiLama : ''
       };
 
       try {
