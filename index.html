@@ -605,6 +605,11 @@
               : 'bg-blue-100 text-blue-900 border-blue-300';
             const roleIcon = isPembina ? 'fa-user-shield' : 'fa-child-reaching';
 
+            // Tautan grup WhatsApp otomatis menyesuaikan peran (Peserta / Pembina)
+            const waGroupLink = isPembina 
+              ? 'https://chat.whatsapp.com/EDGV8PFyUcHAgo1t0MFNva' 
+              : 'https://chat.whatsapp.com/GZQ0kukg7tG6MAxje4Yre';
+
             resBox.innerHTML += `
               <div class="bg-white p-5 sm:p-6 rounded-3xl shadow-md border border-amber-200/80 space-y-4 hover:shadow-lg transition-all">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-gray-100 pb-3">
@@ -629,6 +634,9 @@
 
                 <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100">
                   ${item.linkBukti && item.linkBukti !== '-' ? `<a href="${item.linkBukti}" target="_blank" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all"><i class="fa-solid fa-receipt text-amber-800"></i> Bukti Pembayaran</a>` : ''}
+                  <a href="${waGroupLink}" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-md">
+                    <i class="fa-brands fa-whatsapp text-sm"></i> Gabung Group WhatsApp
+                  </a>
                   <button onclick="openModalKartu('${item.id}', '${namaSafe}', '${item.statusPendaftaran}', '${item.jenisKelamin}', '${item.asalSekolah}', '${item.provinsi}', '${item.kotaKabupaten}', '${item.ukuranKaos}', '${emailVal}')" class="bg-amber-900 hover:bg-amber-950 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 ml-auto shadow-md transition-all">
                     <i class="fa-solid fa-id-card"></i> Cetak Lembar Pendaftaran
                   </button>
