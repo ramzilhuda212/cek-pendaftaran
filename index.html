@@ -206,6 +206,18 @@
                 </h3>
               </div>
               <div class="flex items-center gap-2 w-full sm:w-auto flex-wrap">
+                
+                <!-- TOMBOL & INPUT PENCARIAN MELEBAR DAN MENCIUT -->
+                <div class="relative flex items-center">
+                  <button type="button" onclick="toggleAdminSearch()" title="Cari Data Admin" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-xs">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <span class="text-[11px] hidden sm:inline">Cari</span>
+                  </button>
+                  <div id="adminSearchContainer" class="overflow-hidden transition-all duration-300 ease-in-out w-0 opacity-0 flex items-center">
+                    <input type="text" id="adminSearchInput" oninput="applyFilters()" placeholder="Ketik kata kunci pencarian..." class="ml-2 py-2 px-3 bg-slate-50 border border-amber-300 rounded-xl text-xs font-medium focus:ring-2 focus:ring-amber-500 focus:bg-white w-48 sm:w-64 transition-all">
+                  </div>
+                </div>
+
                 <button onclick="openModalForm()" class="flex-1 sm:flex-none bg-amber-800 hover:bg-amber-900 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow transition-all">
                   <i class="fa-solid fa-user-plus"></i> Tambah Manual
                 </button>
@@ -251,7 +263,25 @@
             </div>
           </div>
 
-          <div class="bg-white rounded-3xl border border-amber-200/80 shadow-md overflow-hidden">
+          <div class="bg-white rounded-3xl border border-amber-200/80 shadow-md overflow-hidden space-y-0">
+            <!-- BARIS KONTROL PAGINATION DI ATAS TABEL -->
+            <div class="p-4 bg-amber-50/50 border-b border-amber-200/80 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
+              <div class="flex items-center gap-2 flex-wrap justify-center sm:justify-start">
+                <span class="font-bold text-slate-700">Tampilkan:</span>
+                <select id="pageSizeSelect" onchange="changePageSize()" class="p-2 border border-amber-200 rounded-xl bg-white font-bold text-amber-950 focus:ring-2 focus:ring-amber-500 text-xs shadow-xs">
+                  <option value="10" selected>10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+                <span class="text-slate-500 font-semibold ml-1" id="paginationInfo">Menampilkan 0 dari 0 data</span>
+              </div>
+
+              <div class="flex items-center gap-1.5 flex-wrap justify-center" id="paginationButtons">
+                <!-- Navigasi Halaman Rendere Dinamis -->
+              </div>
+            </div>
+
             <div class="overflow-x-auto">
               <table id="tableAdmin" class="w-full text-left border-collapse text-xs">
                 <thead id="tableHeader" class="bg-amber-100/70 text-amber-950 uppercase font-bold border-b border-amber-200"></thead>
@@ -526,7 +556,31 @@
     let rawAdminRows = [];
     let filteredRows = [];
 
-    // Helper untuk membuka URL secara aman tanpa pemotongan karakter oleh browser parser
+    // Variable State Pagination
+    let currentPage = 1;
+    let pageSize = 10;
+
+    // Toggle melebarkan dan menciutkan input pencarian admin
+    function toggleAdminSearch() {
+      const container = document.getElementById('adminSearchContainer');
+      const input = document.getElementById('adminSearchInput');
+      const isCollapsed = container.classList.contains('w-0');
+
+      if (isCollapsed) {
+        container.classList.remove('w-0', 'opacity-0');
+        container.classList.add('w-48', 'sm:w-64', 'opacity-100');
+        input.focus();
+      } else {
+        if (input.value !== '') {
+          input.value = '';
+          applyFilters();
+        }
+        container.classList.remove('w-48', 'sm:w-64', 'opacity-100');
+        container.classList.add('w-0', 'opacity-0');
+      }
+    }
+
+    // Helper untuk membuka URL secara aman
     function openUrlSafely(url) {
       if (!url) return;
       window.open(encodeURI(url), '_blank', 'noopener,noreferrer');
@@ -611,7 +665,6 @@
               : 'bg-blue-100 text-blue-900 border-blue-300';
             const roleIcon = isPembina ? 'fa-user-shield' : 'fa-child-reaching';
 
-            // Link WhatsApp dieksekusi via JavaScript `openUrlSafely` agar URL utuh tidak terpotong
             const waGroupLink = isPembina 
               ? 'https://chat.whatsapp.com/EDGV8PFyUcHAgo1t0MFNva' 
               : 'https://chat.whatsapp.com/GZQ0kukg7tG6MAxje4Yre8';
@@ -912,6 +965,7 @@
 
           populateFilterOptions();
           updateStats();
+          currentPage = 1;
           renderTable();
         }
       } catch (err) {
@@ -968,6 +1022,9 @@
       const kota = document.getElementById('filterKota').value;
       const jk = document.getElementById('filterJK').value;
       const kaos = document.getElementById('filterKaos').value;
+      
+      const searchInput = document.getElementById('adminSearchInput');
+      const searchKw = searchInput ? searchInput.value.toLowerCase().trim() : '';
 
       filteredRows = rawAdminRows.filter(row => {
         const matchProv = !prov || String(row[11]) === prov;
@@ -975,9 +1032,32 @@
         const matchJK = !jk || String(row[9]).toLowerCase() === jk.toLowerCase();
         const matchKaos = !kaos || String(row[13]) === kaos;
 
-        return matchProv && matchKota && matchJK && matchKaos;
+        let matchSearch = true;
+        if (searchKw) {
+          matchSearch = row.some(cell => String(cell || '').toLowerCase().includes(searchKw));
+        }
+
+        return matchProv && matchKota && matchJK && matchKaos && matchSearch;
       });
 
+      currentPage = 1;
+      renderTable();
+    }
+
+    // Fungsi mengubah ukuran halaman pagination (10, 25, 50, 100)
+    function changePageSize() {
+      const select = document.getElementById('pageSizeSelect');
+      pageSize = parseInt(select.value) || 10;
+      currentPage = 1;
+      renderTable();
+    }
+
+    // Fungsi navigasi ke halaman tertentu
+    function goToPage(page) {
+      const totalPages = Math.ceil(filteredRows.length / pageSize) || 1;
+      if (page < 1) page = 1;
+      if (page > totalPages) page = totalPages;
+      currentPage = page;
       renderTable();
     }
 
@@ -986,12 +1066,23 @@
       thead.innerHTML = '<tr>' + rawHeaders.map(h => `<th class="px-4 py-3">${h}</th>`).join('') + '<th class="px-4 py-3 text-center">Aksi</th></tr>';
 
       const tbody = document.getElementById('tableBody');
-      if (filteredRows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="${rawHeaders.length + 1}" class="text-center py-6 text-gray-400">Tidak ada data yang cocok dengan filter.</td></tr>`;
+      const totalRows = filteredRows.length;
+
+      if (totalRows === 0) {
+        tbody.innerHTML = `<tr><td colspan="${rawHeaders.length + 1}" class="text-center py-6 text-gray-400">Tidak ada data yang cocok dengan filter atau pencarian.</td></tr>`;
+        updatePaginationControls(0, 0, 0, 1, 1);
         return;
       }
 
-      tbody.innerHTML = filteredRows.map((row, idx) => {
+      const totalPages = Math.ceil(totalRows / pageSize) || 1;
+      if (currentPage > totalPages) currentPage = totalPages;
+
+      const startIndex = (currentPage - 1) * pageSize;
+      const endIndex = Math.min(startIndex + pageSize, totalRows);
+      const pageRows = filteredRows.slice(startIndex, endIndex);
+
+      tbody.innerHTML = pageRows.map((row, idx) => {
+        const actualIdx = startIndex + idx;
         const id = row[0] || '';
         const namaVal = row[3] || row[7] || '-';
         const safeNama = String(namaVal).replace(/'/g, "\\'").replace(/"/g, '&quot;');
@@ -1000,7 +1091,7 @@
           row.map((cell, cIdx) => `<td class="px-4 py-3 border-b border-gray-100">${cIdx === 0 ? formatID(cell) : (String(cell).startsWith('http') ? `<button onclick="openUrlSafely('${cell}')" class="text-blue-600 font-bold underline">Buka Link</button>` : cell)}</td>`).join('') + 
           `<td class="px-4 py-3 border-b border-gray-100 text-center">
             <div class="flex justify-center items-center gap-1.5">
-              <button onclick="editDataByRow(${idx})" class="bg-amber-100 hover:bg-amber-200 text-amber-900 px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all" title="Edit Data">
+              <button onclick="editDataByRow(${actualIdx})" class="bg-amber-100 hover:bg-amber-200 text-amber-900 px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all" title="Edit Data">
                 <i class="fa-solid fa-pen-to-square"></i> Edit
               </button>
               <button onclick="handleDeleteData('${id}', '${safeNama}')" class="bg-red-100 hover:bg-red-200 text-red-700 px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all" title="Hapus Data">
@@ -1010,6 +1101,67 @@
           </td>
         </tr>`;
       }).join('');
+
+      updatePaginationControls(startIndex + 1, endIndex, totalRows, currentPage, totalPages);
+    }
+
+    // Memperbarui Tampilan Kontrol Pagination
+    function updatePaginationControls(start, end, total, page, totalPages) {
+      const infoEl = document.getElementById('paginationInfo');
+      if (infoEl) {
+        if (total === 0) {
+          infoEl.innerText = 'Menampilkan 0 data';
+        } else {
+          infoEl.innerText = `Menampilkan ${start} - ${end} dari ${total} data`;
+        }
+      }
+
+      const btnContainer = document.getElementById('paginationButtons');
+      if (!btnContainer) return;
+
+      if (total === 0) {
+        btnContainer.innerHTML = '';
+        return;
+      }
+
+      let btnHtml = '';
+
+      // Tombol Sebelum (Previous)
+      const prevDisabled = page <= 1;
+      btnHtml += `<button onclick="goToPage(${page - 1})" ${prevDisabled ? 'disabled' : ''} class="px-2.5 py-1.5 rounded-lg border text-xs font-bold transition-all ${prevDisabled ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed' : 'bg-white text-amber-950 border-gray-300 hover:bg-amber-50 shadow-xs'}" title="Halaman Sebelumnya">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>`;
+
+      // Angka-angka Halaman
+      let pagesToShow = [];
+      if (totalPages <= 5) {
+        for (let i = 1; i <= totalPages; i++) pagesToShow.push(i);
+      } else {
+        if (page <= 3) {
+          pagesToShow = [1, 2, 3, 4, '...', totalPages];
+        } else if (page >= totalPages - 2) {
+          pagesToShow = [1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+        } else {
+          pagesToShow = [1, '...', page - 1, page, page + 1, '...', totalPages];
+        }
+      }
+
+      pagesToShow.forEach(p => {
+        if (p === '...') {
+          btnHtml += `<span class="px-1.5 py-1 text-gray-400 text-xs">...</span>`;
+        } else {
+          const isCurrent = p === page;
+          btnHtml += `<button onclick="goToPage(${p})" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${isCurrent ? 'bg-amber-900 text-white shadow-xs' : 'bg-white text-gray-700 border border-gray-300 hover:bg-amber-50 shadow-xs'}">${p}</button>`;
+        }
+      });
+
+      // Tombol Selanjutnya (Next)
+      const nextDisabled = page >= totalPages;
+      btnHtml += `<button onclick="goToPage(${page + 1})" ${nextDisabled ? 'disabled' : ''} class="px-2.5 py-1.5 rounded-lg border text-xs font-bold transition-all ${nextDisabled ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed' : 'bg-white text-amber-950 border-gray-300 hover:bg-amber-50 shadow-xs'}" title="Halaman Selanjutnya">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>`;
+
+      btnContainer.innerHTML = btnHtml;
     }
 
     function openModalForm(row = null) {
@@ -1026,10 +1178,8 @@
       document.getElementById('formKota').value = isEdit ? (row[12] || '') : '';
       document.getElementById('formKaos').value = isEdit ? (row[13] || '') : '';
 
-      // Reset file input
       document.getElementById('formBuktiTransfer').value = '';
 
-      // Tampilkan Tautan Bukti Transfer Lama jika sedang Edit Mode
       const containerBukti = document.getElementById('containerBuktiLama');
       const linkBukti = document.getElementById('linkBuktiLama');
 
