@@ -192,6 +192,10 @@
                 <i class="fa-solid fa-qrcode text-sm"></i>
                 <span>Presensi & Scan QR</span>
               </button>
+              <button onclick="switchAdminPanel('panelPlottingKit')" id="btnPanelPlottingKit" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950">
+                <i class="fa-solid fa-tent text-sm"></i>
+                <span>Plotting & Kit Logistik</span>
+              </button>
               <button onclick="switchAdminPanel('panelDataTable')" id="btnPanelDataTable" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950">
                 <i class="fa-solid fa-table-list text-sm"></i>
                 <span>Kelola Data Pendaftar</span>
@@ -223,7 +227,6 @@
             
             <!-- SUB-PANEL 1: RINGKASAN & STATISTIK -->
             <div id="panelOverview" class="space-y-6">
-              <!-- CARDS STATISTIK KUNCI -->
               <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
                 <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md flex items-center justify-between">
                   <div class="space-y-1">
@@ -263,7 +266,6 @@
                 </div>
               </div>
 
-              <!-- RINGKASAN VISUAL -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md space-y-3">
                   <h4 class="font-extrabold text-amber-950 text-xs uppercase tracking-wider flex items-center gap-2">
@@ -290,7 +292,7 @@
               </div>
             </div>
 
-            <!-- SUB-PANEL BARU: SCAN QR & PRESENSI LAPANGAN -->
+            <!-- SUB-PANEL: SCAN QR & PRESENSI LAPANGAN -->
             <div id="panelScan" class="hidden space-y-6">
               <div class="bg-white p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-3">
@@ -311,7 +313,6 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-                  <!-- AREA KAMERA SCANNER -->
                   <div class="space-y-3">
                     <div id="qr-reader" class="w-full bg-slate-100 rounded-2xl overflow-hidden border-2 border-dashed border-amber-300 min-h-[250px] flex items-center justify-center p-2">
                       <p id="qr-placeholder" class="text-xs text-slate-400 font-medium text-center p-4">
@@ -328,13 +329,77 @@
                     </div>
                   </div>
 
-                  <!-- PROFIL & VERIFIKASI PESERTA -->
                   <div id="scanResultBox" class="bg-amber-50/50 p-5 rounded-2xl border border-amber-200 space-y-4">
                     <div class="text-center py-8 text-slate-400 space-y-1">
                       <i class="fa-solid fa-id-card text-4xl text-amber-800/30"></i>
                       <p class="text-xs font-medium">Data pendaftar akan tampil di sini setelah QR Code dipindai.</p>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SUB-PANEL BARU: OPSI 2 - PLOTTING TAPAK KEMAH & KIT LOGISTIK -->
+            <div id="panelPlottingKit" class="hidden space-y-6">
+              <!-- BARIS 1: ALOKASI TAPAK KEMAH & KAVELING TENDA -->
+              <div class="bg-white p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-3">
+                  <div>
+                    <h3 class="font-extrabold text-amber-950 text-base flex items-center gap-2">
+                      <i class="fa-solid fa-tent text-amber-800"></i> Plotting Tapak Kemah & Kaveling Tenda
+                    </h3>
+                    <p class="text-xs text-slate-500">Tetapkan lokasi Blok Perkemahan dan Nomor Tenda per Pangkalan / Kontingen.</p>
+                  </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                  <table class="w-full text-xs text-left border-collapse">
+                    <thead>
+                      <tr class="bg-amber-100/70 text-amber-950 uppercase font-bold border-b border-amber-200">
+                        <th class="p-3">Nama Pangkalan / Sekolah</th>
+                        <th class="p-3">Provinsi</th>
+                        <th class="p-3 text-center">Jumlah Anggota</th>
+                        <th class="p-3">Blok Perkemahan</th>
+                        <th class="p-3">No. Kaveling Tenda</th>
+                        <th class="p-3 text-center">Aksi Simpan</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tablePlottingBody" class="divide-y divide-gray-100 font-medium">
+                      <!-- Render Otomatis -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- BARIS 2: KONTROL PENYERAHAN KIT LAPANGAN -->
+              <div class="bg-white p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-3">
+                  <div>
+                    <h3 class="font-extrabold text-amber-950 text-base flex items-center gap-2">
+                      <i class="fa-solid fa-boxes-stacked text-emerald-700"></i> Kontrol Penyerahan Kit Logistik Kegiatan
+                    </h3>
+                    <p class="text-xs text-slate-500">Centang perlengkapan yang telah diserahkan kepada peserta atau pembina pendamping.</p>
+                  </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                  <table class="w-full text-xs text-left border-collapse">
+                    <thead>
+                      <tr class="bg-slate-100 text-slate-800 uppercase font-bold border-b border-slate-200">
+                        <th class="p-3">ID & Nama</th>
+                        <th class="p-3">Peran</th>
+                        <th class="p-3 text-center">Kaos</th>
+                        <th class="p-3 text-center">Scarf</th>
+                        <th class="p-3 text-center">Topi</th>
+                        <th class="p-3 text-center">Daypack</th>
+                        <th class="p-3 text-center">Tiska</th>
+                        <th class="p-3 text-center">ID Card</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tableKitBody" class="divide-y divide-gray-100 font-medium">
+                      <!-- Render Otomatis -->
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -554,7 +619,6 @@
               <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">Email</span><span id="card1Email" class="font-semibold text-slate-800"></span></div>
             </div>
 
-            <!-- CONTAINER QR CODE UNTUK VERIFIKASI PRESENSI LAPANGAN -->
             <div class="bg-white/95 p-2 rounded-lg border border-amber-900/20 flex flex-col items-center justify-center text-center shadow-xs">
               <img id="card1QR" src="" alt="QR Code Presensi" class="w-20 h-20 object-contain border border-slate-200 p-1 rounded-md mb-1 bg-white">
               <span class="text-[8px] font-bold text-amber-950 tracking-wider">SCAN PRESENSI</span>
@@ -816,12 +880,15 @@
     let pageSize = 10;
     let currentKwitansiData = null;
 
-    // STATE LOKAL UNTUK STATUS CHECK-IN / PRESENSI LAPANGAN
     let checkinStatusMap = {};
     let html5QrCodeScanner = null;
 
+    // STATE LOKAL UNTUK OPSI 2 (PLOTTING TAPAK & KIT LOGISTIK)
+    let plottingMap = {}; 
+    let kitStatusMap = {}; 
+
     function switchAdminPanel(panelId) {
-      const panels = ['panelOverview', 'panelScan', 'panelDataTable', 'panelRekap', 'panelExport'];
+      const panels = ['panelOverview', 'panelScan', 'panelPlottingKit', 'panelDataTable', 'panelRekap', 'panelExport'];
       panels.forEach(p => {
         const el = document.getElementById(p);
         if (el) el.classList.add('hidden');
@@ -843,6 +910,92 @@
       if (panelId !== 'panelScan') {
         stopScanner();
       }
+
+      if (panelId === 'panelPlottingKit') {
+        renderPlottingKitPanel();
+      }
+    }
+
+    // FUNGSI OPSI 2: RENDER TAPAK KEMAH & LOGISTIK
+    function renderPlottingKitPanel() {
+      // 1. Grouping Data berdasarkan Pangkalan/Sekolah
+      const schoolGroup = {};
+      rawAdminRows.forEach(row => {
+        const sekolah = (row[10] || 'Belum Ditentukan').trim();
+        const prov = (row[11] || '-').trim();
+        if (!schoolGroup[sekolah]) {
+          schoolGroup[sekolah] = { prov: prov, count: 0 };
+        }
+        schoolGroup[sekolah].count++;
+      });
+
+      const plottingBody = document.getElementById('tablePlottingBody');
+      if (plottingBody) {
+        plottingBody.innerHTML = Object.entries(schoolGroup).map(([sekolah, data]) => {
+          const plot = plottingMap[sekolah] || { blok: 'Blok A - Utama', tenda: '-' };
+          const safeSchool = sekolah.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+          return `
+            <tr class="hover:bg-amber-50/50">
+              <td class="p-3 font-bold text-amber-950 uppercase">${sekolah}</td>
+              <td class="p-3 text-slate-600">${data.prov}</td>
+              <td class="p-3 text-center font-extrabold text-blue-900">${data.count} Orang</td>
+              <td class="p-3">
+                <input type="text" id="blok_${safeSchool}" value="${plot.blok}" class="p-2 border border-slate-300 rounded-lg text-xs font-semibold w-full bg-slate-50">
+              </td>
+              <td class="p-3">
+                <input type="text" id="tenda_${safeSchool}" value="${plot.tenda}" class="p-2 border border-slate-300 rounded-lg text-xs font-semibold w-full bg-slate-50">
+              </td>
+              <td class="p-3 text-center">
+                <button onclick="savePlotting('${safeSchool}')" class="bg-amber-800 hover:bg-amber-900 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-xs transition-all">
+                  Simpan
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // 2. Render Tabel Kit Logistik
+      const kitBody = document.getElementById('tableKitBody');
+      if (kitBody) {
+        kitBody.innerHTML = rawAdminRows.slice(0, 30).map(row => {
+          const idClean = formatID(row[0]);
+          const nama = row[3] || row[7] || '-';
+          const status = row[2] || 'Peserta';
+          const kit = kitStatusMap[idClean] || { kaos: false, scarf: false, topi: false, daypack: false, tiska: false, idcard: false };
+
+          const items = ['kaos', 'scarf', 'topi', 'daypack', 'tiska', 'idcard'];
+
+          return `
+            <tr class="hover:bg-slate-50">
+              <td class="p-3">
+                <span class="font-bold text-slate-800 block uppercase">${nama}</span>
+                <span class="font-mono text-[10px] text-gray-400">${idClean}</span>
+              </td>
+              <td class="p-3"><span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded text-[10px] font-bold">${status}</span></td>
+              ${items.map(item => `
+                <td class="p-3 text-center">
+                  <input type="checkbox" ${kit[item] ? 'checked' : ''} onchange="toggleKitItem('${idClean}', '${item}')" class="w-4 h-4 accent-amber-800 cursor-pointer">
+                </td>
+              `).join('')}
+            </tr>
+          `;
+        }).join('');
+      }
+    }
+
+    function savePlotting(sekolah) {
+      const blokVal = document.getElementById(`blok_${sekolah}`).value;
+      const tendaVal = document.getElementById(`tenda_${sekolah}`).value;
+      plottingMap[sekolah] = { blok: blokVal, tenda: tendaVal };
+      alert(`Plotting kaveling untuk ${sekolah} telah disimpan!`);
+    }
+
+    function toggleKitItem(id, item) {
+      if (!kitStatusMap[id]) {
+        kitStatusMap[id] = { kaos: false, scarf: false, topi: false, daypack: false, tiska: false, idcard: false };
+      }
+      kitStatusMap[id][item] = !kitStatusMap[id][item];
     }
 
     // FUNGSI KAMERA SCANNER QR CODE
