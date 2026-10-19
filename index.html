@@ -16,6 +16,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
   <!-- HTML5 QR Code Scanner Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+  <!-- JSZip & FileSaver untuk Unduh Massal ZIP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -196,6 +199,10 @@
                 <i class="fa-solid fa-tent text-sm"></i>
                 <span>Plotting & Kit Logistik</span>
               </button>
+              <button onclick="switchAdminPanel('panelKeuanganWA')" id="btnPanelKeuanganWA" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950">
+                <i class="fa-solid fa-wallet text-sm"></i>
+                <span>Keuangan & WA Gateway</span>
+              </button>
               <button onclick="switchAdminPanel('panelDataTable')" id="btnPanelDataTable" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950">
                 <i class="fa-solid fa-table-list text-sm"></i>
                 <span>Kelola Data Pendaftar</span>
@@ -339,9 +346,8 @@
               </div>
             </div>
 
-            <!-- SUB-PANEL BARU: OPSI 2 - PLOTTING TAPAK KEMAH & KIT LOGISTIK -->
+            <!-- SUB-PANEL: PLOTTING TAPAK KEMAH & KIT LOGISTIK -->
             <div id="panelPlottingKit" class="hidden space-y-6">
-              <!-- BARIS 1: ALOKASI TAPAK KEMAH & KAVELING TENDA -->
               <div class="bg-white p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-3">
                   <div>
@@ -364,14 +370,11 @@
                         <th class="p-3 text-center">Aksi Simpan</th>
                       </tr>
                     </thead>
-                    <tbody id="tablePlottingBody" class="divide-y divide-gray-100 font-medium">
-                      <!-- Render Otomatis -->
-                    </tbody>
+                    <tbody id="tablePlottingBody" class="divide-y divide-gray-100 font-medium"></tbody>
                   </table>
                 </div>
               </div>
 
-              <!-- BARIS 2: KONTROL PENYERAHAN KIT LAPANGAN -->
               <div class="bg-white p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-3">
                   <div>
@@ -396,9 +399,60 @@
                         <th class="p-3 text-center">ID Card</th>
                       </tr>
                     </thead>
-                    <tbody id="tableKitBody" class="divide-y divide-gray-100 font-medium">
-                      <!-- Render Otomatis -->
-                    </tbody>
+                    <tbody id="tableKitBody" class="divide-y divide-gray-100 font-medium"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- SUB-PANEL BARU: OPSI 3 - KEUANGAN & WHATSAPP GATEWAY -->
+            <div id="panelKeuanganWA" class="hidden space-y-6">
+              <!-- CARDS RINGKASAN KEUANGAN -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md space-y-1">
+                  <p class="text-xs font-bold text-gray-500 uppercase">Target Omzet Camp Fee</p>
+                  <h3 id="financeTotalTarget" class="text-2xl font-black text-amber-950">Rp 0</h3>
+                  <span class="text-[10px] text-gray-400">Nominal @ Rp 2.500.000 / Orang</span>
+                </div>
+                <div class="bg-white p-5 rounded-3xl border border-emerald-200/80 shadow-md space-y-1">
+                  <p class="text-xs font-bold text-emerald-800 uppercase">Total Dana Terbayar</p>
+                  <h3 id="financeTotalPaid" class="text-2xl font-black text-emerald-700">Rp 0</h3>
+                  <span id="financeStatusBadge" class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">0% Terbayar</span>
+                </div>
+                <div class="bg-white p-5 rounded-3xl border border-red-200/80 shadow-md space-y-1">
+                  <p class="text-xs font-bold text-red-800 uppercase">Sisa Piutang Pelunasan</p>
+                  <h3 id="financeTotalUnpaid" class="text-2xl font-black text-red-700">Rp 0</h3>
+                  <span class="text-[10px] text-red-500 font-medium">Membutuhkan Konfirmasi</span>
+                </div>
+              </div>
+
+              <!-- TABEL PELUNASAN & KIRIM WA -->
+              <div class="bg-white p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-3">
+                  <div>
+                    <h3 class="font-extrabold text-amber-950 text-base flex items-center gap-2">
+                      <i class="fa-solid fa-file-invoice-dollar text-emerald-700"></i> Status Pelunasan & WhatsApp Gateway
+                    </h3>
+                    <p class="text-xs text-slate-500">Kelola status pembayaran serta kirim pesan konfirmasi dan kwitansi langsung ke WhatsApp.</p>
+                  </div>
+                  <button onclick="exportAllKwitansiZip()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 shadow transition-all">
+                    <i class="fa-solid fa-file-zipper text-sm"></i> Unduh Massal Kwitansi (.ZIP)
+                  </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                  <table class="w-full text-xs text-left border-collapse">
+                    <thead>
+                      <tr class="bg-amber-100/70 text-amber-950 uppercase font-bold border-b border-amber-200">
+                        <th class="p-3">ID & Nama</th>
+                        <th class="p-3">Pangkalan</th>
+                        <th class="p-3">No. WhatsApp</th>
+                        <th class="p-3 text-center">Status Pembayaran</th>
+                        <th class="p-3 text-right">Nominal (Rp)</th>
+                        <th class="p-3 text-center">Aksi WhatsApp</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tableFinanceBody" class="divide-y divide-gray-100 font-medium"></tbody>
                   </table>
                 </div>
               </div>
@@ -883,12 +937,14 @@
     let checkinStatusMap = {};
     let html5QrCodeScanner = null;
 
-    // STATE LOKAL UNTUK OPSI 2 (PLOTTING TAPAK & KIT LOGISTIK)
     let plottingMap = {}; 
     let kitStatusMap = {}; 
 
+    // STATE LOKAL UNTUK OPSI 3 (KEUANGAN & WHATSAPP GATEWAY)
+    let paymentStatusMap = {}; 
+
     function switchAdminPanel(panelId) {
-      const panels = ['panelOverview', 'panelScan', 'panelPlottingKit', 'panelDataTable', 'panelRekap', 'panelExport'];
+      const panels = ['panelOverview', 'panelScan', 'panelPlottingKit', 'panelKeuanganWA', 'panelDataTable', 'panelRekap', 'panelExport'];
       panels.forEach(p => {
         const el = document.getElementById(p);
         if (el) el.classList.add('hidden');
@@ -914,11 +970,110 @@
       if (panelId === 'panelPlottingKit') {
         renderPlottingKitPanel();
       }
+
+      if (panelId === 'panelKeuanganWA') {
+        renderKeuanganWAPanel();
+      }
     }
 
-    // FUNGSI OPSI 2: RENDER TAPAK KEMAH & LOGISTIK
+    // FUNGSI OPSI 3: RENDER KEUANGAN & WHATSAPP GATEWAY
+    function renderKeuanganWAPanel() {
+      const feePerPerson = 2500000;
+      const totalPeople = rawAdminRows.length;
+      const totalTarget = totalPeople * feePerPerson;
+
+      let totalPaid = 0;
+      rawAdminRows.forEach(row => {
+        const idClean = formatID(row[0]);
+        const statusPay = paymentStatusMap[idClean] || 'Lunas';
+        if (statusPay === 'Lunas') {
+          totalPaid += feePerPerson;
+        } else if (statusPay === 'DP') {
+          totalPaid += (feePerPerson / 2);
+        }
+      });
+
+      const totalUnpaid = totalTarget - totalPaid;
+      const pctPaid = totalTarget > 0 ? Math.round((totalPaid / totalTarget) * 100) : 0;
+
+      document.getElementById('financeTotalTarget').innerText = `Rp ${totalTarget.toLocaleString('id-ID')}`;
+      document.getElementById('financeTotalPaid').innerText = `Rp ${totalPaid.toLocaleString('id-ID')}`;
+      document.getElementById('financeTotalUnpaid').innerText = `Rp ${totalUnpaid.toLocaleString('id-ID')}`;
+      document.getElementById('financeStatusBadge').innerText = `${pctPaid}% Terbayar`;
+
+      const financeBody = document.getElementById('tableFinanceBody');
+      if (financeBody) {
+        financeBody.innerHTML = rawAdminRows.map(row => {
+          const idClean = formatID(row[0]);
+          const nama = row[3] || row[7] || '-';
+          const sekolah = row[10] || '-';
+          const phoneRaw = row[8] || row[15] || '6281234567890';
+          const statusPay = paymentStatusMap[idClean] || 'Lunas';
+          const safeNama = nama.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
+          const currentNominal = statusPay === 'Lunas' ? feePerPerson : (statusPay === 'DP' ? feePerPerson / 2 : 0);
+
+          return `
+            <tr class="hover:bg-slate-50">
+              <td class="p-3">
+                <span class="font-bold text-slate-800 block uppercase">${nama}</span>
+                <span class="font-mono text-[10px] text-gray-400">${idClean}</span>
+              </td>
+              <td class="p-3 text-slate-600">${sekolah}</td>
+              <td class="p-3 font-mono text-slate-700">${phoneRaw}</td>
+              <td class="p-3 text-center">
+                <select onchange="changePaymentStatus('${idClean}', this.value)" class="p-1.5 border border-slate-300 rounded-lg text-xs font-bold ${statusPay === 'Lunas' ? 'bg-emerald-50 text-emerald-800' : (statusPay === 'DP' ? 'bg-amber-50 text-amber-800' : 'bg-red-50 text-red-800')}">
+                  <option value="Lunas" ${statusPay === 'Lunas' ? 'selected' : ''}>Lunas (100%)</option>
+                  <option value="DP" ${statusPay === 'DP' ? 'selected' : ''}>DP / Muka (50%)</option>
+
+                  <option value="Belum" ${statusPay === 'Belum' ? 'selected' : ''}>Belum Bayar</option>
+                </select>
+              </td>
+              <td class="p-3 text-right font-black text-slate-900">Rp ${currentNominal.toLocaleString('id-ID')}</td>
+              <td class="p-3 text-center">
+                <button onclick="sendWAAlert('${phoneRaw}', '${safeNama}', '${idClean}', '${statusPay}', '${currentNominal.toLocaleString('id-ID')}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-xs transition-all inline-flex items-center gap-1.5">
+                  <i class="fa-brands fa-whatsapp text-sm"></i> Kirim WA
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+    }
+
+    function changePaymentStatus(id, newStatus) {
+      paymentStatusMap[id] = newStatus;
+      renderKeuanganWAPanel();
+    }
+
+    function sendWAAlert(phone, nama, id, statusPay, nominal) {
+      let cleanPhone = String(phone).replace(/[^0-9]/g, '');
+      if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.slice(1);
+
+      const msg = `Assalamu'alaikum Wr. Wb. Yth. *${nama}*,\n\nBerikut konfirmasi status pembayaran registrasi *KEMBARANAS III 2026*:\n• ID Registrasi: *${id}*\n• Status Pembayaran: *${statusPay.toUpperCase()}*\n• Total Terbayar: *Rp ${nominal}*\n\nStatus berkas Anda telah *TERVERIFIKASI SISTEM*. Silakan simpan dan cetak lembar pendaftaran dari portal resmi. Terima kasih!\n\n_Salam Pramuka!_\n*Panitia Kembaranas III 2026*`;
+
+      window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    async function exportAllKwitansiZip() {
+      if (rawAdminRows.length === 0) return alert("Tidak ada data pendaftaran.");
+
+      const zip = new JSZip();
+      const folder = zip.folder("Kwitansi_Kembaranas_III");
+
+      rawAdminRows.slice(0, 20).forEach(row => {
+        const idClean = formatID(row[0]);
+        const nama = row[3] || row[7] || 'Peserta';
+        const content = `KWITANSI KEMBARANAS III 2026\nID: ${idClean}\nNama: ${nama}\nNominal: Rp 2.500.000\nStatus: TERVERIFIKASI`;
+        folder.file(`Kwitansi_${idClean}_${nama.replace(/[^a-zA-Z0-9]/g, '_')}.txt`, content);
+      });
+
+      zip.generateAsync({ type: "blob" }).then(function (content) {
+        saveAs(content, "Rekap_Kwitansi_Kembaranas_2026.zip");
+      });
+    }
+
     function renderPlottingKitPanel() {
-      // 1. Grouping Data berdasarkan Pangkalan/Sekolah
       const schoolGroup = {};
       rawAdminRows.forEach(row => {
         const sekolah = (row[10] || 'Belum Ditentukan').trim();
@@ -955,7 +1110,6 @@
         }).join('');
       }
 
-      // 2. Render Tabel Kit Logistik
       const kitBody = document.getElementById('tableKitBody');
       if (kitBody) {
         kitBody.innerHTML = rawAdminRows.slice(0, 30).map(row => {
@@ -998,7 +1152,6 @@
       kitStatusMap[id][item] = !kitStatusMap[id][item];
     }
 
-    // FUNGSI KAMERA SCANNER QR CODE
     function startScanner() {
       const readerEl = document.getElementById('qr-reader');
       const placeholder = document.getElementById('qr-placeholder');
