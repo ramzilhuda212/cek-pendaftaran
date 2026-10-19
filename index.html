@@ -4,309 +4,158 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portal Utama & Control Center - KEMBARANAS III 2026</title>
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <!-- Libraries -->
   <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    .scout-bg-pattern {
-      background-image: radial-gradient(#78350f 0.5px, transparent 0.5px);
-      background-size: 24px 24px;
-      opacity: 0.03;
-    }
-    @media print {
-      @page { size: A4 portrait; margin: 3mm; }
-      html, body { background: #ffffff !important; }
-      body * { visibility: hidden; }
-      #modalKartuContent, #modalKartuContent * { visibility: visible; }
-      #modalKartuContent { position: absolute; left: 0; top: 0; width: 100% !important; }
-      .no-print { display: none !important; }
-    }
   </style>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-800 relative antialiased flex flex-col justify-between">
-  
-  <div class="fixed inset-0 scout-bg-pattern pointer-events-none z-0"></div>
+<body class="bg-slate-50 min-h-screen text-slate-800 flex flex-col justify-between">
 
-  <div class="relative z-10">
-    <!-- NAVBAR UTAMA -->
-    <header class="bg-gradient-to-r from-amber-950 via-amber-900 to-amber-950 text-white shadow-lg sticky top-0 z-40 border-b-2 border-amber-500">
-      <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-300 text-xl shadow-inner">
-            <i class="fa-solid fa-compass"></i>
-          </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="font-extrabold text-lg tracking-wider text-amber-100">KEMBARANAS III</span>
-              <span id="roleBadge" class="bg-amber-500 text-amber-950 text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">PESERTA</span>
-            </div>
-            <p class="text-[11px] text-amber-200/80 font-medium tracking-wide flex items-center gap-1">
-              <i class="fa-solid fa-tree text-[9px] text-emerald-400"></i> Perkemahan Ukhuwah SAKO SIT Indonesia
-            </p>
-          </div>
+  <!-- NAVBAR UTAMA -->
+  <header class="bg-amber-950 text-white sticky top-0 z-40 border-b-2 border-amber-500 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-300 text-xl">
+          <i class="fa-solid fa-compass"></i>
         </div>
-
-        <div class="flex items-center bg-amber-950/80 p-1 rounded-2xl border border-amber-700/50 w-full sm:w-auto justify-center">
-          <button onclick="switchTab('userTab')" id="btnUserTab" class="flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 flex items-center justify-center gap-2 bg-amber-500 text-amber-950 shadow-md">
-            <i class="fa-solid fa-magnifying-glass"></i> Cek Pendaftaran
-          </button>
-          <button onclick="openLoginModal()" id="btnAdminTab" class="flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 flex items-center justify-center gap-2 text-amber-200 hover:text-white">
-            <i class="fa-solid fa-user-shield"></i> Portal Admin
-          </button>
-        </div>
-      </div>
-    </header>
-
-    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
-      <!-- BANNER BROADCAST MASTER -->
-      <div id="userBroadcastBanner" class="bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 border-2 border-amber-600 text-amber-950 p-4 rounded-2xl shadow-md flex items-center justify-between gap-3">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-amber-950 text-amber-300 flex items-center justify-center text-lg font-bold flex-shrink-0 animate-bounce">
-            <i class="fa-solid fa-bullhorn"></i>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-lg text-amber-100">KEMBARANAS III</span>
+            <span id="roleBadge" class="bg-amber-500 text-amber-950 text-[10px] font-black px-2 py-0.5 rounded-full uppercase">PESERTA</span>
           </div>
-          <div>
-            <span class="text-[10px] font-black uppercase tracking-widest bg-amber-950 text-amber-300 px-2 py-0.5 rounded-full">PENGUMUMAN PANITIA</span>
-            <p id="userBroadcastText" class="text-xs sm:text-sm font-extrabold mt-0.5">Memuat pengumuman resmi...</p>
-          </div>
+          <p class="text-[11px] text-amber-200/80 font-medium">Perkemahan Ukhuwah SAKO SIT Indonesia 2026</p>
         </div>
       </div>
 
-      <!-- TAB 1: CEK PENDAFTARAN -->
-      <section id="userTab" class="space-y-6">
-        <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-lg border border-amber-100 relative max-w-2xl mx-auto">
-          <div class="text-center space-y-2 mb-6">
-            <div class="w-12 h-12 bg-amber-50 text-amber-800 rounded-2xl mx-auto flex items-center justify-center text-xl border border-amber-200">
-              <i class="fa-solid fa-id-card-clip"></i>
-            </div>
-            <h2 class="text-xl font-extrabold text-amber-950">Pencarian Data Pendaftar</h2>
-            <p class="text-xs text-gray-500">Ketikkan Nama Lengkap, Nomor Registrasi, atau Asal Sekolah</p>
-          </div>
+      <div class="flex items-center gap-2">
+        <button onclick="switchTab('userTab')" class="px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 text-amber-950 shadow">
+          <i class="fa-solid fa-magnifying-glass"></i> Cek Pendaftaran
+        </button>
+        <button onclick="openLoginModal()" class="px-4 py-2 rounded-xl text-xs font-bold text-amber-200 hover:text-white bg-amber-900/60 border border-amber-700">
+          <i class="fa-solid fa-user-shield"></i> Portal Admin
+        </button>
+      </div>
+    </div>
+  </header>
 
-          <form onsubmit="handleSearch(event)" class="space-y-3">
-            <input type="text" id="searchKeyword" required placeholder="Contoh: Ahmad / REG-2026-001 / SDIT Al-Hikmah" 
-                   class="w-full px-4 py-3.5 bg-slate-50 border border-amber-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-amber-500 font-medium text-sm transition-all">
-            <button type="submit" id="btnCari" class="w-full bg-gradient-to-r from-amber-800 to-amber-900 hover:from-amber-900 hover:to-amber-950 text-white font-bold py-3.5 rounded-2xl text-sm shadow-md transition-all flex items-center justify-center gap-2">
-              <i class="fa-solid fa-magnifying-glass"></i> Cari Data Pendaftar
+  <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6 flex-1 w-full">
+    <!-- BROADCAST BANNER -->
+    <div id="userBroadcastBanner" class="bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 border-2 border-amber-600 text-amber-950 p-4 rounded-2xl shadow-md flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-950 text-amber-300 flex items-center justify-center text-lg font-bold flex-shrink-0 animate-bounce">
+          <i class="fa-solid fa-bullhorn"></i>
+        </div>
+        <div>
+          <span class="text-[10px] font-black uppercase bg-amber-950 text-amber-300 px-2 py-0.5 rounded-full">PENGUMUMAN PANITIA</span>
+          <p id="userBroadcastText" class="text-xs sm:text-sm font-extrabold mt-0.5">Memuat pengumuman resmi...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 1: PENCARIAN PESERTA -->
+    <section id="userTab" class="space-y-6">
+      <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-lg border border-amber-100 max-w-2xl mx-auto text-center space-y-4">
+        <h2 class="text-xl font-extrabold text-amber-950">Pencarian Data Pendaftar</h2>
+        <form onsubmit="handleSearch(event)" class="space-y-3">
+          <input type="text" id="searchKeyword" required placeholder="Ketik Nama, No ID, atau Sekolah..." class="w-full p-3.5 bg-slate-50 border border-amber-300 rounded-2xl text-sm font-medium focus:ring-2 focus:ring-amber-500">
+          <button type="submit" id="btnCari" class="w-full bg-amber-900 hover:bg-amber-950 text-white font-bold py-3.5 rounded-2xl text-sm shadow">
+            <i class="fa-solid fa-magnifying-glass"></i> Cari Data Pendaftar
+          </button>
+        </form>
+      </div>
+      <div id="searchResult" class="hidden space-y-4 max-w-3xl mx-auto"></div>
+    </section>
+
+    <!-- TAB 2: PORTAL ADMIN -->
+    <section id="adminTab" class="hidden flex flex-col lg:flex-row gap-6 items-start">
+      <aside class="w-full lg:w-64 bg-white p-4 rounded-3xl border border-amber-200 shadow-md space-y-3">
+        <div class="px-3 py-2 border-b">
+          <h4 id="sidebarUserName" class="font-extrabold text-amber-950 text-sm">Admin Posko</h4>
+          <span id="sidebarUserRole" class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full uppercase">ADMIN</span>
+        </div>
+        <nav class="space-y-1 text-xs font-bold">
+          <button onclick="switchAdminPanel('panelOverview')" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-2 bg-amber-900 text-white">
+            <i class="fa-solid fa-chart-pie"></i> Ringkasan Stat
+          </button>
+          <button onclick="switchAdminPanel('panelDataTable')" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-2 text-slate-700 hover:bg-amber-50">
+            <i class="fa-solid fa-table-list"></i> Kelola Pendaftar
+          </button>
+          <div id="superadminMenu" class="hidden space-y-1 pt-2 border-t">
+            <button onclick="switchAdminPanel('panelUsers')" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-2 text-purple-900 bg-purple-50">
+              <i class="fa-solid fa-users-gear"></i> Manajemen Akun
             </button>
+            <button onclick="switchAdminPanel('panelSettings')" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-2 text-blue-900 bg-blue-50">
+              <i class="fa-solid fa-sliders"></i> Pengaturan Master
+            </button>
+            <button onclick="switchAdminPanel('panelLogs')" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-2 text-rose-900 bg-rose-50">
+              <i class="fa-solid fa-shield-halved"></i> Audit Logs
+            </button>
+          </div>
+        </nav>
+        <button onclick="logoutAdmin()" class="w-full px-3.5 py-2 rounded-2xl text-xs font-bold text-red-600 bg-red-50 border border-red-200 mt-4">
+          <i class="fa-solid fa-right-from-bracket"></i> Keluar
+        </button>
+      </aside>
+
+      <div class="flex-1 w-full space-y-6">
+        <div id="panelOverview" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-white p-5 rounded-3xl border shadow-sm">
+            <p class="text-xs text-gray-500 font-bold uppercase">Total Terdaftar</p>
+            <h3 id="statTotal" class="text-2xl font-black text-amber-950">0</h3>
+          </div>
+        </div>
+
+        <div id="panelUsers" class="hidden bg-white p-6 rounded-3xl border shadow-md space-y-4">
+          <h3 class="font-extrabold text-amber-950 text-base border-b pb-3"><i class="fa-solid fa-users-gear text-purple-700"></i> Kelola Hak Akses Admin</h3>
+          <div class="overflow-x-auto"><table class="w-full text-xs text-left"><tbody id="tableUsersBody"></tbody></table></div>
+        </div>
+
+        <div id="panelSettings" class="hidden bg-white p-6 rounded-3xl border shadow-md space-y-4">
+          <h3 class="font-extrabold text-amber-950 text-base border-b pb-3"><i class="fa-solid fa-sliders text-blue-700"></i> Pengaturan Master</h3>
+          <form onsubmit="handleSaveSettings(event)" class="space-y-3 text-xs">
+            <textarea id="setBroadcast" rows="3" class="w-full p-3 border rounded-xl bg-slate-50 font-semibold"></textarea>
+            <button type="submit" class="bg-blue-800 text-white px-5 py-2.5 rounded-xl font-bold shadow">Simpan</button>
           </form>
         </div>
 
-        <div id="searchResult" class="hidden space-y-4 max-w-3xl mx-auto"></div>
-      </section>
-
-      <!-- TAB 2: PORTAL ADMIN & SUPERADMIN -->
-      <section id="adminTab" class="hidden space-y-6">
-        <div id="adminDashboard" class="flex flex-col lg:flex-row gap-6 items-start">
-          
-          <!-- SIDEBAR NAVIGATION -->
-          <aside class="w-full lg:w-64 bg-white p-4 rounded-3xl border border-amber-200/80 shadow-md space-y-3">
-            <div class="px-3 py-2 border-b border-gray-100 flex items-center justify-between">
-              <div>
-                <h4 id="sidebarUserName" class="font-extrabold text-amber-950 text-sm">Admin Posko</h4>
-                <span id="sidebarUserRole" class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full uppercase">ADMIN</span>
-              </div>
-            </div>
-
-            <nav class="space-y-1 text-xs font-bold">
-              <button onclick="switchAdminPanel('panelOverview')" id="btnPanelOverview" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 bg-amber-900 text-white shadow-sm">
-                <i class="fa-solid fa-chart-pie"></i> Ringkasan & Stat
-              </button>
-              <button onclick="switchAdminPanel('panelScan')" id="btnPanelScan" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 text-slate-700 hover:bg-amber-50">
-                <i class="fa-solid fa-qrcode"></i> Presensi & Scan QR
-              </button>
-              <button onclick="switchAdminPanel('panelPlottingKit')" id="btnPanelPlottingKit" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 text-slate-700 hover:bg-amber-50">
-                <i class="fa-solid fa-tent"></i> Plotting & Kit Logistik
-              </button>
-              <button onclick="switchAdminPanel('panelKeuanganWA')" id="btnPanelKeuanganWA" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 text-slate-700 hover:bg-amber-50">
-                <i class="fa-solid fa-wallet"></i> Keuangan & WA
-              </button>
-              <button onclick="switchAdminPanel('panelSertifikatRundown')" id="btnPanelSertifikatRundown" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 text-slate-700 hover:bg-amber-50">
-                <i class="fa-solid fa-certificate"></i> Sertifikat & Rundown
-              </button>
-              <button onclick="switchAdminPanel('panelDataTable')" id="btnPanelDataTable" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 text-slate-700 hover:bg-amber-50">
-                <i class="fa-solid fa-table-list"></i> Kelola Pendaftar
-              </button>
-
-              <!-- FITUR KHUSUS SUPERADMIN -->
-              <div id="superadminMenu" class="hidden space-y-1 pt-2 border-t border-gray-200">
-                <span class="text-[9px] font-black text-amber-800 uppercase px-3">Fitur Superadmin</span>
-                <button onclick="switchAdminPanel('panelUsers')" id="btnPanelUsers" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 text-purple-900 bg-purple-50 hover:bg-purple-100">
-                  <i class="fa-solid fa-users-gear"></i> Manajemen Akun
-                </button>
-                <button onclick="switchAdminPanel('panelSettings')" id="btnPanelSettings" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 text-blue-900 bg-blue-50 hover:bg-blue-100">
-                  <i class="fa-solid fa-sliders"></i> Pengaturan Master
-                </button>
-                <button onclick="switchAdminPanel('panelLogs')" id="btnPanelLogs" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 text-rose-900 bg-rose-50 hover:bg-rose-100">
-                  <i class="fa-solid fa-shield-halved"></i> Audit Log Sistem
-                </button>
-              </div>
-            </nav>
-
-            <button onclick="logoutAdmin()" class="w-full px-3.5 py-2 rounded-2xl text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 mt-4">
-              <i class="fa-solid fa-right-from-bracket"></i> Keluar
-            </button>
-          </aside>
-
-          <!-- MAIN CONTENT PANEL -->
-          <div class="flex-1 w-full space-y-6">
-
-            <!-- SUB-PANEL 1: RINGKASAN -->
-            <div id="panelOverview" class="space-y-6">
-              <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                <div class="bg-white p-5 rounded-3xl border shadow-sm">
-                  <p class="text-xs text-gray-500 font-bold uppercase">Total Terdaftar</p>
-                  <h3 id="statTotal" class="text-2xl font-black text-amber-950">0</h3>
-                </div>
-                <div class="bg-white p-5 rounded-3xl border shadow-sm">
-                  <p class="text-xs text-gray-500 font-bold uppercase">Peserta</p>
-                  <h3 id="statPeserta" class="text-2xl font-black text-blue-950">0</h3>
-                </div>
-                <div class="bg-white p-5 rounded-3xl border shadow-sm">
-                  <p class="text-xs text-gray-500 font-bold uppercase">Pembina</p>
-                  <h3 id="statPembina" class="text-2xl font-black text-purple-950">0</h3>
-                </div>
-                <div class="bg-white p-5 rounded-3xl border shadow-sm">
-                  <p class="text-xs text-emerald-800 font-bold uppercase">Tiba di Buper</p>
-                  <h3 id="statCheckin" class="text-2xl font-black text-emerald-950">0</h3>
-                </div>
-              </div>
-            </div>
-
-            <!-- SUB-PANEL: MANAJEMEN AKUN (SUPERADMIN ONLY) -->
-            <div id="panelUsers" class="hidden bg-white p-6 rounded-3xl border shadow-md space-y-4">
-              <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="font-extrabold text-amber-950 text-base"><i class="fa-solid fa-users-gear text-purple-700"></i> Kelola Hak Akses Admin</h3>
-                <button onclick="openAddUserModal()" class="bg-purple-800 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow">+ Tambah Admin</button>
-              </div>
-              <div class="overflow-x-auto">
-                <table class="w-full text-xs text-left">
-                  <thead class="bg-purple-50 text-purple-950 font-bold uppercase border-b">
-                    <tr>
-                      <th class="p-3">Username</th>
-                      <th class="p-3">Nama Lengkap</th>
-                      <th class="p-3">Role Hak Akses</th>
-                      <th class="p-3 text-center">Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody id="tableUsersBody" class="divide-y font-medium"></tbody>
-                </table>
-              </div>
-            </div>
-
-            <!-- SUB-PANEL: PENGATURAN MASTER (SUPERADMIN ONLY) -->
-            <div id="panelSettings" class="hidden bg-white p-6 rounded-3xl border shadow-md space-y-4">
-              <h3 class="font-extrabold text-amber-950 text-base border-b pb-3"><i class="fa-solid fa-sliders text-blue-700"></i> Pengaturan Master Sistem</h3>
-              <form onsubmit="handleSaveSettings(event)" class="space-y-4 text-xs">
-                <div>
-                  <label class="block font-bold text-gray-700 mb-1">Teks Broadcast Pengumuman Lapangan</label>
-                  <textarea id="setBroadcast" rows="3" class="w-full p-3 border rounded-xl bg-slate-50 font-semibold focus:ring-2 focus:ring-amber-500"></textarea>
-                </div>
-                <button type="submit" class="bg-blue-800 text-white px-5 py-2.5 rounded-xl font-bold shadow">
-                  <i class="fa-solid fa-floppy-disk"></i> Simpan Pengaturan Master
-                </button>
-              </form>
-            </div>
-
-            <!-- SUB-PANEL: AUDIT LOGS (SUPERADMIN ONLY) -->
-            <div id="panelLogs" class="hidden bg-white p-6 rounded-3xl border shadow-md space-y-4">
-              <h3 class="font-extrabold text-amber-950 text-base border-b pb-3"><i class="fa-solid fa-shield-halved text-rose-700"></i> Audit Log Aktivitas System</h3>
-              <div class="overflow-x-auto max-h-96 overflow-y-auto">
-                <table class="w-full text-xs text-left">
-                  <thead class="bg-rose-50 text-rose-950 font-bold uppercase sticky top-0">
-                    <tr>
-                      <th class="p-2.5">Waktu</th>
-                      <th class="p-2.5">User</th>
-                      <th class="p-2.5">Role</th>
-                      <th class="p-2.5">Aksi</th>
-                      <th class="p-2.5">Rincian</th>
-                    </tr>
-                  </thead>
-                  <tbody id="tableLogsBody" class="divide-y font-mono text-[11px]"></tbody>
-                </table>
-              </div>
-            </div>
-
-            <!-- SUB-PANEL: DATA PENDAFTAR -->
-            <div id="panelDataTable" class="hidden bg-white p-6 rounded-3xl border shadow-md space-y-4">
-              <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="font-extrabold text-amber-950 text-base">Kelola Data Pendaftar</h3>
-                <button onclick="openModalForm()" class="bg-amber-800 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow">+ Tambah Data</button>
-              </div>
-              <div class="overflow-x-auto">
-                <table class="w-full text-xs text-left">
-                  <thead id="tableAdminHeader" class="bg-amber-100 text-amber-950 font-bold uppercase border-b"></thead>
-                  <tbody id="tableAdminBody" class="divide-y font-medium"></tbody>
-                </table>
-              </div>
-            </div>
-
-          </div>
+        <div id="panelLogs" class="hidden bg-white p-6 rounded-3xl border shadow-md space-y-4">
+          <h3 class="font-extrabold text-amber-950 text-base border-b pb-3"><i class="fa-solid fa-shield-halved text-rose-700"></i> Audit Logs</h3>
+          <div class="overflow-x-auto max-h-96"><table class="w-full text-xs text-left"><tbody id="tableLogsBody" class="font-mono text-[11px]"></tbody></table></div>
         </div>
-      </section>
-    </main>
-  </div>
+
+        <div id="panelDataTable" class="hidden bg-white p-6 rounded-3xl border shadow-md space-y-4">
+          <h3 class="font-extrabold text-amber-950 text-base border-b pb-3">Kelola Data Pendaftar</h3>
+          <div class="overflow-x-auto"><table class="w-full text-xs text-left"><thead id="tableAdminHeader" class="bg-amber-100"></thead><tbody id="tableAdminBody"></tbody></table></div>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <!-- MODAL LOGIN ADMIN -->
   <div id="modalLogin" class="fixed inset-0 bg-slate-900/70 hidden flex items-center justify-center p-4 z-50">
-    <div class="bg-white p-6 sm:p-8 rounded-3xl max-w-md w-full relative shadow-2xl border space-y-4">
-      <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700"><i class="fa-solid fa-xmark text-lg"></i></button>
-      <div class="text-center space-y-1">
-        <h3 class="text-lg font-black text-amber-950">Autentikasi Portal Admin</h3>
-        <p class="text-xs text-gray-500">Masuk sesuai tingkat kewenangan akun Anda</p>
-      </div>
-
+    <div class="bg-white p-6 rounded-3xl max-w-md w-full relative shadow-2xl border space-y-4">
+      <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400"><i class="fa-solid fa-xmark"></i></button>
+      <h3 class="text-lg font-black text-amber-950 text-center">Autentikasi Admin</h3>
       <form onsubmit="handleAdminLogin(event)" class="space-y-3 text-xs font-bold">
-        <div>
-          <label class="block mb-1">Username Admin</label>
-          <input type="text" id="adminUser" required class="w-full p-3 border rounded-xl bg-slate-50 focus:ring-2 focus:ring-amber-500">
-        </div>
-        <div>
-          <label class="block mb-1">Kata Sandi</label>
-          <input type="password" id="adminPass" required class="w-full p-3 border rounded-xl bg-slate-50 focus:ring-2 focus:ring-amber-500">
-        </div>
-        <button type="submit" id="btnLogin" class="w-full bg-amber-900 hover:bg-amber-950 text-white py-3 rounded-xl shadow transition-all">
-          Masuk Dashboard
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL TAMBAH USER ADMIN (SUPERADMIN ONLY) -->
-  <div id="modalAddUser" class="fixed inset-0 bg-slate-900/70 hidden flex items-center justify-center p-4 z-50">
-    <div class="bg-white p-6 rounded-3xl max-w-md w-full relative shadow-2xl space-y-3">
-      <button onclick="closeAddUserModal()" class="absolute top-4 right-4 text-gray-400"><i class="fa-solid fa-xmark"></i></button>
-      <h3 class="font-bold text-amber-950 text-base border-b pb-2">Tambah Akun Admin Baru</h3>
-      <form onsubmit="handleSaveUser(event)" class="space-y-3 text-xs font-bold">
-        <div><label>Username</label><input type="text" id="newUserU" required class="w-full p-2.5 border rounded-xl"></div>
-        <div><label>Kata Sandi</label><input type="password" id="newUserP" required class="w-full p-2.5 border rounded-xl"></div>
-        <div><label>Nama Lengkap</label><input type="text" id="newUserN" required class="w-full p-2.5 border rounded-xl"></div>
-        <div>
-          <label>Role Hak Akses</label>
-          <select id="newUserR" class="w-full p-2.5 border rounded-xl bg-slate-50">
-            <option value="admin">Admin Posko Lapangan</option>
-            <option value="superadmin">Super Administrator</option>
-          </select>
-        </div>
-        <button type="submit" class="w-full bg-purple-800 text-white py-2.5 rounded-xl">Simpan Akun</button>
+        <input type="text" id="adminUser" required placeholder="Username" class="w-full p-3 border rounded-xl bg-slate-50">
+        <input type="password" id="adminPass" required placeholder="Password" class="w-full p-3 border rounded-xl bg-slate-50">
+        <button type="submit" id="btnLogin" class="w-full bg-amber-900 text-white py-3 rounded-xl shadow">Masuk Dashboard</button>
       </form>
     </div>
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbznFj-ndl5ArO7N5lnwy7EYnChwbV8slndN0EWlOZ5lXEYauoInw6WZHfFwgN1O7TEV/exec";
-    
+    // Otomatis mengenali URL eksekusi Google Apps Script saat diakses langsung
+    const SCRIPT_URL = (window.location.href.indexOf('script.google.com') !== -1)
+      ? window.location.href
+      : "https://script.google.com/macros/s/AKfycbznFj-ndl5ArO7N5lnwy7EYnChwbV8slndN0EWlOZ5lXEYauoInw6WZHfFwgN1O7TEV/exec";
+
     let currentUser = { username: '', nama: 'Guest', role: 'guest' };
     let rawHeaders = [];
     let rawAdminRows = [];
@@ -317,25 +166,46 @@
     }
 
     function openLoginModal() {
-      if (currentUser.role !== 'guest') {
-        switchTab('adminTab');
-      } else {
-        document.getElementById('modalLogin').classList.remove('hidden');
-      }
+      if (currentUser.role !== 'guest') switchTab('adminTab');
+      else document.getElementById('modalLogin').classList.remove('hidden');
     }
 
-    function closeLoginModal() {
-      document.getElementById('modalLogin').classList.add('hidden');
+    function closeLoginModal() { document.getElementById('modalLogin').classList.add('hidden'); }
+
+    async function handleSearch(e) {
+      e.preventDefault();
+      const kw = document.getElementById('searchKeyword').value;
+      const resBox = document.getElementById('searchResult');
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'search', keyword: kw })
+        }).then(r => r.json());
+
+        resBox.innerHTML = '';
+        resBox.classList.remove('hidden');
+
+        if (res.success && res.data.length > 0) {
+          res.data.forEach(item => {
+            resBox.innerHTML += `
+              <div class="bg-white p-5 rounded-3xl shadow border space-y-2">
+                <h3 class="font-bold text-amber-950 uppercase">${item.nama}</h3>
+                <p class="text-xs text-gray-500">${item.statusPendaftaran} - ${item.asalSekolah}</p>
+              </div>`;
+          });
+        } else {
+          resBox.innerHTML = `<div class="bg-white p-5 rounded-3xl text-center text-red-600 text-xs font-bold">Data tidak ditemukan.</div>`;
+        }
+      } catch (err) {
+        alert("Gagal koneksi: " + err.message);
+      }
     }
 
     async function handleAdminLogin(e) {
       e.preventDefault();
       const u = document.getElementById('adminUser').value;
       const p = document.getElementById('adminPass').value;
-      const btn = document.getElementById('btnLogin');
-
-      btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Memeriksa...`;
 
       try {
         const res = await fetch(SCRIPT_URL, {
@@ -353,53 +223,40 @@
           alert(res.message);
         }
       } catch (err) {
-        alert("Gagal terhubung: " + err.message);
-      } finally {
-        btn.disabled = false;
-        btn.innerText = "Masuk Dashboard";
+        alert("Gagal koneksi: " + err.message);
       }
     }
 
     function updateRoleUI() {
-      const badge = document.getElementById('roleBadge');
-      badge.innerText = currentUser.role.toUpperCase();
-
+      document.getElementById('roleBadge').innerText = currentUser.role.toUpperCase();
       document.getElementById('sidebarUserName').innerText = currentUser.nama;
       document.getElementById('sidebarUserRole').innerText = currentUser.role.toUpperCase();
 
-      const superMenu = document.getElementById('superadminMenu');
       if (currentUser.role === 'superadmin') {
-        superMenu.classList.remove('hidden');
-        badge.className = "bg-purple-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider";
+        document.getElementById('superadminMenu').classList.remove('hidden');
       } else {
-        superMenu.classList.add('hidden');
-        badge.className = "bg-emerald-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider";
+        document.getElementById('superadminMenu').classList.add('hidden');
       }
     }
 
     async function loadAdminData() {
-      try {
-        const res = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          body: JSON.stringify({ action: 'getAdminData', role: currentUser.role })
-        }).then(r => r.json());
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'getAdminData', role: currentUser.role })
+      }).then(r => r.json());
 
-        if (res.success) {
-          rawHeaders = res.headers;
-          rawAdminRows = res.rows;
+      if (res.success) {
+        rawHeaders = res.headers;
+        rawAdminRows = res.rows;
 
-          document.getElementById('statTotal').innerText = rawAdminRows.length;
-          document.getElementById('userBroadcastText').innerText = res.settings.broadcast_text || '-';
-          document.getElementById('setBroadcast').value = res.settings.broadcast_text || '';
+        document.getElementById('statTotal').innerText = rawAdminRows.length;
+        document.getElementById('userBroadcastText').innerText = res.settings.broadcast_text || '-';
+        document.getElementById('setBroadcast').value = res.settings.broadcast_text || '';
 
-          renderAdminTable();
-          if (currentUser.role === 'superadmin') {
-            renderAuditLogs(res.logs);
-            loadUsersList();
-          }
+        renderAdminTable();
+        if (currentUser.role === 'superadmin') {
+          renderAuditLogs(res.logs);
         }
-      } catch (err) {
-        console.error(err);
       }
     }
 
@@ -437,57 +294,6 @@
           <td class="p-2 border-b">${l[4]}</td>
         </tr>
       `).join('');
-    }
-
-    async function loadUsersList() {
-      const res = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'getUsers' })
-      }).then(r => r.json());
-
-      if (res.success) {
-        const tbody = document.getElementById('tableUsersBody');
-        tbody.innerHTML = res.users.map(u => `
-          <tr class="hover:bg-purple-50/50">
-            <td class="p-3 font-bold">${u.username}</td>
-            <td class="p-3">${u.nama}</td>
-            <td class="p-3"><span class="bg-purple-100 text-purple-900 px-2 py-0.5 rounded font-bold">${u.role}</span></td>
-            <td class="p-3 text-center">
-              ${u.username !== 'superadmin' ? `<button onclick="deleteUser('${u.username}')" class="text-red-600 hover:underline"><i class="fa-solid fa-trash"></i></button>` : '-'}
-            </td>
-          </tr>
-        `).join('');
-      }
-    }
-
-    function openAddUserModal() { document.getElementById('modalAddUser').classList.remove('hidden'); }
-    function closeAddUserModal() { document.getElementById('modalAddUser').classList.add('hidden'); }
-
-    async function handleSaveUser(e) {
-      e.preventDefault();
-      const res = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify({
-          action: 'saveUser', authUser: currentUser.username, authRole: currentUser.role,
-          username: document.getElementById('newUserU').value,
-          password: document.getElementById('newUserP').value,
-          nama: document.getElementById('newUserN').value,
-          role: document.getElementById('newUserR').value
-        })
-      }).then(r => r.json());
-
-      alert(res.message);
-      if (res.success) { closeAddUserModal(); loadUsersList(); }
-    }
-
-    async function deleteUser(username) {
-      if (!confirm(`Hapus akun admin ${username}?`)) return;
-      const res = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'deleteUser', username: username, authUser: currentUser.username, authRole: currentUser.role })
-      }).then(r => r.json());
-      alert(res.message);
-      if (res.success) loadUsersList();
     }
 
     async function handleSaveSettings(e) {
