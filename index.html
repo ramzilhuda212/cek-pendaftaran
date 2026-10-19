@@ -23,7 +23,7 @@
       opacity: 0.03;
     }
 
-    /* FORMAT CETAK A4 (FULL 1 HALAMAN PAS ATAS-BAWAH TANPA TERSISA) */
+    /* FORMAT CETAK A4 */
     @media print {
       @page {
         size: A4 portrait;
@@ -63,7 +63,7 @@
   <div class="relative z-10">
     <!-- NAVBAR -->
     <header class="bg-gradient-to-r from-amber-950 via-amber-900 to-amber-950 text-white shadow-lg sticky top-0 z-40 border-b-2 border-amber-500">
-      <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-full bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-300 text-xl shadow-inner">
             <i class="fa-solid fa-compass"></i>
@@ -90,7 +90,7 @@
       </div>
     </header>
 
-    <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
       <!-- HERO BANNER -->
       <section class="relative bg-gradient-to-br from-amber-950 via-amber-900 to-emerald-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl overflow-hidden border border-amber-700/40">
         <div class="relative z-10 max-w-2xl space-y-3">
@@ -135,8 +135,9 @@
         <div id="searchResult" class="hidden space-y-4 max-w-3xl mx-auto"></div>
       </section>
 
-      <!-- TAB 2: PORTAL ADMIN -->
+      <!-- TAB 2: PORTAL ADMIN (SISTEM LAYOUT SIDEBAR) -->
       <section id="adminTab" class="hidden space-y-6">
+        <!-- FORM LOGIN -->
         <div id="adminLoginForm" class="max-w-md mx-auto bg-white p-6 sm:p-8 rounded-3xl shadow-xl border border-amber-100">
           <div class="text-center space-y-2 mb-6">
             <div class="w-14 h-14 bg-amber-100 text-amber-900 rounded-2xl mx-auto flex items-center justify-center text-2xl border border-amber-300 shadow-sm">
@@ -167,122 +168,278 @@
           </form>
         </div>
 
-        <div id="adminDashboard" class="hidden space-y-6">
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md flex items-center justify-between">
-              <div class="space-y-1">
-                <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Total Terdaftar</p>
-                <h3 id="statTotal" class="text-3xl font-black text-amber-950">0</h3>
-              </div>
-              <div class="w-14 h-14 rounded-2xl bg-amber-900 text-amber-300 flex items-center justify-center text-2xl">
-                <i class="fa-solid fa-fire-flame-curved"></i>
-              </div>
-            </div>
-            <div class="bg-white p-5 rounded-3xl border border-blue-200/80 shadow-md flex items-center justify-between">
-              <div class="space-y-1">
-                <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Jumlah Peserta</p>
-                <h3 id="statPeserta" class="text-3xl font-black text-blue-950">0</h3>
-              </div>
-              <div class="w-14 h-14 rounded-2xl bg-blue-800 text-blue-200 flex items-center justify-center text-2xl">
-                <i class="fa-solid fa-child-reaching"></i>
-              </div>
-            </div>
-            <div class="bg-white p-5 rounded-3xl border border-emerald-200/80 shadow-md flex items-center justify-between">
-              <div class="space-y-1">
-                <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Pembina Pendamping</p>
-                <h3 id="statPembina" class="text-3xl font-black text-emerald-950">0</h3>
-              </div>
-              <div class="w-14 h-14 rounded-2xl bg-emerald-800 text-emerald-200 flex items-center justify-center text-2xl">
-                <i class="fa-solid fa-user-shield"></i>
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-white p-5 sm:p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
+        <!-- DASHBOARD ADMIN DENGAN SIDEBAR NAVIGASI KIRI -->
+        <div id="adminDashboard" class="hidden flex flex-col lg:flex-row gap-6 items-start">
+          
+          <!-- SIDEBAR NAVIGASI KIRI -->
+          <aside class="w-full lg:w-64 bg-white p-4 rounded-3xl border border-amber-200/80 shadow-md space-y-3 lg:sticky lg:top-20">
+            <div class="px-3 py-2 border-b border-gray-100 flex items-center justify-between">
               <div>
-                <h3 class="font-extrabold text-amber-950 text-base flex items-center gap-2">
-                  <i class="fa-solid fa-filter text-amber-800"></i> Filter & Kelola Data
-                </h3>
+                <h4 class="font-extrabold text-amber-950 text-sm">Menu Admin</h4>
+                <p class="text-[10px] text-gray-400 font-medium">Panel Navigasi & Analisis</p>
               </div>
-              <div class="flex items-center gap-2 w-full sm:w-auto flex-wrap">
-                <div class="relative flex items-center">
-                  <button type="button" onclick="toggleAdminSearch()" title="Cari Data Admin" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-xs">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <span class="text-[11px] hidden sm:inline">Cari</span>
-                  </button>
-                  <div id="adminSearchContainer" class="overflow-hidden transition-all duration-300 ease-in-out w-0 opacity-0 flex items-center">
-                    <input type="text" id="adminSearchInput" oninput="applyFilters()" placeholder="Ketik kata kunci pencarian..." class="ml-2 py-2 px-3 bg-slate-50 border border-amber-300 rounded-xl text-xs font-medium focus:ring-2 focus:ring-amber-500 focus:bg-white w-48 sm:w-64 transition-all">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" title="Sistem Aktif"></span>
+            </div>
+
+            <nav class="space-y-1.5 text-xs font-bold">
+              <button onclick="switchAdminPanel('panelOverview')" id="btnPanelOverview" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all bg-amber-900 text-white shadow-sm">
+                <i class="fa-solid fa-chart-pie text-sm"></i>
+                <span>Ringkasan & Stat</span>
+              </button>
+              <button onclick="switchAdminPanel('panelDataTable')" id="btnPanelDataTable" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950">
+                <i class="fa-solid fa-table-list text-sm"></i>
+                <span>Kelola Data Pendaftar</span>
+              </button>
+              <button onclick="switchAdminPanel('panelRekap')" id="btnPanelRekap" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950">
+                <i class="fa-solid fa-chart-column text-sm"></i>
+                <span>Analisis & Logistik</span>
+              </button>
+              <button onclick="switchAdminPanel('panelExport')" id="btnPanelExport" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950">
+                <i class="fa-solid fa-file-export text-sm"></i>
+                <span>Ekspor & Berkas</span>
+              </button>
+            </nav>
+
+            <div class="pt-3 border-t border-gray-100 space-y-2">
+              <a href="https://drive.google.com/drive/folders/123YsI7qRtt5ILGwB0UryjIt0coF4M63Z?usp=drive_link" target="_blank" rel="noopener noreferrer" class="w-full px-3.5 py-2 rounded-2xl flex items-center gap-2.5 text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-all">
+                <i class="fa-brands fa-google-drive text-amber-600"></i>
+                <span class="truncate">Drive Kwitansi</span>
+              </a>
+              <button onclick="logoutAdmin()" class="w-full px-3.5 py-2 rounded-2xl flex items-center gap-2.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 transition-all">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Keluar Admin</span>
+              </button>
+            </div>
+          </aside>
+
+          <!-- AREA KONTEN UTAMA DARI SIDEBAR -->
+          <div class="flex-1 w-full space-y-6">
+            
+            <!-- SUB-PANEL 1: RINGKASAN & STATISTIK -->
+            <div id="panelOverview" class="space-y-6">
+              <!-- CARDS STATISTIK KUNCI -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md flex items-center justify-between">
+                  <div class="space-y-1">
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Total Terdaftar</p>
+                    <h3 id="statTotal" class="text-3xl font-black text-amber-950">0</h3>
+                  </div>
+                  <div class="w-14 h-14 rounded-2xl bg-amber-900 text-amber-300 flex items-center justify-center text-2xl">
+                    <i class="fa-solid fa-fire-flame-curved"></i>
+                  </div>
+                </div>
+                <div class="bg-white p-5 rounded-3xl border border-blue-200/80 shadow-md flex items-center justify-between">
+                  <div class="space-y-1">
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Jumlah Peserta</p>
+                    <h3 id="statPeserta" class="text-3xl font-black text-blue-950">0</h3>
+                  </div>
+                  <div class="w-14 h-14 rounded-2xl bg-blue-800 text-blue-200 flex items-center justify-center text-2xl">
+                    <i class="fa-solid fa-child-reaching"></i>
+                  </div>
+                </div>
+                <div class="bg-white p-5 rounded-3xl border border-emerald-200/80 shadow-md flex items-center justify-between">
+                  <div class="space-y-1">
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Pembina Pendamping</p>
+                    <h3 id="statPembina" class="text-3xl font-black text-emerald-950">0</h3>
+                  </div>
+                  <div class="w-14 h-14 rounded-2xl bg-emerald-800 text-emerald-200 flex items-center justify-center text-2xl">
+                    <i class="fa-solid fa-user-shield"></i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- RINGKASAN VISUAL (RASIO GENDER & TIPE KONTINGEN) -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md space-y-3">
+                  <h4 class="font-extrabold text-amber-950 text-xs uppercase tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-venus-mars text-amber-800"></i> Distribusi Jenis Kelamin
+                  </h4>
+                  <div class="space-y-2 text-xs">
+                    <div>
+                      <div class="flex justify-between font-bold mb-1"><span class="text-blue-900">Laki-laki</span><span id="statLakiVal">0 (0%)</span></div>
+                      <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden"><div id="barLaki" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div></div>
+                    </div>
+                    <div>
+                      <div class="flex justify-between font-bold mb-1"><span class="text-pink-900">Perempuan</span><span id="statPerempuanVal">0 (0%)</span></div>
+                      <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden"><div id="barPerempuan" class="bg-pink-500 h-2.5 rounded-full" style="width: 0%"></div></div>
+                    </div>
                   </div>
                 </div>
 
-                <button onclick="openModalForm()" class="flex-1 sm:flex-none bg-amber-800 hover:bg-amber-900 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow transition-all">
-                  <i class="fa-solid fa-user-plus"></i> Tambah Manual
-                </button>
-                <button onclick="exportToExcel()" class="flex-1 sm:flex-none bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow transition-all">
-                  <i class="fa-solid fa-file-excel"></i> Unduh Excel
-                </button>
-                <button onclick="exportToPDF()" class="flex-1 sm:flex-none bg-red-700 hover:bg-red-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow transition-all">
-                  <i class="fa-solid fa-file-pdf"></i> Unduh PDF
-                </button>
-                <button onclick="logoutAdmin()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-2.5 rounded-xl text-xs font-bold shadow transition-all">
-                  <i class="fa-solid fa-right-from-bracket"></i>
-                </button>
+                <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md space-y-3">
+                  <h4 class="font-extrabold text-amber-950 text-xs uppercase tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-shirt text-emerald-700"></i> Ringkasan Pengadaan Ukuran Kaos
+                  </h4>
+                  <div id="summaryKaosQuick" class="grid grid-cols-4 gap-2 text-center text-xs">
+                    <!-- Ditampilkan secara dinamis -->
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-              <div>
-                <label class="block font-bold text-gray-700 mb-1">Provinsi</label>
-                <select id="filterProvinsi" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
-                  <option value="">Semua Provinsi</option>
-                </select>
+            <!-- SUB-PANEL 2: KELOLA DATA PENDAFTAR (TABEL) -->
+            <div id="panelDataTable" class="hidden space-y-6">
+              <div class="bg-white p-5 sm:p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
+                  <div>
+                    <h3 class="font-extrabold text-amber-950 text-base flex items-center gap-2">
+                      <i class="fa-solid fa-filter text-amber-800"></i> Filter & Pencarian Pendaftar
+                    </h3>
+                  </div>
+                  <div class="flex items-center gap-2 w-full sm:w-auto flex-wrap">
+                    <div class="relative flex items-center">
+                      <button type="button" onclick="toggleAdminSearch()" title="Cari Data Admin" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-xs">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span class="text-[11px] hidden sm:inline">Cari</span>
+                      </button>
+                      <div id="adminSearchContainer" class="overflow-hidden transition-all duration-300 ease-in-out w-0 opacity-0 flex items-center">
+                        <input type="text" id="adminSearchInput" oninput="applyFilters()" placeholder="Ketik kata kunci pencarian..." class="ml-2 py-2 px-3 bg-slate-50 border border-amber-300 rounded-xl text-xs font-medium focus:ring-2 focus:ring-amber-500 focus:bg-white w-48 sm:w-64 transition-all">
+                      </div>
+                    </div>
+
+                    <button onclick="openModalForm()" class="bg-amber-800 hover:bg-amber-900 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow transition-all">
+                      <i class="fa-solid fa-user-plus"></i> Tambah Manual
+                    </button>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                  <div>
+                    <label class="block font-bold text-gray-700 mb-1">Provinsi</label>
+                    <select id="filterProvinsi" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
+                      <option value="">Semua Provinsi</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block font-bold text-gray-700 mb-1">Kota / Kabupaten</label>
+                    <select id="filterKota" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
+                      <option value="">Semua Kota/Kab</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block font-bold text-gray-700 mb-1">Jenis Kelamin</label>
+                    <select id="filterJK" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
+                      <option value="">Semua Gender</option>
+                      <option value="Laki-laki">Laki-laki</option>
+                      <option value="Perempuan">Perempuan</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block font-bold text-gray-700 mb-1">Ukuran Kaos</label>
+                    <select id="filterKaos" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
+                      <option value="">Semua Ukuran</option>
+                    </select>
+                  </div>
+                </div>
               </div>
-              <div>
-                <label class="block font-bold text-gray-700 mb-1">Kota / Kabupaten</label>
-                <select id="filterKota" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
-                  <option value="">Semua Kota/Kab</option>
-                </select>
-              </div>
-              <div>
-                <label class="block font-bold text-gray-700 mb-1">Jenis Kelamin</label>
-                <select id="filterJK" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
-                  <option value="">Semua Gender</option>
-                  <option value="Laki-laki">Laki-laki</option>
-                  <option value="Perempuan">Perempuan</option>
-                </select>
-              </div>
-              <div>
-                <label class="block font-bold text-gray-700 mb-1">Ukuran Kaos</label>
-                <select id="filterKaos" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
-                  <option value="">Semua Ukuran</option>
-                </select>
+
+              <div class="bg-white rounded-3xl border border-amber-200/80 shadow-md overflow-hidden space-y-0">
+                <div class="p-4 bg-amber-50/50 border-b border-amber-200/80 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
+                  <div class="flex items-center gap-2 flex-wrap justify-center sm:justify-start">
+                    <span class="font-bold text-slate-700">Tampilkan:</span>
+                    <select id="pageSizeSelect" onchange="changePageSize()" class="p-2 border border-amber-200 rounded-xl bg-white font-bold text-amber-950 focus:ring-2 focus:ring-amber-500 text-xs shadow-xs">
+                      <option value="10" selected>10</option>
+                      <option value="25">25</option>
+                      <option value="50">50</option>
+                      <option value="100">100</option>
+                    </select>
+                    <span class="text-slate-500 font-semibold ml-1" id="paginationInfo">Menampilkan 0 dari 0 data</span>
+                  </div>
+
+                  <div class="flex items-center gap-1.5 flex-wrap justify-center" id="paginationButtons"></div>
+                </div>
+
+                <div class="overflow-x-auto">
+                  <table id="tableAdmin" class="w-full text-left border-collapse text-xs">
+                    <thead id="tableHeader" class="bg-amber-100/70 text-amber-950 uppercase font-bold border-b border-amber-200"></thead>
+                    <tbody id="tableBody" class="divide-y divide-gray-100"></tbody>
+                  </table>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="bg-white rounded-3xl border border-amber-200/80 shadow-md overflow-hidden space-y-0">
-            <div class="p-4 bg-amber-50/50 border-b border-amber-200/80 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
-              <div class="flex items-center gap-2 flex-wrap justify-center sm:justify-start">
-                <span class="font-bold text-slate-700">Tampilkan:</span>
-                <select id="pageSizeSelect" onchange="changePageSize()" class="p-2 border border-amber-200 rounded-xl bg-white font-bold text-amber-950 focus:ring-2 focus:ring-amber-500 text-xs shadow-xs">
-                  <option value="10" selected>10</option>
-                  <option value="25">25</option>
-                  <option value="50">50</option>
-                  <option value="100">100</option>
-                </select>
-                <span class="text-slate-500 font-semibold ml-1" id="paginationInfo">Menampilkan 0 dari 0 data</span>
+            <!-- SUB-PANEL 3: ANALISIS & REKAPITULASI LOGISTIK -->
+            <div id="panelRekap" class="hidden space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- TABEL REKAPITULASI KAOS -->
+                <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md space-y-3">
+                  <h4 class="font-extrabold text-amber-950 text-sm flex items-center gap-2 border-b pb-2">
+                    <i class="fa-solid fa-boxes-packing text-amber-800"></i> Rekap Rincian Ukuran Kaos (Vendor)
+                  </h4>
+                  <div class="overflow-x-auto">
+                    <table class="w-full text-xs text-left border-collapse">
+                      <thead>
+                        <tr class="bg-slate-100 text-slate-700 font-bold uppercase">
+                          <th class="p-2.5 rounded-l-xl">Ukuran Kaos</th>
+                          <th class="p-2.5 text-center">Jumlah Pendaftar</th>
+                          <th class="p-2.5 text-right rounded-r-xl">Persentase</th>
+                        </tr>
+                      </thead>
+                      <tbody id="rekapKaosBody" class="divide-y divide-slate-100 font-medium">
+                        <!-- Render Otomatis -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- TABEL SEBARAN PROVINSI -->
+                <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md space-y-3">
+                  <h4 class="font-extrabold text-amber-950 text-sm flex items-center gap-2 border-b pb-2">
+                    <i class="fa-solid fa-map-location-dot text-emerald-700"></i> Sebaran Kontingen per Provinsi
+                  </h4>
+                  <div class="overflow-x-auto max-h-72 overflow-y-auto">
+                    <table class="w-full text-xs text-left border-collapse">
+                      <thead class="sticky top-0 bg-slate-100 text-slate-700 font-bold uppercase">
+                        <tr>
+                          <th class="p-2.5">Provinsi</th>
+                          <th class="p-2.5 text-center">Jumlah Orang</th>
+                        </tr>
+                      </thead>
+                      <tbody id="rekapProvinsiBody" class="divide-y divide-slate-100 font-medium">
+                        <!-- Render Otomatis -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
-
-              <div class="flex items-center gap-1.5 flex-wrap justify-center" id="paginationButtons"></div>
             </div>
 
-            <div class="overflow-x-auto">
-              <table id="tableAdmin" class="w-full text-left border-collapse text-xs">
-                <thead id="tableHeader" class="bg-amber-100/70 text-amber-950 uppercase font-bold border-b border-amber-200"></thead>
-                <tbody id="tableBody" class="divide-y divide-gray-100"></tbody>
-              </table>
+            <!-- SUB-PANEL 4: EKSPOR & LAPORAN -->
+            <div id="panelExport" class="hidden space-y-6">
+              <div class="bg-white p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
+                <h3 class="font-extrabold text-amber-950 text-base border-b pb-3 flex items-center gap-2">
+                  <i class="fa-solid fa-file-export text-emerald-700"></i> Pusat Ekspor Laporan & Berkas
+                </h3>
+                <p class="text-xs text-slate-500">
+                  Pilih format berkas yang dibutuhkan untuk mengunduh rekap data pendaftaran yang telah terfilter.
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                  <button onclick="exportToExcel()" class="bg-emerald-700 hover:bg-emerald-800 text-white p-5 rounded-2xl font-bold text-xs flex items-center justify-between shadow-md transition-all">
+                    <div class="flex items-center gap-3">
+                      <i class="fa-solid fa-file-excel text-2xl"></i>
+                      <div class="text-left">
+                        <span class="block text-sm">Unduh Format Excel (.xlsx)</span>
+                        <span class="text-[10px] font-normal text-emerald-100">Laporan rekapitulasi data pendaftaran</span>
+                      </div>
+                    </div>
+                    <i class="fa-solid fa-download text-lg"></i>
+                  </button>
+
+                  <button onclick="exportToPDF()" class="bg-red-700 hover:bg-red-800 text-white p-5 rounded-2xl font-bold text-xs flex items-center justify-between shadow-md transition-all">
+                    <div class="flex items-center gap-3">
+                      <i class="fa-solid fa-file-pdf text-2xl"></i>
+                      <div class="text-left">
+                        <span class="block text-sm">Unduh Format PDF</span>
+                        <span class="text-[10px] font-normal text-red-100">Dokumen cetak landscape rekapitulasi</span>
+                      </div>
+                    </div>
+                    <i class="fa-solid fa-download text-lg"></i>
+                  </button>
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
       </section>
@@ -481,7 +638,6 @@
         </a>
       </div>
 
-      <!-- CANVAS RENDERER KWITANSI -->
       <div class="relative bg-slate-100 rounded-2xl overflow-hidden border border-slate-300 shadow-inner flex justify-center items-center p-1 min-h-[220px]">
         <canvas id="kwitansiCanvas" class="w-full h-auto max-h-[65vh] object-contain rounded-xl shadow-xs"></canvas>
       </div>
@@ -595,6 +751,28 @@
     let pageSize = 10;
     let currentKwitansiData = null;
 
+    // FUNGSI NAVIGASI SIDEBAR PORTAL ADMIN
+    function switchAdminPanel(panelId) {
+      const panels = ['panelOverview', 'panelDataTable', 'panelRekap', 'panelExport'];
+      panels.forEach(p => {
+        const el = document.getElementById(p);
+        if (el) el.classList.add('hidden');
+
+        const btn = document.getElementById('btn' + p.charAt(0).toUpperCase() + p.slice(1));
+        if (btn) {
+          btn.className = "w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950";
+        }
+      });
+
+      const activeEl = document.getElementById(panelId);
+      if (activeEl) activeEl.classList.remove('hidden');
+
+      const activeBtn = document.getElementById('btn' + panelId.charAt(0).toUpperCase() + panelId.slice(1));
+      if (activeBtn) {
+        activeBtn.className = "w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all bg-amber-900 text-white shadow-sm";
+      }
+    }
+
     function toggleAdminSearch() {
       const container = document.getElementById('adminSearchContainer');
       const input = document.getElementById('adminSearchInput');
@@ -649,7 +827,6 @@
       return str.length > 15 ? 'REG-2026-' + str.substring(0, 6).toUpperCase() : str;
     }
 
-    // FUNGSI KONVERSI ANGKA NOMINAL KE TERBILANG INDONESIA
     function terbilang(angka) {
       const bil = ["", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas"];
       angka = Math.floor(angka);
@@ -661,7 +838,6 @@
       if (angka < 2000) return "Seribu " + terbilang(angka - 1000);
       if (angka < 1000000) return terbilang(Math.floor(angka / 1000)) + " Ribu " + terbilang(angka % 1000);
       if (angka < 1000000000) return terbilang(Math.floor(angka / 1000000)) + " Juta " + terbilang(angka % 1000000);
-      if (angka < 1000000000000) return terbilang(Math.floor(angka / 1000000000)) + " Milyar " + terbilang(angka % 1000000000);
       return "";
     }
 
@@ -753,7 +929,6 @@
                     </button>
                   </div>
 
-                  <!-- KELOMPOK TOMBOL SISI KANAN (UNDUH KWITANSI TERLETAK DI ATAS CETAK LEMBAR PENDAFTARAN) -->
                   <div class="flex flex-col gap-2 w-full sm:w-auto sm:items-end ml-auto">
                     <button onclick="generateKwitansi('${item.id}', '${namaSafe}', '${item.statusPendaftaran}', '${item.asalSekolah}', '${item.provinsi}', '${item.kotaKabupaten}')" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition-all w-full sm:w-auto">
                       <i class="fa-solid fa-file-invoice-dollar"></i> Unduh Kwitansi
@@ -782,10 +957,9 @@
       }
     }
 
-    // LOGIKA GENERATOR KWITANSI BERDASARKAN TEMPLATE GAMBAR
     function generateKwitansi(id, nama, status, sekolah, prov, kota, jumlahOrang = 1) {
       const cleanId = formatID(id);
-      const nominalPerOrang = 2500000; // Harga Rp 2.500.000,- per orang
+      const nominalPerOrang = 2500000;
       const totalNominal = nominalPerOrang * jumlahOrang;
       const nominalFormatted = totalNominal.toLocaleString('id-ID') + ",00";
       const terbilangText = formatTerbilangRupiah(totalNominal);
@@ -815,13 +989,11 @@
       const canvas = document.getElementById('kwitansiCanvas');
       const ctx = canvas.getContext('2d');
 
-      // Resolusi Canvas 2000 x 980 (Rasio 2:1 sesuai Gambar Template Kwitansi)
       canvas.width = 2000;
       canvas.height = 980;
 
       const img = new Image();
       img.crossOrigin = "Anonymous";
-      // URL Gambar Template Kwitansi dari Google Drive
       img.src = "https://lh3.googleusercontent.com/d/1_dvqCcfLMmd82Df8g_tHaZHYGjskl6uk";
 
       img.onload = function() {
@@ -830,37 +1002,29 @@
       };
 
       img.onerror = function() {
-        // Fallback jika terjadi kendala CORS/koneksi saat memuat template gambar
         drawKwitansiVectorFallback(ctx, canvas.width, canvas.height, data);
       };
     }
 
-    // MENIMPA TEKS PADA TITIK-TITIK TEMPLATE GAMBAR
     function drawKwitansiOverlayText(ctx, data) {
       ctx.fillStyle = "#000000";
 
-      // 1. Nomor Kwitansi
       ctx.font = "bold 30px 'Plus Jakarta Sans', monospace, sans-serif";
       ctx.fillText(`No. : ${data.no}`, 1540, 345);
 
-      // 2. Telah Terima Dari
       ctx.font = "bold 30px 'Plus Jakarta Sans', Arial, sans-serif";
       ctx.fillText(data.telahTerimaDari, 530, 442);
 
-      // 3. Uang Sejumlah
       ctx.font = "bold 29px 'Plus Jakarta Sans', Arial, sans-serif";
       ctx.fillText(data.uangSejumlah, 530, 510);
 
-      // 4. Untuk Pembayaran
       ctx.font = "bold 29px 'Plus Jakarta Sans', Arial, sans-serif";
       ctx.fillText(data.untukPembayaran, 530, 580);
 
-      // 5. Nominal (Dalam Kotak Hijau Bawah)
       ctx.font = "900 36px 'Plus Jakarta Sans', Arial, sans-serif";
       ctx.fillText(data.jumlahNominal, 420, 712);
     }
 
-    // VECTOR FALLBACK RECREATION BILA GAMBAR TEMPLATE GAGAL DI-LOAD
     function drawKwitansiVectorFallback(ctx, w, h, data) {
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, w, h);
@@ -1271,6 +1435,7 @@
 
           populateFilterOptions();
           updateStats();
+          renderAdminAnalytics();
           currentPage = 1;
           renderTable();
         }
@@ -1284,18 +1449,88 @@
 
       let countPeserta = 0;
       let countPembina = 0;
+      let countLaki = 0;
+      let countPerempuan = 0;
 
       rawAdminRows.forEach(row => {
         const status = String(row[2] || '').toLowerCase();
+        const jk = String(row[9] || '').toLowerCase();
+
         if (status.includes('pembina')) {
           countPembina++;
         } else {
           countPeserta++;
         }
+
+        if (jk.includes('laki')) countLaki++;
+        else if (jk.includes('perempuan')) countPerempuan++;
       });
 
       document.getElementById('statPeserta').innerText = countPeserta;
       document.getElementById('statPembina').innerText = countPembina;
+
+      const total = rawAdminRows.length || 1;
+      const pctLaki = Math.round((countLaki / total) * 100);
+      const pctPerempuan = Math.round((countPerempuan / total) * 100);
+
+      document.getElementById('statLakiVal').innerText = `${countLaki} (${pctLaki}%)`;
+      document.getElementById('barLaki').style.width = `${pctLaki}%`;
+
+      document.getElementById('statPerempuanVal').innerText = `${countPerempuan} (${pctPerempuan}%)`;
+      document.getElementById('barPerempuan').style.width = `${pctPerempuan}%`;
+    }
+
+    // FUNGSI ANALISIS DATA & REKAPITULASI UNTUK SIDEBAR
+    function renderAdminAnalytics() {
+      const mapKaos = {};
+      const mapProv = {};
+
+      rawAdminRows.forEach(row => {
+        const kaos = (row[13] || 'Belum Diisi').trim().toUpperCase();
+        const prov = (row[11] || 'Lainnya').trim();
+
+        if (kaos) mapKaos[kaos] = (mapKaos[kaos] || 0) + 1;
+        if (prov) mapProv[prov] = (mapProv[prov] || 0) + 1;
+      });
+
+      const total = rawAdminRows.length || 1;
+
+      // 1. Quick Summary Kaos di Panel Overview
+      const quickKaosBox = document.getElementById('summaryKaosQuick');
+      if (quickKaosBox) {
+        quickKaosBox.innerHTML = Object.entries(mapKaos).slice(0, 4).map(([k, count]) => `
+          <div class="bg-amber-50 p-2 rounded-xl border border-amber-200">
+            <span class="block font-black text-amber-950 text-sm">${k}</span>
+            <span class="text-[10px] text-gray-500 font-bold">${count} pcs</span>
+          </div>
+        `).join('');
+      }
+
+      // 2. Tabel Rekapitulasi Kaos di Panel Rekap
+      const rekapKaosBody = document.getElementById('rekapKaosBody');
+      if (rekapKaosBody) {
+        rekapKaosBody.innerHTML = Object.entries(mapKaos).map(([k, count]) => {
+          const pct = Math.round((count / total) * 100);
+          return `
+            <tr class="hover:bg-slate-50">
+              <td class="p-2.5 font-bold text-amber-950">${k}</td>
+              <td class="p-2.5 text-center font-extrabold text-slate-800">${count} pcs</td>
+              <td class="p-2.5 text-right font-bold text-emerald-700">${pct}%</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // 3. Tabel Rekapitulasi Provinsi di Panel Rekap
+      const rekapProvBody = document.getElementById('rekapProvinsiBody');
+      if (rekapProvBody) {
+        rekapProvBody.innerHTML = Object.entries(mapProv).sort((a,b) => b[1] - a[1]).map(([p, count]) => `
+          <tr class="hover:bg-slate-50">
+            <td class="p-2.5 font-semibold text-slate-800">${p}</td>
+            <td class="p-2.5 text-center font-extrabold text-amber-950">${count} Orang</td>
+          </tr>
+        `).join('');
+      }
     }
 
     function populateFilterOptions() {
