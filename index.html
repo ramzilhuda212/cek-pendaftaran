@@ -23,7 +23,7 @@
       opacity: 0.03;
     }
 
-    /* FORMAT CETAK A4 */
+    /* FORMAT CETAK A4 (FULL 1 HALAMAN PAS ATAS-BAWAH TANPA TERSISA) */
     @media print {
       @page {
         size: A4 portrait;
@@ -63,7 +63,7 @@
   <div class="relative z-10">
     <!-- NAVBAR -->
     <header class="bg-gradient-to-r from-amber-950 via-amber-900 to-amber-950 text-white shadow-lg sticky top-0 z-40 border-b-2 border-amber-500">
-      <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-full bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-300 text-xl shadow-inner">
             <i class="fa-solid fa-compass"></i>
@@ -90,7 +90,7 @@
       </div>
     </header>
 
-    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
+    <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
       <!-- HERO BANNER -->
       <section class="relative bg-gradient-to-br from-amber-950 via-amber-900 to-emerald-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl overflow-hidden border border-amber-700/40">
         <div class="relative z-10 max-w-2xl space-y-3">
@@ -135,9 +135,8 @@
         <div id="searchResult" class="hidden space-y-4 max-w-3xl mx-auto"></div>
       </section>
 
-      <!-- TAB 2: PORTAL ADMIN (SISTEM LAYOUT SIDEBAR) -->
+      <!-- TAB 2: PORTAL ADMIN -->
       <section id="adminTab" class="hidden space-y-6">
-        <!-- FORM LOGIN -->
         <div id="adminLoginForm" class="max-w-md mx-auto bg-white p-6 sm:p-8 rounded-3xl shadow-xl border border-amber-100">
           <div class="text-center space-y-2 mb-6">
             <div class="w-14 h-14 bg-amber-100 text-amber-900 rounded-2xl mx-auto flex items-center justify-center text-2xl border border-amber-300 shadow-sm">
@@ -168,278 +167,127 @@
           </form>
         </div>
 
-        <!-- DASHBOARD ADMIN DENGAN SIDEBAR NAVIGASI KIRI -->
-        <div id="adminDashboard" class="hidden flex flex-col lg:flex-row gap-6 items-start">
-          
-          <!-- SIDEBAR NAVIGASI KIRI -->
-          <aside class="w-full lg:w-64 bg-white p-4 rounded-3xl border border-amber-200/80 shadow-md space-y-3 lg:sticky lg:top-20">
-            <div class="px-3 py-2 border-b border-gray-100 flex items-center justify-between">
+        <div id="adminDashboard" class="hidden space-y-6">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md flex items-center justify-between">
+              <div class="space-y-1">
+                <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Total Terdaftar</p>
+                <h3 id="statTotal" class="text-3xl font-black text-amber-950">0</h3>
+              </div>
+              <div class="w-14 h-14 rounded-2xl bg-amber-900 text-amber-300 flex items-center justify-center text-2xl">
+                <i class="fa-solid fa-fire-flame-curved"></i>
+              </div>
+            </div>
+            <div class="bg-white p-5 rounded-3xl border border-blue-200/80 shadow-md flex items-center justify-between">
+              <div class="space-y-1">
+                <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Jumlah Peserta</p>
+                <h3 id="statPeserta" class="text-3xl font-black text-blue-950">0</h3>
+              </div>
+              <div class="w-14 h-14 rounded-2xl bg-blue-800 text-blue-200 flex items-center justify-center text-2xl">
+                <i class="fa-solid fa-child-reaching"></i>
+              </div>
+            </div>
+            <div class="bg-white p-5 rounded-3xl border border-emerald-200/80 shadow-md flex items-center justify-between">
+              <div class="space-y-1">
+                <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Pembina Pendamping</p>
+                <h3 id="statPembina" class="text-3xl font-black text-emerald-950">0</h3>
+              </div>
+              <div class="w-14 h-14 rounded-2xl bg-emerald-800 text-emerald-200 flex items-center justify-center text-2xl">
+                <i class="fa-solid fa-user-shield"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white p-5 sm:p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
               <div>
-                <h4 class="font-extrabold text-amber-950 text-sm">Menu Admin</h4>
-                <p class="text-[10px] text-gray-400 font-medium">Panel Navigasi & Analisis</p>
-              </div>
-              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" title="Sistem Aktif"></span>
-            </div>
-
-            <nav class="space-y-1.5 text-xs font-bold">
-              <button onclick="switchAdminPanel('panelOverview')" id="btnPanelOverview" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all bg-amber-900 text-white shadow-sm">
-                <i class="fa-solid fa-chart-pie text-sm"></i>
-                <span>Ringkasan & Stat</span>
-              </button>
-              <button onclick="switchAdminPanel('panelDataTable')" id="btnPanelDataTable" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950">
-                <i class="fa-solid fa-table-list text-sm"></i>
-                <span>Kelola Data Pendaftar</span>
-              </button>
-              <button onclick="switchAdminPanel('panelRekap')" id="btnPanelRekap" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950">
-                <i class="fa-solid fa-chart-column text-sm"></i>
-                <span>Analisis & Logistik</span>
-              </button>
-              <button onclick="switchAdminPanel('panelExport')" id="btnPanelExport" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950">
-                <i class="fa-solid fa-file-export text-sm"></i>
-                <span>Ekspor & Berkas</span>
-              </button>
-            </nav>
-
-            <div class="pt-3 border-t border-gray-100 space-y-2">
-              <a href="https://drive.google.com/drive/folders/123YsI7qRtt5ILGwB0UryjIt0coF4M63Z?usp=drive_link" target="_blank" rel="noopener noreferrer" class="w-full px-3.5 py-2 rounded-2xl flex items-center gap-2.5 text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-all">
-                <i class="fa-brands fa-google-drive text-amber-600"></i>
-                <span class="truncate">Drive Kwitansi</span>
-              </a>
-              <button onclick="logoutAdmin()" class="w-full px-3.5 py-2 rounded-2xl flex items-center gap-2.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 transition-all">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <span>Keluar Admin</span>
-              </button>
-            </div>
-          </aside>
-
-          <!-- AREA KONTEN UTAMA DARI SIDEBAR -->
-          <div class="flex-1 w-full space-y-6">
-            
-            <!-- SUB-PANEL 1: RINGKASAN & STATISTIK -->
-            <div id="panelOverview" class="space-y-6">
-              <!-- CARDS STATISTIK KUNCI -->
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md flex items-center justify-between">
-                  <div class="space-y-1">
-                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Total Terdaftar</p>
-                    <h3 id="statTotal" class="text-3xl font-black text-amber-950">0</h3>
-                  </div>
-                  <div class="w-14 h-14 rounded-2xl bg-amber-900 text-amber-300 flex items-center justify-center text-2xl">
-                    <i class="fa-solid fa-fire-flame-curved"></i>
-                  </div>
-                </div>
-                <div class="bg-white p-5 rounded-3xl border border-blue-200/80 shadow-md flex items-center justify-between">
-                  <div class="space-y-1">
-                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Jumlah Peserta</p>
-                    <h3 id="statPeserta" class="text-3xl font-black text-blue-950">0</h3>
-                  </div>
-                  <div class="w-14 h-14 rounded-2xl bg-blue-800 text-blue-200 flex items-center justify-center text-2xl">
-                    <i class="fa-solid fa-child-reaching"></i>
-                  </div>
-                </div>
-                <div class="bg-white p-5 rounded-3xl border border-emerald-200/80 shadow-md flex items-center justify-between">
-                  <div class="space-y-1">
-                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Pembina Pendamping</p>
-                    <h3 id="statPembina" class="text-3xl font-black text-emerald-950">0</h3>
-                  </div>
-                  <div class="w-14 h-14 rounded-2xl bg-emerald-800 text-emerald-200 flex items-center justify-center text-2xl">
-                    <i class="fa-solid fa-user-shield"></i>
-                  </div>
-                </div>
-              </div>
-
-              <!-- RINGKASAN VISUAL (RASIO GENDER & TIPE KONTINGEN) -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md space-y-3">
-                  <h4 class="font-extrabold text-amber-950 text-xs uppercase tracking-wider flex items-center gap-2">
-                    <i class="fa-solid fa-venus-mars text-amber-800"></i> Distribusi Jenis Kelamin
-                  </h4>
-                  <div class="space-y-2 text-xs">
-                    <div>
-                      <div class="flex justify-between font-bold mb-1"><span class="text-blue-900">Laki-laki</span><span id="statLakiVal">0 (0%)</span></div>
-                      <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden"><div id="barLaki" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div></div>
-                    </div>
-                    <div>
-                      <div class="flex justify-between font-bold mb-1"><span class="text-pink-900">Perempuan</span><span id="statPerempuanVal">0 (0%)</span></div>
-                      <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden"><div id="barPerempuan" class="bg-pink-500 h-2.5 rounded-full" style="width: 0%"></div></div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md space-y-3">
-                  <h4 class="font-extrabold text-amber-950 text-xs uppercase tracking-wider flex items-center gap-2">
-                    <i class="fa-solid fa-shirt text-emerald-700"></i> Ringkasan Pengadaan Ukuran Kaos
-                  </h4>
-                  <div id="summaryKaosQuick" class="grid grid-cols-4 gap-2 text-center text-xs">
-                    <!-- Ditampilkan secara dinamis -->
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- SUB-PANEL 2: KELOLA DATA PENDAFTAR (TABEL) -->
-            <div id="panelDataTable" class="hidden space-y-6">
-              <div class="bg-white p-5 sm:p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
-                  <div>
-                    <h3 class="font-extrabold text-amber-950 text-base flex items-center gap-2">
-                      <i class="fa-solid fa-filter text-amber-800"></i> Filter & Pencarian Pendaftar
-                    </h3>
-                  </div>
-                  <div class="flex items-center gap-2 w-full sm:w-auto flex-wrap">
-                    <div class="relative flex items-center">
-                      <button type="button" onclick="toggleAdminSearch()" title="Cari Data Admin" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-xs">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <span class="text-[11px] hidden sm:inline">Cari</span>
-                      </button>
-                      <div id="adminSearchContainer" class="overflow-hidden transition-all duration-300 ease-in-out w-0 opacity-0 flex items-center">
-                        <input type="text" id="adminSearchInput" oninput="applyFilters()" placeholder="Ketik kata kunci pencarian..." class="ml-2 py-2 px-3 bg-slate-50 border border-amber-300 rounded-xl text-xs font-medium focus:ring-2 focus:ring-amber-500 focus:bg-white w-48 sm:w-64 transition-all">
-                      </div>
-                    </div>
-
-                    <button onclick="openModalForm()" class="bg-amber-800 hover:bg-amber-900 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow transition-all">
-                      <i class="fa-solid fa-user-plus"></i> Tambah Manual
-                    </button>
-                  </div>
-                </div>
-
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                  <div>
-                    <label class="block font-bold text-gray-700 mb-1">Provinsi</label>
-                    <select id="filterProvinsi" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
-                      <option value="">Semua Provinsi</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block font-bold text-gray-700 mb-1">Kota / Kabupaten</label>
-                    <select id="filterKota" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
-                      <option value="">Semua Kota/Kab</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block font-bold text-gray-700 mb-1">Jenis Kelamin</label>
-                    <select id="filterJK" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
-                      <option value="">Semua Gender</option>
-                      <option value="Laki-laki">Laki-laki</option>
-                      <option value="Perempuan">Perempuan</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block font-bold text-gray-700 mb-1">Ukuran Kaos</label>
-                    <select id="filterKaos" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
-                      <option value="">Semua Ukuran</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <div class="bg-white rounded-3xl border border-amber-200/80 shadow-md overflow-hidden space-y-0">
-                <div class="p-4 bg-amber-50/50 border-b border-amber-200/80 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
-                  <div class="flex items-center gap-2 flex-wrap justify-center sm:justify-start">
-                    <span class="font-bold text-slate-700">Tampilkan:</span>
-                    <select id="pageSizeSelect" onchange="changePageSize()" class="p-2 border border-amber-200 rounded-xl bg-white font-bold text-amber-950 focus:ring-2 focus:ring-amber-500 text-xs shadow-xs">
-                      <option value="10" selected>10</option>
-                      <option value="25">25</option>
-                      <option value="50">50</option>
-                      <option value="100">100</option>
-                    </select>
-                    <span class="text-slate-500 font-semibold ml-1" id="paginationInfo">Menampilkan 0 dari 0 data</span>
-                  </div>
-
-                  <div class="flex items-center gap-1.5 flex-wrap justify-center" id="paginationButtons"></div>
-                </div>
-
-                <div class="overflow-x-auto">
-                  <table id="tableAdmin" class="w-full text-left border-collapse text-xs">
-                    <thead id="tableHeader" class="bg-amber-100/70 text-amber-950 uppercase font-bold border-b border-amber-200"></thead>
-                    <tbody id="tableBody" class="divide-y divide-gray-100"></tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
-            <!-- SUB-PANEL 3: ANALISIS & REKAPITULASI LOGISTIK -->
-            <div id="panelRekap" class="hidden space-y-6">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- TABEL REKAPITULASI KAOS -->
-                <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md space-y-3">
-                  <h4 class="font-extrabold text-amber-950 text-sm flex items-center gap-2 border-b pb-2">
-                    <i class="fa-solid fa-boxes-packing text-amber-800"></i> Rekap Rincian Ukuran Kaos (Vendor)
-                  </h4>
-                  <div class="overflow-x-auto">
-                    <table class="w-full text-xs text-left border-collapse">
-                      <thead>
-                        <tr class="bg-slate-100 text-slate-700 font-bold uppercase">
-                          <th class="p-2.5 rounded-l-xl">Ukuran Kaos</th>
-                          <th class="p-2.5 text-center">Jumlah Pendaftar</th>
-                          <th class="p-2.5 text-right rounded-r-xl">Persentase</th>
-                        </tr>
-                      </thead>
-                      <tbody id="rekapKaosBody" class="divide-y divide-slate-100 font-medium">
-                        <!-- Render Otomatis -->
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <!-- TABEL SEBARAN PROVINSI -->
-                <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md space-y-3">
-                  <h4 class="font-extrabold text-amber-950 text-sm flex items-center gap-2 border-b pb-2">
-                    <i class="fa-solid fa-map-location-dot text-emerald-700"></i> Sebaran Kontingen per Provinsi
-                  </h4>
-                  <div class="overflow-x-auto max-h-72 overflow-y-auto">
-                    <table class="w-full text-xs text-left border-collapse">
-                      <thead class="sticky top-0 bg-slate-100 text-slate-700 font-bold uppercase">
-                        <tr>
-                          <th class="p-2.5">Provinsi</th>
-                          <th class="p-2.5 text-center">Jumlah Orang</th>
-                        </tr>
-                      </thead>
-                      <tbody id="rekapProvinsiBody" class="divide-y divide-slate-100 font-medium">
-                        <!-- Render Otomatis -->
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- SUB-PANEL 4: EKSPOR & LAPORAN -->
-            <div id="panelExport" class="hidden space-y-6">
-              <div class="bg-white p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
-                <h3 class="font-extrabold text-amber-950 text-base border-b pb-3 flex items-center gap-2">
-                  <i class="fa-solid fa-file-export text-emerald-700"></i> Pusat Ekspor Laporan & Berkas
+                <h3 class="font-extrabold text-amber-950 text-base flex items-center gap-2">
+                  <i class="fa-solid fa-filter text-amber-800"></i> Filter & Kelola Data
                 </h3>
-                <p class="text-xs text-slate-500">
-                  Pilih format berkas yang dibutuhkan untuk mengunduh rekap data pendaftaran yang telah terfilter.
-                </p>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                  <button onclick="exportToExcel()" class="bg-emerald-700 hover:bg-emerald-800 text-white p-5 rounded-2xl font-bold text-xs flex items-center justify-between shadow-md transition-all">
-                    <div class="flex items-center gap-3">
-                      <i class="fa-solid fa-file-excel text-2xl"></i>
-                      <div class="text-left">
-                        <span class="block text-sm">Unduh Format Excel (.xlsx)</span>
-                        <span class="text-[10px] font-normal text-emerald-100">Laporan rekapitulasi data pendaftaran</span>
-                      </div>
-                    </div>
-                    <i class="fa-solid fa-download text-lg"></i>
+              </div>
+              <div class="flex items-center gap-2 w-full sm:w-auto flex-wrap">
+                
+                <!-- TOMBOL & INPUT PENCARIAN MELEBAR DAN MENCIUT -->
+                <div class="relative flex items-center">
+                  <button type="button" onclick="toggleAdminSearch()" title="Cari Data Admin" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-xs">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <span class="text-[11px] hidden sm:inline">Cari</span>
                   </button>
-
-                  <button onclick="exportToPDF()" class="bg-red-700 hover:bg-red-800 text-white p-5 rounded-2xl font-bold text-xs flex items-center justify-between shadow-md transition-all">
-                    <div class="flex items-center gap-3">
-                      <i class="fa-solid fa-file-pdf text-2xl"></i>
-                      <div class="text-left">
-                        <span class="block text-sm">Unduh Format PDF</span>
-                        <span class="text-[10px] font-normal text-red-100">Dokumen cetak landscape rekapitulasi</span>
-                      </div>
-                    </div>
-                    <i class="fa-solid fa-download text-lg"></i>
-                  </button>
+                  <div id="adminSearchContainer" class="overflow-hidden transition-all duration-300 ease-in-out w-0 opacity-0 flex items-center">
+                    <input type="text" id="adminSearchInput" oninput="applyFilters()" placeholder="Ketik kata kunci pencarian..." class="ml-2 py-2 px-3 bg-slate-50 border border-amber-300 rounded-xl text-xs font-medium focus:ring-2 focus:ring-amber-500 focus:bg-white w-48 sm:w-64 transition-all">
+                  </div>
                 </div>
+
+                <button onclick="openModalForm()" class="flex-1 sm:flex-none bg-amber-800 hover:bg-amber-900 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow transition-all">
+                  <i class="fa-solid fa-user-plus"></i> Tambah Manual
+                </button>
+                <button onclick="exportToExcel()" class="flex-1 sm:flex-none bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow transition-all">
+                  <i class="fa-solid fa-file-excel"></i> Unduh Excel
+                </button>
+                <button onclick="exportToPDF()" class="flex-1 sm:flex-none bg-red-700 hover:bg-red-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow transition-all">
+                  <i class="fa-solid fa-file-pdf"></i> Unduh PDF
+                </button>
+                <button onclick="logoutAdmin()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-2.5 rounded-xl text-xs font-bold shadow transition-all">
+                  <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
               </div>
             </div>
 
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+              <div>
+                <label class="block font-bold text-gray-700 mb-1">Provinsi</label>
+                <select id="filterProvinsi" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
+                  <option value="">Semua Provinsi</option>
+                </select>
+              </div>
+              <div>
+                <label class="block font-bold text-gray-700 mb-1">Kota / Kabupaten</label>
+                <select id="filterKota" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
+                  <option value="">Semua Kota/Kab</option>
+                </select>
+              </div>
+              <div>
+                <label class="block font-bold text-gray-700 mb-1">Jenis Kelamin</label>
+                <select id="filterJK" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
+                  <option value="">Semua Gender</option>
+                  <option value="Laki-laki">Laki-laki</option>
+                  <option value="Perempuan">Perempuan</option>
+                </select>
+              </div>
+              <div>
+                <label class="block font-bold text-gray-700 mb-1">Ukuran Kaos</label>
+                <select id="filterKaos" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
+                  <option value="">Semua Ukuran</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-3xl border border-amber-200/80 shadow-md overflow-hidden space-y-0">
+            <!-- BARIS KONTROL PAGINATION DI ATAS TABEL -->
+            <div class="p-4 bg-amber-50/50 border-b border-amber-200/80 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
+              <div class="flex items-center gap-2 flex-wrap justify-center sm:justify-start">
+                <span class="font-bold text-slate-700">Tampilkan:</span>
+                <select id="pageSizeSelect" onchange="changePageSize()" class="p-2 border border-amber-200 rounded-xl bg-white font-bold text-amber-950 focus:ring-2 focus:ring-amber-500 text-xs shadow-xs">
+                  <option value="10" selected>10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+                <span class="text-slate-500 font-semibold ml-1" id="paginationInfo">Menampilkan 0 dari 0 data</span>
+              </div>
+
+              <div class="flex items-center gap-1.5 flex-wrap justify-center" id="paginationButtons">
+                <!-- Navigasi Halaman Rendere Dinamis -->
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table id="tableAdmin" class="w-full text-left border-collapse text-xs">
+                <thead id="tableHeader" class="bg-amber-100/70 text-amber-950 uppercase font-bold border-b border-amber-200"></thead>
+                <tbody id="tableBody" class="divide-y divide-gray-100"></tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
@@ -450,11 +298,13 @@
   <div id="modalKartu" class="fixed inset-0 bg-slate-900/80 hidden flex justify-center items-start sm:items-center p-2 sm:p-4 z-50 overflow-y-auto">
     <div id="modalKartuContent" class="bg-amber-50/20 rounded-2xl p-3 sm:p-4 max-w-2xl w-full relative shadow-2xl border-2 border-amber-800 my-auto flex flex-col justify-between min-h-[95vh] sm:min-h-0">
       
+      <!-- TOMBOL CLOSE -->
       <button onclick="closeModalKartu()" class="no-print absolute top-3 right-3 text-slate-500 hover:text-slate-900 w-8 h-8 rounded-full bg-white shadow flex items-center justify-center z-20">
         <i class="fa-solid fa-xmark text-lg"></i>
       </button>
 
       <div class="flex-1 flex flex-col justify-between space-y-3">
+        
         <!-- KARTU 1: LEMBAR PESERTA -->
         <div class="border-2 border-amber-900 bg-amber-50/90 rounded-xl p-3 relative flex flex-col justify-between space-y-2 shadow-xs flex-1">
           <div class="bg-gradient-to-r from-amber-950 via-amber-900 to-emerald-950 text-amber-100 p-2.5 rounded-lg border-b-2 border-amber-500 shadow-sm relative overflow-hidden">
@@ -619,49 +469,7 @@
     </div>
   </div>
 
-  <!-- MODAL PREVIEW & UNDUH KWITANSI -->
-  <div id="modalKwitansi" class="fixed inset-0 bg-slate-900/80 hidden flex justify-center items-center p-2 sm:p-4 z-50 overflow-y-auto">
-    <div class="bg-white rounded-3xl p-4 sm:p-6 max-w-3xl w-full relative shadow-2xl border border-amber-200 my-auto space-y-4">
-      <button onclick="closeModalKwitansi()" class="no-print absolute top-3 right-3 text-slate-500 hover:text-slate-900 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center z-20">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-
-      <div class="border-b pb-3 flex justify-between items-center pr-8">
-        <div>
-          <h3 class="text-base font-extrabold text-amber-950 flex items-center gap-2">
-            <i class="fa-solid fa-file-invoice-dollar text-emerald-600"></i> Kwitansi Pembayaran Resmi
-          </h3>
-          <p class="text-xs text-gray-500">Hasil generate otomatis dari data pendaftaran terverifikasi</p>
-        </div>
-        <a href="https://drive.google.com/drive/folders/123YsI7qRtt5ILGwB0UryjIt0coF4M63Z?usp=drive_link" target="_blank" rel="noopener noreferrer" class="hidden sm:flex items-center gap-1.5 text-xs text-blue-700 font-bold bg-blue-50 px-3 py-1.5 rounded-xl border border-blue-200 hover:bg-blue-100 transition-all">
-          <i class="fa-brands fa-google-drive text-amber-600"></i> Folder Penampung Drive
-        </a>
-      </div>
-
-      <div class="relative bg-slate-100 rounded-2xl overflow-hidden border border-slate-300 shadow-inner flex justify-center items-center p-1 min-h-[220px]">
-        <canvas id="kwitansiCanvas" class="w-full h-auto max-h-[65vh] object-contain rounded-xl shadow-xs"></canvas>
-      </div>
-
-      <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-2 border-t text-xs">
-        <a href="https://drive.google.com/drive/folders/123YsI7qRtt5ILGwB0UryjIt0coF4M63Z?usp=drive_link" target="_blank" rel="noopener noreferrer" class="sm:hidden text-blue-700 font-bold underline flex items-center gap-1">
-          <i class="fa-brands fa-google-drive"></i> Buka Folder Penampung Drive
-        </a>
-        <div class="flex gap-2 w-full sm:w-auto ml-auto">
-          <button onclick="downloadKwitansiFromCanvas('pdf')" class="flex-1 sm:flex-none bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-4 py-2.5 rounded-xl flex items-center justify-center gap-2 shadow-md transition-all">
-            <i class="fa-solid fa-file-pdf"></i> Unduh PDF (A5)
-          </button>
-          <button onclick="downloadKwitansiFromCanvas('png')" class="flex-1 sm:flex-none bg-blue-700 hover:bg-blue-800 text-white font-bold px-4 py-2.5 rounded-xl flex items-center justify-center gap-2 shadow-md transition-all">
-            <i class="fa-solid fa-file-image"></i> Unduh PNG
-          </button>
-          <button onclick="printKwitansiCanvas()" class="bg-amber-900 hover:bg-amber-950 text-white font-bold px-4 py-2.5 rounded-xl flex items-center justify-center gap-2 shadow-md transition-all">
-            <i class="fa-solid fa-print"></i> Cetak
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL FORM ADMIN -->
+  <!-- MODAL FORM ADMIN (TAMBAH MANUAL & EDIT WITH FILE UPLOAD) -->
   <div id="modalFormAdmin" class="fixed inset-0 bg-slate-900/60 hidden flex justify-center items-center p-4 z-50 overflow-y-auto">
     <div class="bg-white rounded-3xl p-6 max-w-lg w-full relative shadow-2xl border border-amber-200 my-8">
       <button onclick="closeModalForm()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
@@ -720,6 +528,7 @@
           </div>
         </div>
 
+        <!-- FITUR INPUT BUKTI TRANSFER FILE -->
         <div class="border-t border-gray-100 pt-2 mt-2">
           <label class="block font-bold text-gray-700 mb-1">Upload Bukti Transfer (Gambar / PDF)</label>
           <input type="file" id="formBuktiTransfer" accept="image/*,.pdf" class="w-full p-2 border border-gray-300 rounded-xl bg-slate-50 text-xs font-medium file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-100 file:text-amber-900 hover:file:bg-amber-200">
@@ -741,38 +550,17 @@
 
   <!-- JAVASCRIPT LOGIC -->
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbznFj-ndl5ArO7N5lnwy7EYnChwbV8slndN0EWlOZ5lXEYauoInw6WZHfFwgN1O7TEV/exec"; 
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyWIuL5JEK7c1kQ4_DoGFew5p_tOgK_X27gFTiKkMddXxu_Vv2UZxh0dTujhqnX0WaS/exec"; 
     
     let rawHeaders = [];
     let rawAdminRows = [];
     let filteredRows = [];
 
+    // Variable State Pagination
     let currentPage = 1;
     let pageSize = 10;
-    let currentKwitansiData = null;
 
-    // FUNGSI NAVIGASI SIDEBAR PORTAL ADMIN
-    function switchAdminPanel(panelId) {
-      const panels = ['panelOverview', 'panelDataTable', 'panelRekap', 'panelExport'];
-      panels.forEach(p => {
-        const el = document.getElementById(p);
-        if (el) el.classList.add('hidden');
-
-        const btn = document.getElementById('btn' + p.charAt(0).toUpperCase() + p.slice(1));
-        if (btn) {
-          btn.className = "w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950";
-        }
-      });
-
-      const activeEl = document.getElementById(panelId);
-      if (activeEl) activeEl.classList.remove('hidden');
-
-      const activeBtn = document.getElementById('btn' + panelId.charAt(0).toUpperCase() + panelId.slice(1));
-      if (activeBtn) {
-        activeBtn.className = "w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all bg-amber-900 text-white shadow-sm";
-      }
-    }
-
+    // Toggle melebarkan dan menciutkan input pencarian admin
     function toggleAdminSearch() {
       const container = document.getElementById('adminSearchContainer');
       const input = document.getElementById('adminSearchInput');
@@ -792,11 +580,13 @@
       }
     }
 
+    // Helper untuk membuka URL secara aman
     function openUrlSafely(url) {
       if (!url) return;
       window.open(encodeURI(url), '_blank', 'noopener,noreferrer');
     }
 
+    // Helper untuk mengubah berkas lokal menjadi Base64
     function readFileAsBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -825,26 +615,6 @@
         return `REG-2026-${pad(d.getDate())}${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
       }
       return str.length > 15 ? 'REG-2026-' + str.substring(0, 6).toUpperCase() : str;
-    }
-
-    function terbilang(angka) {
-      const bil = ["", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas"];
-      angka = Math.floor(angka);
-      if (angka < 12) return bil[angka];
-      if (angka < 20) return terbilang(angka - 10) + " Belas";
-      if (angka < 100) return terbilang(Math.floor(angka / 10)) + " Puluh " + terbilang(angka % 10);
-      if (angka < 200) return "Seratus " + terbilang(angka - 100);
-      if (angka < 1000) return terbilang(Math.floor(angka / 100)) + " Ratus " + terbilang(angka % 100);
-      if (angka < 2000) return "Seribu " + terbilang(angka - 1000);
-      if (angka < 1000000) return terbilang(Math.floor(angka / 1000)) + " Ribu " + terbilang(angka % 1000);
-      if (angka < 1000000000) return terbilang(Math.floor(angka / 1000000)) + " Juta " + terbilang(angka % 1000000);
-      return "";
-    }
-
-    function formatTerbilangRupiah(nominal) {
-      if (!nominal || nominal === 0) return "Nol Rupiah";
-      let hasil = terbilang(nominal).replace(/\s+/g, ' ').trim();
-      return hasil + " Rupiah";
     }
 
     function switchTab(tabName) {
@@ -921,22 +691,14 @@
                   <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100 col-span-2 sm:col-span-1"><span class="text-gray-400 block text-[10px]">Kota / Kabupaten</span><span class="font-bold text-slate-800">${item.kotaKabupaten || '-'}</span></div>
                 </div>
 
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pt-2 border-t border-slate-100">
-                  <div class="flex flex-wrap items-center gap-2">
-                    ${item.linkBukti && item.linkBukti !== '-' ? `<button onclick="openUrlSafely('${item.linkBukti}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all"><i class="fa-solid fa-receipt text-amber-800"></i> Bukti Pembayaran</button>` : ''}
-                    <button onclick="openUrlSafely('${waGroupLink}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-md">
-                      <i class="fa-brands fa-whatsapp text-sm"></i> Gabung Group WhatsApp
-                    </button>
-                  </div>
-
-                  <div class="flex flex-col gap-2 w-full sm:w-auto sm:items-end ml-auto">
-                    <button onclick="generateKwitansi('${item.id}', '${namaSafe}', '${item.statusPendaftaran}', '${item.asalSekolah}', '${item.provinsi}', '${item.kotaKabupaten}')" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition-all w-full sm:w-auto">
-                      <i class="fa-solid fa-file-invoice-dollar"></i> Unduh Kwitansi
-                    </button>
-                    <button onclick="openModalKartu('${item.id}', '${namaSafe}', '${item.statusPendaftaran}', '${item.jenisKelamin}', '${item.asalSekolah}', '${item.provinsi}', '${item.kotaKabupaten}', '${item.ukuranKaos}', '${emailVal}')" class="bg-amber-900 hover:bg-amber-950 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition-all w-full sm:w-auto">
-                      <i class="fa-solid fa-id-card"></i> Cetak Lembar Pendaftaran
-                    </button>
-                  </div>
+                <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100">
+                  ${item.linkBukti && item.linkBukti !== '-' ? `<button onclick="openUrlSafely('${item.linkBukti}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all"><i class="fa-solid fa-receipt text-amber-800"></i> Bukti Pembayaran</button>` : ''}
+                  <button onclick="openUrlSafely('${waGroupLink}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-md">
+                    <i class="fa-brands fa-whatsapp text-sm"></i> Gabung Group WhatsApp
+                  </button>
+                  <button onclick="openModalKartu('${item.id}', '${namaSafe}', '${item.statusPendaftaran}', '${item.jenisKelamin}', '${item.asalSekolah}', '${item.provinsi}', '${item.kotaKabupaten}', '${item.ukuranKaos}', '${emailVal}')" class="bg-amber-900 hover:bg-amber-950 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 ml-auto shadow-md transition-all">
+                    <i class="fa-solid fa-id-card"></i> Cetak Lembar Pendaftaran
+                  </button>
                 </div>
               </div>
             `;
@@ -955,238 +717,6 @@
         btn.disabled = false;
         btn.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i> Cari Data Pendaftar`;
       }
-    }
-
-    function generateKwitansi(id, nama, status, sekolah, prov, kota, jumlahOrang = 1) {
-      const cleanId = formatID(id);
-      const nominalPerOrang = 2500000;
-      const totalNominal = nominalPerOrang * jumlahOrang;
-      const nominalFormatted = totalNominal.toLocaleString('id-ID') + ",00";
-      const terbilangText = formatTerbilangRupiah(totalNominal);
-
-      const kwitansiNo = cleanId.startsWith('REG-') || cleanId.startsWith('KMB-') ? cleanId : `REG-2026-${cleanId}`;
-      const telahTerimaDari = `${sekolah ? sekolah : nama}${prov ? ', ' + prov : ''}`;
-      const untukPembayaran = `Camp Fee Kembaranas III di Lampung Sejumlah ${jumlahOrang} Orang (${nama})`;
-
-      currentKwitansiData = {
-        no: kwitansiNo,
-        nama: nama,
-        sekolah: sekolah,
-        prov: prov,
-        kota: kota,
-        telahTerimaDari: telahTerimaDari,
-        uangSejumlah: terbilangText,
-        untukPembayaran: untukPembayaran,
-        jumlahNominal: nominalFormatted,
-        rawNominal: totalNominal
-      };
-
-      renderKwitansiCanvas(currentKwitansiData);
-      document.getElementById('modalKwitansi').classList.remove('hidden');
-    }
-
-    function renderKwitansiCanvas(data) {
-      const canvas = document.getElementById('kwitansiCanvas');
-      const ctx = canvas.getContext('2d');
-
-      canvas.width = 2000;
-      canvas.height = 980;
-
-      const img = new Image();
-      img.crossOrigin = "Anonymous";
-      img.src = "https://lh3.googleusercontent.com/d/1_dvqCcfLMmd82Df8g_tHaZHYGjskl6uk";
-
-      img.onload = function() {
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        drawKwitansiOverlayText(ctx, data);
-      };
-
-      img.onerror = function() {
-        drawKwitansiVectorFallback(ctx, canvas.width, canvas.height, data);
-      };
-    }
-
-    function drawKwitansiOverlayText(ctx, data) {
-      ctx.fillStyle = "#000000";
-
-      ctx.font = "bold 30px 'Plus Jakarta Sans', monospace, sans-serif";
-      ctx.fillText(`No. : ${data.no}`, 1540, 345);
-
-      ctx.font = "bold 30px 'Plus Jakarta Sans', Arial, sans-serif";
-      ctx.fillText(data.telahTerimaDari, 530, 442);
-
-      ctx.font = "bold 29px 'Plus Jakarta Sans', Arial, sans-serif";
-      ctx.fillText(data.uangSejumlah, 530, 510);
-
-      ctx.font = "bold 29px 'Plus Jakarta Sans', Arial, sans-serif";
-      ctx.fillText(data.untukPembayaran, 530, 580);
-
-      ctx.font = "900 36px 'Plus Jakarta Sans', Arial, sans-serif";
-      ctx.fillText(data.jumlahNominal, 420, 712);
-    }
-
-    function drawKwitansiVectorFallback(ctx, w, h, data) {
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(0, 0, w, h);
-
-      ctx.strokeStyle = "#15803d";
-      ctx.lineWidth = 12;
-      ctx.strokeRect(20, 20, w - 40, h - 40);
-
-      ctx.strokeStyle = "#d97706";
-      ctx.lineWidth = 4;
-      ctx.strokeRect(32, 32, w - 64, h - 64);
-
-      ctx.fillStyle = "#78350f";
-      ctx.font = "900 48px 'Plus Jakarta Sans', sans-serif";
-      ctx.fillText("KEMBARANAS III", 800, 100);
-
-      ctx.font = "bold 28px 'Plus Jakarta Sans', sans-serif";
-      ctx.fillStyle = "#1e293b";
-      ctx.fillText("SAKO PRAMUKA SIT INDONESIA", 800, 140);
-      ctx.font = "italic 22px 'Plus Jakarta Sans', sans-serif";
-      ctx.fillStyle = "#475569";
-      ctx.fillText("Perkemahan Bakti dan Pengembaraan Nasional ke-3", 800, 175);
-      ctx.fillText("📍 Lampung, 27 – 31 Oktober 2026", 800, 210);
-
-      ctx.fillStyle = "#064e3b";
-      ctx.beginPath();
-      ctx.roundRect(580, 260, 840, 90, 20);
-      ctx.fill();
-      ctx.strokeStyle = "#f59e0b";
-      ctx.lineWidth = 6;
-      ctx.stroke();
-
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "900 52px 'Plus Jakarta Sans', sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillText("KWITANSI", 1000, 325);
-      ctx.textAlign = "left";
-
-      ctx.fillStyle = "#f8fafc";
-      ctx.strokeStyle = "#94a3b8";
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.roundRect(1500, 280, 420, 70, 15);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.fillStyle = "#0f172a";
-      ctx.font = "bold 26px monospace";
-      ctx.fillText(`No. : ${data.no}`, 1520, 325);
-
-      let startY = 440;
-      const drawRow = (label, value) => {
-        ctx.fillStyle = "#334155";
-        ctx.font = "bold 28px 'Plus Jakarta Sans', sans-serif";
-        ctx.fillText(label, 120, startY);
-        ctx.fillText(":", 440, startY);
-
-        ctx.fillStyle = "#0f172a";
-        ctx.font = "900 28px 'Plus Jakarta Sans', sans-serif";
-        ctx.fillText(value, 470, startY);
-
-        ctx.strokeStyle = "#cbd5e1";
-        ctx.lineWidth = 2;
-        ctx.setLineDash([6, 6]);
-        ctx.beginPath();
-        ctx.moveTo(470, startY + 10);
-        ctx.lineTo(1880, startY + 10);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        startY += 80;
-      };
-
-      drawRow("Telah terima dari", data.telahTerimaDari);
-      drawRow("Uang sejumlah", data.uangSejumlah);
-      drawRow("Untuk pembayaran", data.untukPembayaran);
-
-      ctx.fillStyle = "#064e3b";
-      ctx.beginPath();
-      ctx.roundRect(120, 690, 220, 80, [15, 0, 0, 15]);
-      ctx.fill();
-
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "bold 32px 'Plus Jakarta Sans', sans-serif";
-      ctx.fillText("Jumlah", 160, 742);
-
-      ctx.fillStyle = "#ecfdf5";
-      ctx.strokeStyle = "#059669";
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.roundRect(340, 690, 700, 80, [0, 15, 15, 0]);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.fillStyle = "#065f46";
-      ctx.font = "900 36px 'Plus Jakarta Sans', sans-serif";
-      ctx.fillText(`Rp.  ${data.jumlahNominal}`, 380, 742);
-
-      ctx.fillStyle = "#047857";
-      ctx.font = "italic bold 22px 'Plus Jakarta Sans', sans-serif";
-      ctx.fillText("Bersama Pramuka SIT Membangun Generasi Berkarakter,", 120, 840);
-      ctx.fillText("Berilmu dan Berdaya Guna", 120, 870);
-
-      ctx.fillStyle = "#0f172a";
-      ctx.font = "bold 26px 'Plus Jakarta Sans', sans-serif";
-      ctx.fillText("Lampung, 19 Oktober 2026", 1480, 680);
-      ctx.fillText("Yang menerima,", 1520, 720);
-
-      ctx.fillStyle = "#0f172a";
-      ctx.font = "bold 26px 'Plus Jakarta Sans', sans-serif";
-      ctx.fillText("( Ramzil Huda, S.Pd.I. )", 1490, 860);
-      ctx.font = "22px 'Plus Jakarta Sans', sans-serif";
-      ctx.fillText("Sekretaris Pelaksana II", 1500, 895);
-    }
-
-    function closeModalKwitansi() {
-      document.getElementById('modalKwitansi').classList.add('hidden');
-    }
-
-    function downloadKwitansiFromCanvas(type = 'pdf') {
-      const canvas = document.getElementById('kwitansiCanvas');
-      if (!canvas || !currentKwitansiData) return;
-
-      const fileNameClean = (currentKwitansiData.nama || 'Kwitansi').trim().replace(/[^a-zA-Z0-9]/g, '_');
-
-      if (type === 'png') {
-        const link = document.createElement('a');
-        link.download = `Kwitansi_Kembaranas_${fileNameClean}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-      } else if (type === 'pdf') {
-        try {
-          const { jsPDF } = window.jspdf;
-          const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a5' });
-          const imgData = canvas.toDataURL('image/jpeg', 0.95);
-          doc.addImage(imgData, 'JPEG', 0, 0, 210, 148);
-          doc.save(`Kwitansi_Kembaranas_${fileNameClean}.pdf`);
-        } catch (err) {
-          alert("Gagal mengunduh PDF: " + err.message);
-        }
-      }
-    }
-
-    function printKwitansiCanvas() {
-      const canvas = document.getElementById('kwitansiCanvas');
-      if (!canvas) return;
-      const win = window.open('', '_blank');
-      win.document.write(`
-        <html>
-          <head>
-            <title>Cetak Kwitansi</title>
-            <style>
-              @page { size: A5 landscape; margin: 0; }
-              body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-              img { width: 100%; height: auto; max-height: 100vh; object-fit: contain; }
-            </style>
-          </head>
-          <body>
-            <img src="${canvas.toDataURL('image/png')}" onload="window.print(); window.close();" />
-          </body>
-        </html>
-      `);
     }
 
     function openModalKartu(id, nama, status, jk, sekolah, prov, kota, kaos, email = '-') {
@@ -1435,7 +965,6 @@
 
           populateFilterOptions();
           updateStats();
-          renderAdminAnalytics();
           currentPage = 1;
           renderTable();
         }
@@ -1449,88 +978,18 @@
 
       let countPeserta = 0;
       let countPembina = 0;
-      let countLaki = 0;
-      let countPerempuan = 0;
 
       rawAdminRows.forEach(row => {
         const status = String(row[2] || '').toLowerCase();
-        const jk = String(row[9] || '').toLowerCase();
-
         if (status.includes('pembina')) {
           countPembina++;
         } else {
           countPeserta++;
         }
-
-        if (jk.includes('laki')) countLaki++;
-        else if (jk.includes('perempuan')) countPerempuan++;
       });
 
       document.getElementById('statPeserta').innerText = countPeserta;
       document.getElementById('statPembina').innerText = countPembina;
-
-      const total = rawAdminRows.length || 1;
-      const pctLaki = Math.round((countLaki / total) * 100);
-      const pctPerempuan = Math.round((countPerempuan / total) * 100);
-
-      document.getElementById('statLakiVal').innerText = `${countLaki} (${pctLaki}%)`;
-      document.getElementById('barLaki').style.width = `${pctLaki}%`;
-
-      document.getElementById('statPerempuanVal').innerText = `${countPerempuan} (${pctPerempuan}%)`;
-      document.getElementById('barPerempuan').style.width = `${pctPerempuan}%`;
-    }
-
-    // FUNGSI ANALISIS DATA & REKAPITULASI UNTUK SIDEBAR
-    function renderAdminAnalytics() {
-      const mapKaos = {};
-      const mapProv = {};
-
-      rawAdminRows.forEach(row => {
-        const kaos = (row[13] || 'Belum Diisi').trim().toUpperCase();
-        const prov = (row[11] || 'Lainnya').trim();
-
-        if (kaos) mapKaos[kaos] = (mapKaos[kaos] || 0) + 1;
-        if (prov) mapProv[prov] = (mapProv[prov] || 0) + 1;
-      });
-
-      const total = rawAdminRows.length || 1;
-
-      // 1. Quick Summary Kaos di Panel Overview
-      const quickKaosBox = document.getElementById('summaryKaosQuick');
-      if (quickKaosBox) {
-        quickKaosBox.innerHTML = Object.entries(mapKaos).slice(0, 4).map(([k, count]) => `
-          <div class="bg-amber-50 p-2 rounded-xl border border-amber-200">
-            <span class="block font-black text-amber-950 text-sm">${k}</span>
-            <span class="text-[10px] text-gray-500 font-bold">${count} pcs</span>
-          </div>
-        `).join('');
-      }
-
-      // 2. Tabel Rekapitulasi Kaos di Panel Rekap
-      const rekapKaosBody = document.getElementById('rekapKaosBody');
-      if (rekapKaosBody) {
-        rekapKaosBody.innerHTML = Object.entries(mapKaos).map(([k, count]) => {
-          const pct = Math.round((count / total) * 100);
-          return `
-            <tr class="hover:bg-slate-50">
-              <td class="p-2.5 font-bold text-amber-950">${k}</td>
-              <td class="p-2.5 text-center font-extrabold text-slate-800">${count} pcs</td>
-              <td class="p-2.5 text-right font-bold text-emerald-700">${pct}%</td>
-            </tr>
-          `;
-        }).join('');
-      }
-
-      // 3. Tabel Rekapitulasi Provinsi di Panel Rekap
-      const rekapProvBody = document.getElementById('rekapProvinsiBody');
-      if (rekapProvBody) {
-        rekapProvBody.innerHTML = Object.entries(mapProv).sort((a,b) => b[1] - a[1]).map(([p, count]) => `
-          <tr class="hover:bg-slate-50">
-            <td class="p-2.5 font-semibold text-slate-800">${p}</td>
-            <td class="p-2.5 text-center font-extrabold text-amber-950">${count} Orang</td>
-          </tr>
-        `).join('');
-      }
     }
 
     function populateFilterOptions() {
@@ -1585,6 +1044,7 @@
       renderTable();
     }
 
+    // Fungsi mengubah ukuran halaman pagination (10, 25, 50, 100)
     function changePageSize() {
       const select = document.getElementById('pageSizeSelect');
       pageSize = parseInt(select.value) || 10;
@@ -1592,6 +1052,7 @@
       renderTable();
     }
 
+    // Fungsi navigasi ke halaman tertentu
     function goToPage(page) {
       const totalPages = Math.ceil(filteredRows.length / pageSize) || 1;
       if (page < 1) page = 1;
@@ -1644,6 +1105,7 @@
       updatePaginationControls(startIndex + 1, endIndex, totalRows, currentPage, totalPages);
     }
 
+    // Memperbarui Tampilan Kontrol Pagination
     function updatePaginationControls(start, end, total, page, totalPages) {
       const infoEl = document.getElementById('paginationInfo');
       if (infoEl) {
@@ -1664,11 +1126,13 @@
 
       let btnHtml = '';
 
+      // Tombol Sebelum (Previous)
       const prevDisabled = page <= 1;
       btnHtml += `<button onclick="goToPage(${page - 1})" ${prevDisabled ? 'disabled' : ''} class="px-2.5 py-1.5 rounded-lg border text-xs font-bold transition-all ${prevDisabled ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed' : 'bg-white text-amber-950 border-gray-300 hover:bg-amber-50 shadow-xs'}" title="Halaman Sebelumnya">
         <i class="fa-solid fa-chevron-left"></i>
       </button>`;
 
+      // Angka-angka Halaman
       let pagesToShow = [];
       if (totalPages <= 5) {
         for (let i = 1; i <= totalPages; i++) pagesToShow.push(i);
@@ -1691,6 +1155,7 @@
         }
       });
 
+      // Tombol Selanjutnya (Next)
       const nextDisabled = page >= totalPages;
       btnHtml += `<button onclick="goToPage(${page + 1})" ${nextDisabled ? 'disabled' : ''} class="px-2.5 py-1.5 rounded-lg border text-xs font-bold transition-all ${nextDisabled ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed' : 'bg-white text-amber-950 border-gray-300 hover:bg-amber-50 shadow-xs'}" title="Halaman Selanjutnya">
         <i class="fa-solid fa-chevron-right"></i>
