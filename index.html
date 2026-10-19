@@ -112,6 +112,22 @@
         </div>
       </section>
 
+      <!-- BANNER BROADCAST PENGUMUMAN LAPANGAN (DARI OPSI 4) -->
+      <div id="userBroadcastBanner" class="hidden bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 border-2 border-amber-600 text-amber-950 p-4 rounded-2xl shadow-md flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-950 text-amber-300 flex items-center justify-center text-lg font-bold flex-shrink-0 animate-bounce">
+            <i class="fa-solid fa-bullhorn"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-black uppercase tracking-widest bg-amber-950 text-amber-300 px-2 py-0.5 rounded-full">PENGUMUMAN PANITIA</span>
+            <p id="userBroadcastText" class="text-xs sm:text-sm font-extrabold mt-0.5"></p>
+          </div>
+        </div>
+        <button onclick="document.getElementById('userBroadcastBanner').classList.add('hidden')" class="text-amber-950 hover:text-black font-bold p-1">
+          <i class="fa-solid fa-xmark text-base"></i>
+        </button>
+      </div>
+
       <!-- TAB 1: CEK PENDAFTARAN -->
       <section id="userTab" class="space-y-6">
         <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-lg border border-amber-100 relative max-w-2xl mx-auto">
@@ -202,6 +218,10 @@
               <button onclick="switchAdminPanel('panelKeuanganWA')" id="btnPanelKeuanganWA" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950">
                 <i class="fa-solid fa-wallet text-sm"></i>
                 <span>Keuangan & WA Gateway</span>
+              </button>
+              <button onclick="switchAdminPanel('panelSertifikatRundown')" id="btnPanelSertifikatRundown" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950">
+                <i class="fa-solid fa-certificate text-sm"></i>
+                <span>Sertifikat & Rundown</span>
               </button>
               <button onclick="switchAdminPanel('panelDataTable')" id="btnPanelDataTable" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950">
                 <i class="fa-solid fa-table-list text-sm"></i>
@@ -405,9 +425,8 @@
               </div>
             </div>
 
-            <!-- SUB-PANEL BARU: OPSI 3 - KEUANGAN & WHATSAPP GATEWAY -->
+            <!-- SUB-PANEL: KEUANGAN & WHATSAPP GATEWAY -->
             <div id="panelKeuanganWA" class="hidden space-y-6">
-              <!-- CARDS RINGKASAN KEUANGAN -->
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md space-y-1">
                   <p class="text-xs font-bold text-gray-500 uppercase">Target Omzet Camp Fee</p>
@@ -426,7 +445,6 @@
                 </div>
               </div>
 
-              <!-- TABEL PELUNASAN & KIRIM WA -->
               <div class="bg-white p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-3">
                   <div>
@@ -454,6 +472,90 @@
                     </thead>
                     <tbody id="tableFinanceBody" class="divide-y divide-gray-100 font-medium"></tbody>
                   </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- SUB-PANEL BARU: OPSI 4 - SERTIFIKAT DIGITAL, RUNDOWN & BROADCAST -->
+            <div id="panelSertifikatRundown" class="hidden space-y-6">
+              <!-- BARIS 1: BROADCAST PENGUMUMAN LAPANGAN -->
+              <div class="bg-white p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-3">
+                <h3 class="font-extrabold text-amber-950 text-base flex items-center gap-2 border-b pb-3">
+                  <i class="fa-solid fa-bullhorn text-amber-800"></i> Broadcast Pengumuman Lapangan (Real-Time)
+                </h3>
+                <p class="text-xs text-slate-500">Pesan pengumuman yang diisi di sini akan langsung muncul sebagai banner aktif di beranda pencarian peserta.</p>
+                
+                <div class="flex gap-2">
+                  <input type="text" id="broadcastInput" placeholder="Ketikkan teks pengumuman penting (misal: Upacara Pembukaan Pukul 16:00 WIB di Lapangan Utama)..." class="w-full p-3 border border-amber-300 rounded-xl bg-slate-50 text-xs font-semibold focus:ring-2 focus:ring-amber-500">
+                  <button onclick="publishBroadcast()" class="bg-amber-900 hover:bg-amber-950 text-white px-5 py-3 rounded-xl text-xs font-bold shadow transition-all flex items-center gap-2 flex-shrink-0">
+                    <i class="fa-solid fa-paper-plane"></i> Terbitkan
+                  </button>
+                </div>
+              </div>
+
+              <!-- BARIS 2: E-SERTIFIKAT DIGITAL GENERATOR -->
+              <div class="bg-white p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-3">
+                  <div>
+                    <h3 class="font-extrabold text-amber-950 text-base flex items-center gap-2">
+                      <i class="fa-solid fa-certificate text-amber-800"></i> Generator E-Sertifikat Kelulusan Kegiatan
+                    </h3>
+                    <p class="text-xs text-slate-500">Cetak & Unduh Sertifikat Penghargaan resmi untuk Peserta dan Pembina Pendamping.</p>
+                  </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                  <table class="w-full text-xs text-left border-collapse">
+                    <thead>
+                      <tr class="bg-amber-100/70 text-amber-950 uppercase font-bold border-b border-amber-200">
+                        <th class="p-3">ID & Nama</th>
+                        <th class="p-3">Peran / Status</th>
+                        <th class="p-3">Sekolah / Pangkalan</th>
+                        <th class="p-3 text-center">No. Sertifikat Unik</th>
+                        <th class="p-3 text-center">Aksi Unduh Sertifikat</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tableSertifikatBody" class="divide-y divide-gray-100 font-medium"></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- BARIS 3: RUNDOWN & JADWAL KEGIATAN -->
+              <div class="bg-white p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
+                <h3 class="font-extrabold text-amber-950 text-base flex items-center gap-2 border-b pb-3">
+                  <i class="fa-solid fa-calendar-days text-emerald-700"></i> Rundown Jadwal Utama KEMBARANAS III 2026
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                  <div class="bg-amber-50/60 p-4 rounded-2xl border border-amber-200 space-y-2">
+                    <span class="bg-amber-800 text-white font-extrabold px-2.5 py-1 rounded-md text-[10px] uppercase">HARI 1 • 27 OKTOBER 2026</span>
+                    <h4 class="font-bold text-amber-950">Kedatangan & Upacara Pembukaan</h4>
+                    <ul class="space-y-1.5 text-slate-700 font-medium">
+                      <li>• 08.00 - 14.00 : Registrasi Ulang & Tapak Kemah</li>
+                      <li>• 16.00 - 17.30 : Upacara Pembukaan Kembaranas III</li>
+                      <li>• 20.00 - 22.00 : Malam Ukhuwah & Orientasi Medan</li>
+                    </ul>
+                  </div>
+
+                  <div class="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-200 space-y-2">
+                    <span class="bg-emerald-800 text-white font-extrabold px-2.5 py-1 rounded-md text-[10px] uppercase">HARI 2 & 3 • 28-29 OKTOBER</span>
+                    <h4 class="font-bold text-emerald-950">Giat Rotasi & Survival Expedition</h4>
+                    <ul class="space-y-1.5 text-slate-700 font-medium">
+                      <li>• 08.00 - 12.00 : Giat Kemampuan Dasar Scout & Survival</li>
+                      <li>• 13.30 - 17.00 : Baksos & Bakti Masyarakat Lampung</li>
+                      <li>• 19.30 - 22.00 : Api Unggun & Pentas Seni Budaya</li>
+                    </ul>
+                  </div>
+
+                  <div class="bg-blue-50/60 p-4 rounded-2xl border border-blue-200 space-y-2">
+                    <span class="bg-blue-800 text-white font-extrabold px-2.5 py-1 rounded-md text-[10px] uppercase">HARI 4 & 5 • 30-31 OKTOBER</span>
+                    <h4 class="font-bold text-blue-950">Trip Pahawang & Penutupan</h4>
+                    <ul class="space-y-1.5 text-slate-700 font-medium">
+                      <li>• 06.00 - 16.00 : Wisata & Ekowisata Pulau Pahawang</li>
+                      <li>• 19.30 - 21.00 : Upacara Penutupan & Pembagian Tiska</li>
+                      <li>• 08.00 - selesai : Kepulangan Kontingen</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
@@ -939,12 +1041,10 @@
 
     let plottingMap = {}; 
     let kitStatusMap = {}; 
-
-    // STATE LOKAL UNTUK OPSI 3 (KEUANGAN & WHATSAPP GATEWAY)
     let paymentStatusMap = {}; 
 
     function switchAdminPanel(panelId) {
-      const panels = ['panelOverview', 'panelScan', 'panelPlottingKit', 'panelKeuanganWA', 'panelDataTable', 'panelRekap', 'panelExport'];
+      const panels = ['panelOverview', 'panelScan', 'panelPlottingKit', 'panelKeuanganWA', 'panelSertifikatRundown', 'panelDataTable', 'panelRekap', 'panelExport'];
       panels.forEach(p => {
         const el = document.getElementById(p);
         if (el) el.classList.add('hidden');
@@ -974,9 +1074,128 @@
       if (panelId === 'panelKeuanganWA') {
         renderKeuanganWAPanel();
       }
+
+      if (panelId === 'panelSertifikatRundown') {
+        renderSertifikatPanel();
+      }
     }
 
-    // FUNGSI OPSI 3: RENDER KEUANGAN & WHATSAPP GATEWAY
+    // FUNGSI OPSI 4: RENDER SERTIFIKAT & BROADCAST
+    function renderSertifikatPanel() {
+      const sertiBody = document.getElementById('tableSertifikatBody');
+      if (sertiBody) {
+        sertiBody.innerHTML = rawAdminRows.map(row => {
+          const idClean = formatID(row[0]);
+          const nama = row[3] || row[7] || '-';
+          const status = row[2] || 'Peserta';
+          const sekolah = row[10] || '-';
+          const sertiNo = `SERT/KMB-III/2026/${idClean.replace(/[^0-9]/g, '').slice(-4)}`;
+          const safeNama = nama.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
+          return `
+            <tr class="hover:bg-slate-50">
+              <td class="p-3">
+                <span class="font-bold text-amber-950 block uppercase">${nama}</span>
+                <span class="font-mono text-[10px] text-gray-400">${idClean}</span>
+              </td>
+              <td class="p-3"><span class="bg-blue-100 text-blue-900 px-2 py-0.5 rounded text-[10px] font-bold">${status}</span></td>
+              <td class="p-3 text-slate-700 font-semibold uppercase">${sekolah}</td>
+              <td class="p-3 text-center font-mono font-bold text-slate-800">${sertiNo}</td>
+              <td class="p-3 text-center">
+                <button onclick="downloadSertifikat('${safeNama}', '${status}', '${sekolah}', '${sertiNo}')" class="bg-amber-800 hover:bg-amber-900 text-white px-3.5 py-1.5 rounded-xl text-xs font-bold shadow-xs transition-all inline-flex items-center gap-1.5">
+                  <i class="fa-solid fa-file-pdf text-amber-300"></i> Unduh Sertifikat
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+    }
+
+    function publishBroadcast() {
+      const input = document.getElementById('broadcastInput');
+      const text = input.value.trim();
+      if (!text) return alert("Ketikkan teks pengumuman terlebih dahulu.");
+
+      document.getElementById('userBroadcastText').innerText = text;
+      document.getElementById('userBroadcastBanner').classList.remove('hidden');
+      alert("Pengumuman berhasil diterbitkan ke beranda peserta!");
+    }
+
+    function downloadSertifikat(nama, status, sekolah, sertiNo) {
+      try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+
+        doc.setFillColor(254, 243, 199);
+        doc.rect(0, 0, 297, 210, 'F');
+
+        doc.setDrawColor(120, 53, 15);
+        doc.setLineWidth(3);
+        doc.rect(8, 8, 281, 194);
+        doc.setDrawColor(217, 119, 6);
+        doc.setLineWidth(1);
+        doc.rect(12, 12, 273, 186);
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(22);
+        doc.setTextColor(120, 53, 15);
+        doc.text("SERTIFIKAT PENGHARGAAN", 148.5, 35, { align: "center" });
+
+        doc.setFontSize(11);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(71, 85, 105);
+        doc.text(`Nomor: ${sertiNo}`, 148.5, 43, { align: "center" });
+
+        doc.setFontSize(12);
+        doc.text("Diberikan kepada:", 148.5, 62, { align: "center" });
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(26);
+        doc.setTextColor(15, 23, 42);
+        doc.text(nama.toUpperCase(), 148.5, 78, { align: "center" });
+
+        doc.setDrawColor(120, 53, 15);
+        doc.setLineWidth(0.8);
+        doc.line(60, 82, 237, 82);
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(13);
+        doc.setTextColor(30, 41, 59);
+        doc.text(`Asal Pangkalan / Sekolah: ${sekolah.toUpperCase()}`, 148.5, 92, { align: "center" });
+
+        doc.setFontSize(11);
+        doc.text(`Atas partisipasi dan dedikasinya sebagai ${status.toUpperCase()} dalam kegiatan:`, 148.5, 110, { align: "center" });
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(16);
+        doc.setTextColor(6, 95, 70);
+        doc.text("PERKEMAHAN UKHUWAH KEMBARANAS III 2026", 148.5, 122, { align: "center" });
+
+        doc.setFont("helvetica", "italic");
+        doc.setFontSize(11);
+        doc.setTextColor(71, 85, 105);
+        doc.text("SAKO PRAMUKA SIT INDONESIA • Bandar Lampung, 27–31 Oktober 2026", 148.5, 130, { align: "center" });
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(11);
+        doc.setTextColor(15, 23, 42);
+        doc.text("Panitia Pelaksana KEMBARANAS III", 148.5, 160, { align: "center" });
+
+        doc.setFontSize(10);
+        doc.text("( Prof. Dr. H. Dahlan, M.Pd. )", 80, 185, { align: "center" });
+        doc.text("Ketua SAKO SIT Pusat", 80, 191, { align: "center" });
+
+        doc.text("( Ramzil Huda, S.Pd.I. )", 217, 185, { align: "center" });
+        doc.text("Sekretaris Pelaksana", 217, 191, { align: "center" });
+
+        const safeFile = nama.trim().replace(/[^a-zA-Z0-9]/g, '_');
+        doc.save(`Sertifikat_Kembaranas_${safeFile}.pdf`);
+      } catch (err) {
+        alert("Gagal mengunduh sertifikat: " + err.message);
+      }
+    }
+
     function renderKeuanganWAPanel() {
       const feePerPerson = 2500000;
       const totalPeople = rawAdminRows.length;
@@ -1025,7 +1244,6 @@
                 <select onchange="changePaymentStatus('${idClean}', this.value)" class="p-1.5 border border-slate-300 rounded-lg text-xs font-bold ${statusPay === 'Lunas' ? 'bg-emerald-50 text-emerald-800' : (statusPay === 'DP' ? 'bg-amber-50 text-amber-800' : 'bg-red-50 text-red-800')}">
                   <option value="Lunas" ${statusPay === 'Lunas' ? 'selected' : ''}>Lunas (100%)</option>
                   <option value="DP" ${statusPay === 'DP' ? 'selected' : ''}>DP / Muka (50%)</option>
-
                   <option value="Belum" ${statusPay === 'Belum' ? 'selected' : ''}>Belum Bayar</option>
                 </select>
               </td>
