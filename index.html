@@ -23,7 +23,6 @@
       opacity: 0.03;
     }
 
-    /* FORMAT CETAK A4 (FULL 1 HALAMAN PAS ATAS-BAWAH TANPA TERSISA) */
     @media print {
       @page {
         size: A4 portrait;
@@ -206,8 +205,6 @@
                 </h3>
               </div>
               <div class="flex items-center gap-2 w-full sm:w-auto flex-wrap">
-                
-                <!-- TOMBOL & INPUT PENCARIAN MELEBAR DAN MENCIUT -->
                 <div class="relative flex items-center">
                   <button type="button" onclick="toggleAdminSearch()" title="Cari Data Admin" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-xs">
                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -264,7 +261,6 @@
           </div>
 
           <div class="bg-white rounded-3xl border border-amber-200/80 shadow-md overflow-hidden space-y-0">
-            <!-- BARIS KONTROL PAGINATION DI ATAS TABEL -->
             <div class="p-4 bg-amber-50/50 border-b border-amber-200/80 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
               <div class="flex items-center gap-2 flex-wrap justify-center sm:justify-start">
                 <span class="font-bold text-slate-700">Tampilkan:</span>
@@ -277,9 +273,7 @@
                 <span class="text-slate-500 font-semibold ml-1" id="paginationInfo">Menampilkan 0 dari 0 data</span>
               </div>
 
-              <div class="flex items-center gap-1.5 flex-wrap justify-center" id="paginationButtons">
-                <!-- Navigasi Halaman Rendere Dinamis -->
-              </div>
+              <div class="flex items-center gap-1.5 flex-wrap justify-center" id="paginationButtons"></div>
             </div>
 
             <div class="overflow-x-auto">
@@ -298,13 +292,11 @@
   <div id="modalKartu" class="fixed inset-0 bg-slate-900/80 hidden flex justify-center items-start sm:items-center p-2 sm:p-4 z-50 overflow-y-auto">
     <div id="modalKartuContent" class="bg-amber-50/20 rounded-2xl p-3 sm:p-4 max-w-2xl w-full relative shadow-2xl border-2 border-amber-800 my-auto flex flex-col justify-between min-h-[95vh] sm:min-h-0">
       
-      <!-- TOMBOL CLOSE -->
       <button onclick="closeModalKartu()" class="no-print absolute top-3 right-3 text-slate-500 hover:text-slate-900 w-8 h-8 rounded-full bg-white shadow flex items-center justify-center z-20">
         <i class="fa-solid fa-xmark text-lg"></i>
       </button>
 
       <div class="flex-1 flex flex-col justify-between space-y-3">
-        
         <!-- KARTU 1: LEMBAR PESERTA -->
         <div class="border-2 border-amber-900 bg-amber-50/90 rounded-xl p-3 relative flex flex-col justify-between space-y-2 shadow-xs flex-1">
           <div class="bg-gradient-to-r from-amber-950 via-amber-900 to-emerald-950 text-amber-100 p-2.5 rounded-lg border-b-2 border-amber-500 shadow-sm relative overflow-hidden">
@@ -469,7 +461,7 @@
     </div>
   </div>
 
-  <!-- MODAL FORM ADMIN (TAMBAH MANUAL & EDIT WITH FILE UPLOAD) -->
+  <!-- MODAL FORM ADMIN -->
   <div id="modalFormAdmin" class="fixed inset-0 bg-slate-900/60 hidden flex justify-center items-center p-4 z-50 overflow-y-auto">
     <div class="bg-white rounded-3xl p-6 max-w-lg w-full relative shadow-2xl border border-amber-200 my-8">
       <button onclick="closeModalForm()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
@@ -528,7 +520,6 @@
           </div>
         </div>
 
-        <!-- FITUR INPUT BUKTI TRANSFER FILE -->
         <div class="border-t border-gray-100 pt-2 mt-2">
           <label class="block font-bold text-gray-700 mb-1">Upload Bukti Transfer (Gambar / PDF)</label>
           <input type="file" id="formBuktiTransfer" accept="image/*,.pdf" class="w-full p-2 border border-gray-300 rounded-xl bg-slate-50 text-xs font-medium file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-100 file:text-amber-900 hover:file:bg-amber-200">
@@ -556,11 +547,9 @@
     let rawAdminRows = [];
     let filteredRows = [];
 
-    // Variable State Pagination
     let currentPage = 1;
     let pageSize = 10;
 
-    // Toggle melebarkan dan menciutkan input pencarian admin
     function toggleAdminSearch() {
       const container = document.getElementById('adminSearchContainer');
       const input = document.getElementById('adminSearchInput');
@@ -580,13 +569,11 @@
       }
     }
 
-    // Helper untuk membuka URL secara aman
     function openUrlSafely(url) {
       if (!url) return;
       window.open(encodeURI(url), '_blank', 'noopener,noreferrer');
     }
 
-    // Helper untuk mengubah berkas lokal menjadi Base64
     function readFileAsBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -691,14 +678,23 @@
                   <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100 col-span-2 sm:col-span-1"><span class="text-gray-400 block text-[10px]">Kota / Kabupaten</span><span class="font-bold text-slate-800">${item.kotaKabupaten || '-'}</span></div>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100">
-                  ${item.linkBukti && item.linkBukti !== '-' ? `<button onclick="openUrlSafely('${item.linkBukti}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all"><i class="fa-solid fa-receipt text-amber-800"></i> Bukti Pembayaran</button>` : ''}
-                  <button onclick="openUrlSafely('${waGroupLink}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-md">
-                    <i class="fa-brands fa-whatsapp text-sm"></i> Gabung Group WhatsApp
-                  </button>
-                  <button onclick="openModalKartu('${item.id}', '${namaSafe}', '${item.statusPendaftaran}', '${item.jenisKelamin}', '${item.asalSekolah}', '${item.provinsi}', '${item.kotaKabupaten}', '${item.ukuranKaos}', '${emailVal}')" class="bg-amber-900 hover:bg-amber-950 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 ml-auto shadow-md transition-all">
-                    <i class="fa-solid fa-id-card"></i> Cetak Lembar Pendaftaran
-                  </button>
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pt-2 border-t border-slate-100">
+                  <div class="flex flex-wrap items-center gap-2">
+                    ${item.linkBukti && item.linkBukti !== '-' ? `<button onclick="openUrlSafely('${item.linkBukti}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all"><i class="fa-solid fa-receipt text-amber-800"></i> Bukti Pembayaran</button>` : ''}
+                    <button onclick="openUrlSafely('${waGroupLink}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-md">
+                      <i class="fa-brands fa-whatsapp text-sm"></i> Gabung Group WhatsApp
+                    </button>
+                  </div>
+
+                  <!-- TOMBOL SISI KANAN (UNDUH KWITANSI DI ATAS CETAK LEMBAR PENDAFTARAN) -->
+                  <div class="flex flex-col gap-2 w-full sm:w-auto sm:items-end ml-auto">
+                    <button onclick="downloadKwitansiPDF('${item.id}', '${namaSafe}', '${item.statusPendaftaran}', '${item.asalSekolah}', '${item.provinsi}', '${item.kotaKabupaten}')" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition-all w-full sm:w-auto">
+                      <i class="fa-solid fa-file-invoice-dollar"></i> Unduh Kwitansi
+                    </button>
+                    <button onclick="openModalKartu('${item.id}', '${namaSafe}', '${item.statusPendaftaran}', '${item.jenisKelamin}', '${item.asalSekolah}', '${item.provinsi}', '${item.kotaKabupaten}', '${item.ukuranKaos}', '${emailVal}')" class="bg-amber-900 hover:bg-amber-950 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition-all w-full sm:w-auto">
+                      <i class="fa-solid fa-id-card"></i> Cetak Lembar Pendaftaran
+                    </button>
+                  </div>
                 </div>
               </div>
             `;
@@ -716,6 +712,87 @@
       } finally {
         btn.disabled = false;
         btn.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i> Cari Data Pendaftar`;
+      }
+    }
+
+    // FUNGSI UNDUH KWITANSI OTOMATIS (PDF FORMAT A5)
+    function downloadKwitansiPDF(id, nama, status, sekolah, prov, kota) {
+      try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a5' });
+
+        const cleanId = formatID(id);
+        const kwitansiNo = `KWT-${cleanId.replace('REG-', '').replace('KMB-', '')}`;
+        const today = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        doc.setDrawColor(120, 53, 15);
+        doc.setLineWidth(1);
+        doc.rect(5, 5, 200, 138);
+        doc.setLineWidth(0.3);
+        doc.rect(7, 7, 196, 134);
+
+        doc.setFillColor(120, 53, 15);
+        doc.rect(7, 7, 196, 22, 'F');
+
+        doc.setTextColor(255, 255, 255);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(13);
+        doc.text("KWITANSI PEMBAYARAN RESMI", 105, 15, { align: "center" });
+        doc.setFontSize(8);
+        doc.setFont("helvetica", "normal");
+        doc.text("PERKEMAHAN UKHUWAH KEMBARANAS III 2026 • SAKO SIT INDONESIA", 105, 22, { align: "center" });
+
+        doc.setTextColor(15, 23, 42);
+        doc.setFontSize(9);
+        doc.setFont("helvetica", "bold");
+        doc.text(`No. Kwitansi : ${kwitansiNo}`, 12, 36);
+        doc.text(`Tanggal       : ${today}`, 140, 36);
+
+        doc.setDrawColor(203, 213, 225);
+        doc.line(12, 39, 198, 39);
+
+        let y = 48;
+        const addRow = (label, value, isBold = false) => {
+          doc.setFont("helvetica", "normal");
+          doc.setTextColor(100, 116, 139);
+          doc.text(label, 12, y);
+          doc.text(":", 48, y);
+          
+          doc.setFont("helvetica", isBold ? "bold" : "normal");
+          doc.setTextColor(15, 23, 42);
+          doc.text(String(value || '-'), 52, y);
+          y += 9;
+        };
+
+        addRow("Telah Terima Dari", nama.toUpperCase(), true);
+        addRow("Status / Peran", status, false);
+        addRow("Asal Pangkalan", sekolah.toUpperCase(), false);
+        addRow("Wilayah", `${prov || '-'} / ${kota || '-'}`, false);
+        addRow("Untuk Pembayaran", `Pendaftaran ${status} KEMBARANAS III 2026`, false);
+
+        doc.setFillColor(236, 253, 245);
+        doc.setDrawColor(16, 185, 129);
+        doc.roundedRect(12, y + 2, 186, 13, 2, 2, 'FD');
+        doc.setTextColor(6, 95, 70);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(10);
+        doc.text("STATUS: LUNAS / TERVERIFIKASI SISTEM", 105, y + 10, { align: "center" });
+
+        y += 24;
+        doc.setFontSize(8);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(100, 116, 139);
+        doc.text("Panitia Pelaksana KEMBARANAS III 2026", 140, y);
+        doc.text("Sekretariat Keuangan & Registrasi", 140, y + 4);
+
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(120, 53, 15);
+        doc.text("[ TERVERIFIKASI OTOMATIS ]", 140, y + 16);
+
+        const fileNameClean = nama.trim().replace(/[^a-zA-Z0-9]/g, '_');
+        doc.save(`Kwitansi_KEMBARANAS_${fileNameClean}.pdf`);
+      } catch (err) {
+        alert("Gagal mengunduh kwitansi: " + err.message);
       }
     }
 
@@ -1044,7 +1121,6 @@
       renderTable();
     }
 
-    // Fungsi mengubah ukuran halaman pagination (10, 25, 50, 100)
     function changePageSize() {
       const select = document.getElementById('pageSizeSelect');
       pageSize = parseInt(select.value) || 10;
@@ -1052,7 +1128,6 @@
       renderTable();
     }
 
-    // Fungsi navigasi ke halaman tertentu
     function goToPage(page) {
       const totalPages = Math.ceil(filteredRows.length / pageSize) || 1;
       if (page < 1) page = 1;
@@ -1105,7 +1180,6 @@
       updatePaginationControls(startIndex + 1, endIndex, totalRows, currentPage, totalPages);
     }
 
-    // Memperbarui Tampilan Kontrol Pagination
     function updatePaginationControls(start, end, total, page, totalPages) {
       const infoEl = document.getElementById('paginationInfo');
       if (infoEl) {
@@ -1126,13 +1200,11 @@
 
       let btnHtml = '';
 
-      // Tombol Sebelum (Previous)
       const prevDisabled = page <= 1;
       btnHtml += `<button onclick="goToPage(${page - 1})" ${prevDisabled ? 'disabled' : ''} class="px-2.5 py-1.5 rounded-lg border text-xs font-bold transition-all ${prevDisabled ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed' : 'bg-white text-amber-950 border-gray-300 hover:bg-amber-50 shadow-xs'}" title="Halaman Sebelumnya">
         <i class="fa-solid fa-chevron-left"></i>
       </button>`;
 
-      // Angka-angka Halaman
       let pagesToShow = [];
       if (totalPages <= 5) {
         for (let i = 1; i <= totalPages; i++) pagesToShow.push(i);
@@ -1155,7 +1227,6 @@
         }
       });
 
-      // Tombol Selanjutnya (Next)
       const nextDisabled = page >= totalPages;
       btnHtml += `<button onclick="goToPage(${page + 1})" ${nextDisabled ? 'disabled' : ''} class="px-2.5 py-1.5 rounded-lg border text-xs font-bold transition-all ${nextDisabled ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed' : 'bg-white text-amber-950 border-gray-300 hover:bg-amber-50 shadow-xs'}" title="Halaman Selanjutnya">
         <i class="fa-solid fa-chevron-right"></i>
