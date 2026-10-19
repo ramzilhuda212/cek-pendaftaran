@@ -14,6 +14,8 @@
   <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+  <!-- HTML5 QR Code Scanner Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
 
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -135,7 +137,7 @@
         <div id="searchResult" class="hidden space-y-4 max-w-3xl mx-auto"></div>
       </section>
 
-      <!-- TAB 2: PORTAL ADMIN (SISTEM LAYOUT SIDEBAR) -->
+      <!-- TAB 2: PORTAL ADMIN -->
       <section id="adminTab" class="hidden space-y-6">
         <!-- FORM LOGIN -->
         <div id="adminLoginForm" class="max-w-md mx-auto bg-white p-6 sm:p-8 rounded-3xl shadow-xl border border-amber-100">
@@ -168,7 +170,7 @@
           </form>
         </div>
 
-        <!-- DASHBOARD ADMIN DENGAN SIDEBAR NAVIGASI KIRI -->
+        <!-- DASHBOARD ADMIN SIDEBAR -->
         <div id="adminDashboard" class="hidden flex flex-col lg:flex-row gap-6 items-start">
           
           <!-- SIDEBAR NAVIGASI KIRI -->
@@ -185,6 +187,10 @@
               <button onclick="switchAdminPanel('panelOverview')" id="btnPanelOverview" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all bg-amber-900 text-white shadow-sm">
                 <i class="fa-solid fa-chart-pie text-sm"></i>
                 <span>Ringkasan & Stat</span>
+              </button>
+              <button onclick="switchAdminPanel('panelScan')" id="btnPanelScan" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950">
+                <i class="fa-solid fa-qrcode text-sm"></i>
+                <span>Presensi & Scan QR</span>
               </button>
               <button onclick="switchAdminPanel('panelDataTable')" id="btnPanelDataTable" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950">
                 <i class="fa-solid fa-table-list text-sm"></i>
@@ -212,43 +218,52 @@
             </div>
           </aside>
 
-          <!-- AREA KONTEN UTAMA DARI SIDEBAR -->
+          <!-- AREA KONTEN UTAMA -->
           <div class="flex-1 w-full space-y-6">
             
             <!-- SUB-PANEL 1: RINGKASAN & STATISTIK -->
             <div id="panelOverview" class="space-y-6">
               <!-- CARDS STATISTIK KUNCI -->
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
                 <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md flex items-center justify-between">
                   <div class="space-y-1">
                     <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Total Terdaftar</p>
-                    <h3 id="statTotal" class="text-3xl font-black text-amber-950">0</h3>
+                    <h3 id="statTotal" class="text-2xl font-black text-amber-950">0</h3>
                   </div>
-                  <div class="w-14 h-14 rounded-2xl bg-amber-900 text-amber-300 flex items-center justify-center text-2xl">
+                  <div class="w-12 h-12 rounded-2xl bg-amber-900 text-amber-300 flex items-center justify-center text-xl">
                     <i class="fa-solid fa-fire-flame-curved"></i>
                   </div>
                 </div>
                 <div class="bg-white p-5 rounded-3xl border border-blue-200/80 shadow-md flex items-center justify-between">
                   <div class="space-y-1">
-                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Jumlah Peserta</p>
-                    <h3 id="statPeserta" class="text-3xl font-black text-blue-950">0</h3>
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Peserta</p>
+                    <h3 id="statPeserta" class="text-2xl font-black text-blue-950">0</h3>
                   </div>
-                  <div class="w-14 h-14 rounded-2xl bg-blue-800 text-blue-200 flex items-center justify-center text-2xl">
+                  <div class="w-12 h-12 rounded-2xl bg-blue-800 text-blue-200 flex items-center justify-center text-xl">
                     <i class="fa-solid fa-child-reaching"></i>
+                  </div>
+                </div>
+                <div class="bg-white p-5 rounded-3xl border border-purple-200/80 shadow-md flex items-center justify-between">
+                  <div class="space-y-1">
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Pembina</p>
+                    <h3 id="statPembina" class="text-2xl font-black text-purple-950">0</h3>
+                  </div>
+                  <div class="w-12 h-12 rounded-2xl bg-purple-800 text-purple-200 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-user-shield"></i>
                   </div>
                 </div>
                 <div class="bg-white p-5 rounded-3xl border border-emerald-200/80 shadow-md flex items-center justify-between">
                   <div class="space-y-1">
-                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Pembina Pendamping</p>
-                    <h3 id="statPembina" class="text-3xl font-black text-emerald-950">0</h3>
+                    <p class="text-xs font-bold text-emerald-800 uppercase tracking-wider">Tiba di Buper</p>
+                    <h3 id="statCheckin" class="text-2xl font-black text-emerald-950">0</h3>
                   </div>
-                  <div class="w-14 h-14 rounded-2xl bg-emerald-800 text-emerald-200 flex items-center justify-center text-2xl">
-                    <i class="fa-solid fa-user-shield"></i>
+                  <div class="w-12 h-12 rounded-2xl bg-emerald-700 text-emerald-100 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-campground"></i>
                   </div>
                 </div>
               </div>
 
-              <!-- RINGKASAN VISUAL (RASIO GENDER & TIPE KONTINGEN) -->
+              <!-- RINGKASAN VISUAL -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md space-y-3">
                   <h4 class="font-extrabold text-amber-950 text-xs uppercase tracking-wider flex items-center gap-2">
@@ -268,16 +283,63 @@
 
                 <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md space-y-3">
                   <h4 class="font-extrabold text-amber-950 text-xs uppercase tracking-wider flex items-center gap-2">
-                    <i class="fa-solid fa-shirt text-emerald-700"></i> Ringkasan Pengadaan Ukuran Kaos
+                    <i class="fa-solid fa-shirt text-emerald-700"></i> Ringkasan Ukuran Kaos
                   </h4>
-                  <div id="summaryKaosQuick" class="grid grid-cols-4 gap-2 text-center text-xs">
-                    <!-- Ditampilkan secara dinamis -->
+                  <div id="summaryKaosQuick" class="grid grid-cols-4 gap-2 text-center text-xs"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SUB-PANEL BARU: SCAN QR & PRESENSI LAPANGAN -->
+            <div id="panelScan" class="hidden space-y-6">
+              <div class="bg-white p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-3">
+                  <div>
+                    <h3 class="font-extrabold text-amber-950 text-base flex items-center gap-2">
+                      <i class="fa-solid fa-qrcode text-emerald-600"></i> Posko Verifikasi Lapangan & Scan QR
+                    </h3>
+                    <p class="text-xs text-slate-500">Arahkan kamera ke QR Code peserta untuk memverifikasi kehadiran di lokasi perkemahan.</p>
+                  </div>
+                  <div class="flex gap-2">
+                    <button onclick="startScanner()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 shadow transition-all">
+                      <i class="fa-solid fa-camera"></i> Buka Kamera Scan
+                    </button>
+                    <button onclick="stopScanner()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-2 rounded-xl text-xs font-bold transition-all">
+                      <i class="fa-solid fa-camera-rotate"></i> Tutup Kamera
+                    </button>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                  <!-- AREA KAMERA SCANNER -->
+                  <div class="space-y-3">
+                    <div id="qr-reader" class="w-full bg-slate-100 rounded-2xl overflow-hidden border-2 border-dashed border-amber-300 min-h-[250px] flex items-center justify-center p-2">
+                      <p id="qr-placeholder" class="text-xs text-slate-400 font-medium text-center p-4">
+                        <i class="fa-solid fa-qrcode text-4xl mb-2 block text-amber-800/40"></i>
+                        Klik tombol 'Buka Kamera Scan' untuk aktifkan scanner QR Code.
+                      </p>
+                    </div>
+                    
+                    <div class="flex gap-2">
+                      <input type="text" id="manualScanId" placeholder="Ketik No. ID / Nama Peserta..." class="w-full p-2.5 border border-amber-200 rounded-xl bg-slate-50 text-xs font-medium focus:bg-white focus:ring-2 focus:ring-amber-500">
+                      <button onclick="handleManualCheckinSearch()" class="bg-amber-900 hover:bg-amber-950 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow transition-all">
+                        Cari
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- PROFIL & VERIFIKASI PESERTA -->
+                  <div id="scanResultBox" class="bg-amber-50/50 p-5 rounded-2xl border border-amber-200 space-y-4">
+                    <div class="text-center py-8 text-slate-400 space-y-1">
+                      <i class="fa-solid fa-id-card text-4xl text-amber-800/30"></i>
+                      <p class="text-xs font-medium">Data pendaftar akan tampil di sini setelah QR Code dipindai.</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- SUB-PANEL 2: KELOLA DATA PENDAFTAR (TABEL) -->
+            <!-- SUB-PANEL 3: KELOLA DATA PENDAFTAR (TABEL) -->
             <div id="panelDataTable" class="hidden space-y-6">
               <div class="bg-white p-5 sm:p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
@@ -358,10 +420,9 @@
               </div>
             </div>
 
-            <!-- SUB-PANEL 3: ANALISIS & REKAPITULASI LOGISTIK -->
+            <!-- SUB-PANEL 4: ANALISIS LOGISTIK -->
             <div id="panelRekap" class="hidden space-y-6">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- TABEL REKAPITULASI KAOS -->
                 <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md space-y-3">
                   <h4 class="font-extrabold text-amber-950 text-sm flex items-center gap-2 border-b pb-2">
                     <i class="fa-solid fa-boxes-packing text-amber-800"></i> Rekap Rincian Ukuran Kaos (Vendor)
@@ -375,14 +436,11 @@
                           <th class="p-2.5 text-right rounded-r-xl">Persentase</th>
                         </tr>
                       </thead>
-                      <tbody id="rekapKaosBody" class="divide-y divide-slate-100 font-medium">
-                        <!-- Render Otomatis -->
-                      </tbody>
+                      <tbody id="rekapKaosBody" class="divide-y divide-slate-100 font-medium"></tbody>
                     </table>
                   </div>
                 </div>
 
-                <!-- TABEL SEBARAN PROVINSI -->
                 <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md space-y-3">
                   <h4 class="font-extrabold text-amber-950 text-sm flex items-center gap-2 border-b pb-2">
                     <i class="fa-solid fa-map-location-dot text-emerald-700"></i> Sebaran Kontingen per Provinsi
@@ -395,16 +453,14 @@
                           <th class="p-2.5 text-center">Jumlah Orang</th>
                         </tr>
                       </thead>
-                      <tbody id="rekapProvinsiBody" class="divide-y divide-slate-100 font-medium">
-                        <!-- Render Otomatis -->
-                      </tbody>
+                      <tbody id="rekapProvinsiBody" class="divide-y divide-slate-100 font-medium"></tbody>
                     </table>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- SUB-PANEL 4: EKSPOR & LAPORAN -->
+            <!-- SUB-PANEL 5: EKSPOR LAPORAN -->
             <div id="panelExport" class="hidden space-y-6">
               <div class="bg-white p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
                 <h3 class="font-extrabold text-amber-950 text-base border-b pb-3 flex items-center gap-2">
@@ -484,20 +540,25 @@
               <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
               <span>STATUS: TERVERIFIKASI SISTEM</span>
             </div>
-            <p class="text-[9px] text-slate-500 italic text-center font-medium">
-              Harap membawa dokumen cetak ini saat melakukan registrasi ulang di lokasi perkemahan.
-            </p>
           </div>
 
-          <div class="grid grid-cols-2 gap-x-3 gap-y-1 text-[10px] sm:text-[11px] text-slate-800 bg-white/95 p-2 rounded-lg border border-amber-900/20 shadow-xs">
-            <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">ID Registrasi</span><span id="card1Id" class="font-bold text-amber-950 font-mono"></span></div>
-            <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">Peran / Status</span><span id="card1Status" class="font-black text-amber-900 uppercase"></span></div>
-            <div class="flex justify-between border-b border-amber-100 pb-0.5 col-span-2"><span class="text-slate-500 font-medium">Nama Lengkap</span><span id="card1Nama" class="font-bold uppercase text-slate-900"></span></div>
-            <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">Jenis Kelamin</span><span id="card1JK" class="font-semibold"></span></div>
-            <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">Ukuran Kaos</span><span id="card1Kaos" class="font-bold text-amber-950"></span></div>
-            <div class="flex justify-between border-b border-amber-100 pb-0.5 col-span-2"><span class="text-slate-500 font-medium">Asal Pangkalan</span><span id="card1Sekolah" class="font-bold uppercase text-slate-900"></span></div>
-            <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">Prov / KabKota</span><span id="card1Wilayah" class="font-semibold text-slate-800"></span></div>
-            <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">Email</span><span id="card1Email" class="font-semibold text-slate-800"></span></div>
+          <div class="grid grid-cols-3 gap-2">
+            <div class="col-span-2 grid grid-cols-2 gap-x-3 gap-y-1 text-[10px] sm:text-[11px] text-slate-800 bg-white/95 p-2 rounded-lg border border-amber-900/20 shadow-xs">
+              <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">ID Registrasi</span><span id="card1Id" class="font-bold text-amber-950 font-mono"></span></div>
+              <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">Peran / Status</span><span id="card1Status" class="font-black text-amber-900 uppercase"></span></div>
+              <div class="flex justify-between border-b border-amber-100 pb-0.5 col-span-2"><span class="text-slate-500 font-medium">Nama Lengkap</span><span id="card1Nama" class="font-bold uppercase text-slate-900"></span></div>
+              <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">Jenis Kelamin</span><span id="card1JK" class="font-semibold"></span></div>
+              <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">Ukuran Kaos</span><span id="card1Kaos" class="font-bold text-amber-950"></span></div>
+              <div class="flex justify-between border-b border-amber-100 pb-0.5 col-span-2"><span class="text-slate-500 font-medium">Asal Pangkalan</span><span id="card1Sekolah" class="font-bold uppercase text-slate-900"></span></div>
+              <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">Prov / KabKota</span><span id="card1Wilayah" class="font-semibold text-slate-800"></span></div>
+              <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">Email</span><span id="card1Email" class="font-semibold text-slate-800"></span></div>
+            </div>
+
+            <!-- CONTAINER QR CODE UNTUK VERIFIKASI PRESENSI LAPANGAN -->
+            <div class="bg-white/95 p-2 rounded-lg border border-amber-900/20 flex flex-col items-center justify-center text-center shadow-xs">
+              <img id="card1QR" src="" alt="QR Code Presensi" class="w-20 h-20 object-contain border border-slate-200 p-1 rounded-md mb-1 bg-white">
+              <span class="text-[8px] font-bold text-amber-950 tracking-wider">SCAN PRESENSI</span>
+            </div>
           </div>
 
           <div class="bg-white/95 p-2 rounded-lg border border-amber-900/20 space-y-1">
@@ -564,20 +625,24 @@
               <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
               <span>STATUS: TERVERIFIKASI SISTEM</span>
             </div>
-            <p class="text-[9px] text-slate-500 italic text-center font-medium">
-              Harap membawa dokumen cetak ini saat melakukan registrasi ulang di lokasi perkemahan.
-            </p>
           </div>
 
-          <div class="grid grid-cols-2 gap-x-3 gap-y-1 text-[10px] sm:text-[11px] text-slate-800 bg-white/95 p-2 rounded-lg border border-slate-300 shadow-xs">
-            <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">ID Registrasi</span><span id="card2Id" class="font-bold text-amber-950 font-mono"></span></div>
-            <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Peran / Status</span><span id="card2Status" class="font-black text-amber-900 uppercase"></span></div>
-            <div class="flex justify-between border-b border-gray-100 pb-0.5 col-span-2"><span class="text-slate-500 font-medium">Nama Lengkap</span><span id="card2Nama" class="font-bold uppercase text-slate-900"></span></div>
-            <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Jenis Kelamin</span><span id="card2JK" class="font-semibold"></span></div>
-            <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Ukuran Kaos</span><span id="card2Kaos" class="font-bold text-amber-950"></span></div>
-            <div class="flex justify-between border-b border-gray-100 pb-0.5 col-span-2"><span class="text-slate-500 font-medium">Asal Pangkalan</span><span id="card2Sekolah" class="font-bold uppercase text-slate-900"></span></div>
-            <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Prov / KabKota</span><span id="card2Wilayah" class="font-semibold text-slate-800"></span></div>
-            <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Email</span><span id="card2Email" class="font-semibold text-slate-800"></span></div>
+          <div class="grid grid-cols-3 gap-2">
+            <div class="col-span-2 grid grid-cols-2 gap-x-3 gap-y-1 text-[10px] sm:text-[11px] text-slate-800 bg-white/95 p-2 rounded-lg border border-slate-300 shadow-xs">
+              <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">ID Registrasi</span><span id="card2Id" class="font-bold text-amber-950 font-mono"></span></div>
+              <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Peran / Status</span><span id="card2Status" class="font-black text-amber-900 uppercase"></span></div>
+              <div class="flex justify-between border-b border-gray-100 pb-0.5 col-span-2"><span class="text-slate-500 font-medium">Nama Lengkap</span><span id="card2Nama" class="font-bold uppercase text-slate-900"></span></div>
+              <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Jenis Kelamin</span><span id="card2JK" class="font-semibold"></span></div>
+              <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Ukuran Kaos</span><span id="card2Kaos" class="font-bold text-amber-950"></span></div>
+              <div class="flex justify-between border-b border-gray-100 pb-0.5 col-span-2"><span class="text-slate-500 font-medium">Asal Pangkalan</span><span id="card2Sekolah" class="font-bold uppercase text-slate-900"></span></div>
+              <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Prov / KabKota</span><span id="card2Wilayah" class="font-semibold text-slate-800"></span></div>
+              <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Email</span><span id="card2Email" class="font-semibold text-slate-800"></span></div>
+            </div>
+
+            <div class="bg-white/95 p-2 rounded-lg border border-slate-300 flex flex-col items-center justify-center text-center shadow-xs">
+              <img id="card2QR" src="" alt="QR Code Presensi" class="w-20 h-20 object-contain border border-slate-200 p-1 rounded-md mb-1 bg-white">
+              <span class="text-[8px] font-bold text-slate-800 tracking-wider">ARSIP QR SCAN</span>
+            </div>
           </div>
 
           <div class="bg-white/95 p-2 rounded-lg border border-slate-300 space-y-1">
@@ -751,9 +816,12 @@
     let pageSize = 10;
     let currentKwitansiData = null;
 
-    // FUNGSI NAVIGASI SIDEBAR PORTAL ADMIN
+    // STATE LOKAL UNTUK STATUS CHECK-IN / PRESENSI LAPANGAN
+    let checkinStatusMap = {};
+    let html5QrCodeScanner = null;
+
     function switchAdminPanel(panelId) {
-      const panels = ['panelOverview', 'panelDataTable', 'panelRekap', 'panelExport'];
+      const panels = ['panelOverview', 'panelScan', 'panelDataTable', 'panelRekap', 'panelExport'];
       panels.forEach(p => {
         const el = document.getElementById(p);
         if (el) el.classList.add('hidden');
@@ -771,6 +839,113 @@
       if (activeBtn) {
         activeBtn.className = "w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all bg-amber-900 text-white shadow-sm";
       }
+
+      if (panelId !== 'panelScan') {
+        stopScanner();
+      }
+    }
+
+    // FUNGSI KAMERA SCANNER QR CODE
+    function startScanner() {
+      const readerEl = document.getElementById('qr-reader');
+      const placeholder = document.getElementById('qr-placeholder');
+      if (placeholder) placeholder.classList.add('hidden');
+
+      if (!html5QrCodeScanner) {
+        html5QrCodeScanner = new Html5Qrcode("qr-reader");
+      }
+
+      const config = { fps: 10, qrbox: { width: 220, height: 220 } };
+
+      html5QrCodeScanner.start({ facingMode: "environment" }, config, onScanSuccess)
+      .catch(err => {
+        alert("Gagal membuka kamera: " + err);
+      });
+    }
+
+    function stopScanner() {
+      if (html5QrCodeScanner && html5QrCodeScanner.isScanning) {
+        html5QrCodeScanner.stop().then(() => {
+          const placeholder = document.getElementById('qr-placeholder');
+          if (placeholder) placeholder.classList.remove('hidden');
+        }).catch(err => console.error(err));
+      }
+    }
+
+    function onScanSuccess(decodedText) {
+      document.getElementById('manualScanId').value = decodedText;
+      processCheckinSearch(decodedText);
+    }
+
+    function handleManualCheckinSearch() {
+      const kw = document.getElementById('manualScanId').value.trim();
+      if (!kw) return alert("Silakan ketikkan ID Pendaftaran atau Nama terlebih dahulu.");
+      processCheckinSearch(kw);
+    }
+
+    function processCheckinSearch(keyword) {
+      const kw = keyword.toLowerCase();
+      let match = rawAdminRows.find(row => {
+        const id = formatID(row[0]).toLowerCase();
+        const nama = String(row[3] || row[7] || '').toLowerCase();
+        return id === kw || id.includes(kw) || nama.includes(kw);
+      });
+
+      const box = document.getElementById('scanResultBox');
+
+      if (match) {
+        const idClean = formatID(match[0]);
+        const nama = match[3] || match[7] || '-';
+        const status = match[2] || 'Peserta';
+        const sekolah = match[10] || '-';
+        const prov = match[11] || '-';
+        const isCheckedIn = !!checkinStatusMap[idClean];
+
+        box.innerHTML = `
+          <div class="space-y-3">
+            <div class="flex justify-between items-start border-b pb-2">
+              <div>
+                <span class="bg-amber-200 text-amber-950 font-black text-[10px] px-2.5 py-0.5 rounded-full uppercase">${status}</span>
+                <h4 class="text-base font-extrabold text-amber-950 uppercase mt-1">${nama}</h4>
+              </div>
+              <span class="font-mono font-bold text-xs bg-slate-100 text-slate-800 px-2 py-1 rounded-lg">${idClean}</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div class="bg-white p-2 rounded-xl border"><span class="text-gray-400 block text-[10px]">Pangkalan</span><span class="font-bold text-slate-800">${sekolah}</span></div>
+              <div class="bg-white p-2 rounded-xl border"><span class="text-gray-400 block text-[10px]">Provinsi</span><span class="font-bold text-slate-800">${prov}</span></div>
+            </div>
+
+            <div id="checkinStatusBadge" class="p-3 rounded-2xl border ${isCheckedIn ? 'bg-emerald-100 border-emerald-300 text-emerald-900' : 'bg-yellow-100 border-yellow-300 text-yellow-900'} text-xs font-extrabold flex items-center justify-between">
+              <span class="flex items-center gap-2">
+                <i class="fa-solid ${isCheckedIn ? 'fa-circle-check text-emerald-600' : 'fa-clock text-yellow-700'} text-lg"></i>
+                ${isCheckedIn ? 'STATUS: TIBA DI BUPER (LOKASI)' : 'STATUS: BELUM PRESENSI'}
+              </span>
+              <button onclick="toggleCheckin('${idClean}')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${isCheckedIn ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-emerald-700 hover:bg-emerald-800 text-white'} shadow-sm">
+                ${isCheckedIn ? 'Batalkan Presensi' : 'Konfirmasi Kehadiran'}
+              </button>
+            </div>
+          </div>
+        `;
+      } else {
+        box.innerHTML = `
+          <div class="text-center py-6 text-red-600 space-y-1">
+            <i class="fa-solid fa-circle-exclamation text-3xl mb-1"></i>
+            <p class="text-xs font-bold">Data Pendaftar Tidak Ditemukan</p>
+            <p class="text-[10px] text-slate-500">Pastikan ID Registrasi atau QR Code sesuai dengan berkas resmi.</p>
+          </div>
+        `;
+      }
+    }
+
+    function toggleCheckin(id) {
+      if (checkinStatusMap[id]) {
+        delete checkinStatusMap[id];
+      } else {
+        checkinStatusMap[id] = true;
+      }
+      updateStats();
+      processCheckinSearch(id);
     }
 
     function toggleAdminSearch() {
@@ -1192,6 +1367,7 @@
     function openModalKartu(id, nama, status, jk, sekolah, prov, kota, kaos, email = '-') {
       const cleanId = formatID(id);
       const wilayahText = `${prov || '-'} / ${kota || '-'}`;
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(cleanId)}`;
 
       document.getElementById('card1Id').innerText = cleanId;
       document.getElementById('card1Nama').innerText = nama;
@@ -1201,6 +1377,7 @@
       document.getElementById('card1Wilayah').innerText = wilayahText;
       document.getElementById('card1Kaos').innerText = kaos;
       document.getElementById('card1Email').innerText = email;
+      document.getElementById('card1QR').src = qrUrl;
 
       document.getElementById('card2Id').innerText = cleanId;
       document.getElementById('card2Nama').innerText = nama;
@@ -1210,6 +1387,7 @@
       document.getElementById('card2Wilayah').innerText = wilayahText;
       document.getElementById('card2Kaos').innerText = kaos;
       document.getElementById('card2Email').innerText = email;
+      document.getElementById('card2QR').src = qrUrl;
 
       document.getElementById('modalKartu').classList.remove('hidden');
     }
@@ -1469,6 +1647,9 @@
       document.getElementById('statPeserta').innerText = countPeserta;
       document.getElementById('statPembina').innerText = countPembina;
 
+      const checkedInCount = Object.keys(checkinStatusMap).length;
+      document.getElementById('statCheckin').innerText = checkedInCount;
+
       const total = rawAdminRows.length || 1;
       const pctLaki = Math.round((countLaki / total) * 100);
       const pctPerempuan = Math.round((countPerempuan / total) * 100);
@@ -1480,7 +1661,6 @@
       document.getElementById('barPerempuan').style.width = `${pctPerempuan}%`;
     }
 
-    // FUNGSI ANALISIS DATA & REKAPITULASI UNTUK SIDEBAR
     function renderAdminAnalytics() {
       const mapKaos = {};
       const mapProv = {};
@@ -1495,7 +1675,6 @@
 
       const total = rawAdminRows.length || 1;
 
-      // 1. Quick Summary Kaos di Panel Overview
       const quickKaosBox = document.getElementById('summaryKaosQuick');
       if (quickKaosBox) {
         quickKaosBox.innerHTML = Object.entries(mapKaos).slice(0, 4).map(([k, count]) => `
@@ -1506,7 +1685,6 @@
         `).join('');
       }
 
-      // 2. Tabel Rekapitulasi Kaos di Panel Rekap
       const rekapKaosBody = document.getElementById('rekapKaosBody');
       if (rekapKaosBody) {
         rekapKaosBody.innerHTML = Object.entries(mapKaos).map(([k, count]) => {
@@ -1521,7 +1699,6 @@
         }).join('');
       }
 
-      // 3. Tabel Rekapitulasi Provinsi di Panel Rekap
       const rekapProvBody = document.getElementById('rekapProvinsiBody');
       if (rekapProvBody) {
         rekapProvBody.innerHTML = Object.entries(mapProv).sort((a,b) => b[1] - a[1]).map(([p, count]) => `
@@ -1623,11 +1800,13 @@
       tbody.innerHTML = pageRows.map((row, idx) => {
         const actualIdx = startIndex + idx;
         const id = row[0] || '';
+        const idClean = formatID(id);
         const namaVal = row[3] || row[7] || '-';
         const safeNama = String(namaVal).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        const isArrived = checkinStatusMap[idClean];
 
         return `<tr class="hover:bg-amber-50/50 transition-colors">` + 
-          row.map((cell, cIdx) => `<td class="px-4 py-3 border-b border-gray-100">${cIdx === 0 ? formatID(cell) : (String(cell).startsWith('http') ? `<button onclick="openUrlSafely('${cell}')" class="text-blue-600 font-bold underline">Buka Link</button>` : cell)}</td>`).join('') + 
+          row.map((cell, cIdx) => `<td class="px-4 py-3 border-b border-gray-100">${cIdx === 0 ? `<span class="font-bold ${isArrived ? 'text-emerald-700' : ''}">${idClean}</span>${isArrived ? '<i class="fa-solid fa-circle-check text-emerald-600 ml-1" title="Tiba di Buper"></i>' : ''}` : (String(cell).startsWith('http') ? `<button onclick="openUrlSafely('${cell}')" class="text-blue-600 font-bold underline">Buka Link</button>` : cell)}</td>`).join('') + 
           `<td class="px-4 py-3 border-b border-gray-100 text-center">
             <div class="flex justify-center items-center gap-1.5">
               <button onclick="editDataByRow(${actualIdx})" class="bg-amber-100 hover:bg-amber-200 text-amber-900 px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all" title="Edit Data">
@@ -1844,6 +2023,7 @@
     }
 
     function logoutAdmin() {
+      stopScanner();
       document.getElementById('adminDashboard').classList.add('hidden');
       document.getElementById('adminLoginForm').classList.remove('hidden');
       document.getElementById('adminUser').value = '';
