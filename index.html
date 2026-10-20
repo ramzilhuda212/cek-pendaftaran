@@ -23,7 +23,6 @@
       opacity: 0.03;
     }
 
-    /* FORMAT CETAK A4 */
     @media print {
       @page {
         size: A4 portrait;
@@ -135,7 +134,7 @@
         <div id="searchResult" class="hidden space-y-4 max-w-3xl mx-auto"></div>
       </section>
 
-      <!-- TAB 2: PORTAL ADMIN -->
+      <!-- TAB 2: PORTAL ADMIN DENGAN 4 PANEL NAVIGASI -->
       <section id="adminTab" class="hidden space-y-6">
         <!-- FORM LOGIN -->
         <div id="adminLoginForm" class="max-w-md mx-auto bg-white p-6 sm:p-8 rounded-3xl shadow-xl border border-amber-100">
@@ -168,7 +167,7 @@
           </form>
         </div>
 
-        <!-- DASHBOARD ADMIN DENGAN SIDEBAR NAVIGASI KIRI -->
+        <!-- DASHBOARD ADMIN (SIDEBAR DENGAN OPSI 1-4) -->
         <div id="adminDashboard" class="hidden flex flex-col lg:flex-row gap-6 items-start">
           
           <aside class="w-full lg:w-64 bg-white p-4 rounded-3xl border border-amber-200/80 shadow-md space-y-3 lg:sticky lg:top-20">
@@ -183,19 +182,19 @@
             <nav class="space-y-1.5 text-xs font-bold">
               <button onclick="switchAdminPanel('panelOverview')" id="btnPanelOverview" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all bg-amber-900 text-white shadow-sm">
                 <i class="fa-solid fa-chart-pie text-sm"></i>
-                <span>Ringkasan & Stat</span>
+                <span>1. Ringkasan & Stat</span>
               </button>
               <button onclick="switchAdminPanel('panelDataTable')" id="btnPanelDataTable" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950">
                 <i class="fa-solid fa-table-list text-sm"></i>
-                <span>Kelola Data Pendaftar</span>
+                <span>2. Kelola Data Pendaftar</span>
               </button>
               <button onclick="switchAdminPanel('panelRekap')" id="btnPanelRekap" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950">
                 <i class="fa-solid fa-chart-column text-sm"></i>
-                <span>Analisis & Logistik</span>
+                <span>3. Analisis & Logistik</span>
               </button>
               <button onclick="switchAdminPanel('panelExport')" id="btnPanelExport" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950">
                 <i class="fa-solid fa-file-export text-sm"></i>
-                <span>Ekspor & Berkas</span>
+                <span>4. Ekspor & Berkas</span>
               </button>
             </nav>
 
@@ -211,10 +210,10 @@
             </div>
           </aside>
 
-          <!-- AREA KONTEN UTAMA DARI SIDEBAR -->
+          <!-- AREA KONTEN PANEL (OPSI 1 - 4) -->
           <div class="flex-1 w-full space-y-6">
             
-            <!-- SUB-PANEL 1: RINGKASAN & STATISTIK -->
+            <!-- OPSI 1: RINGKASAN & STATISTIK -->
             <div id="panelOverview" class="space-y-6">
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md flex items-center justify-between">
@@ -265,14 +264,14 @@
 
                 <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md space-y-3">
                   <h4 class="font-extrabold text-amber-950 text-xs uppercase tracking-wider flex items-center gap-2">
-                    <i class="fa-solid fa-shirt text-emerald-700"></i> Ringkasan Pengadaan Ukuran Kaos
+                    <i class="fa-solid fa-shirt text-emerald-700"></i> Ringkasan Ukuran Kaos
                   </h4>
                   <div id="summaryKaosQuick" class="grid grid-cols-4 gap-2 text-center text-xs"></div>
                 </div>
               </div>
             </div>
 
-            <!-- SUB-PANEL 2: KELOLA DATA PENDAFTAR -->
+            <!-- OPSI 2: KELOLA DATA PENDAFTAR -->
             <div id="panelDataTable" class="hidden space-y-6">
               <div class="bg-white p-5 sm:p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
@@ -288,7 +287,7 @@
                         <span class="text-[11px] hidden sm:inline">Cari</span>
                       </button>
                       <div id="adminSearchContainer" class="overflow-hidden transition-all duration-300 ease-in-out w-0 opacity-0 flex items-center">
-                        <input type="text" id="adminSearchInput" oninput="applyFilters()" placeholder="Ketik kata kunci pencarian..." class="ml-2 py-2 px-3 bg-slate-50 border border-amber-300 rounded-xl text-xs font-medium focus:ring-2 focus:ring-amber-500 focus:bg-white w-48 sm:w-64 transition-all">
+                        <input type="text" id="adminSearchInput" oninput="applyFilters()" placeholder="Ketik kata kunci..." class="ml-2 py-2 px-3 bg-slate-50 border border-amber-300 rounded-xl text-xs font-medium focus:ring-2 focus:ring-amber-500 focus:bg-white w-48 sm:w-64 transition-all">
                       </div>
                     </div>
 
@@ -353,12 +352,12 @@
               </div>
             </div>
 
-            <!-- SUB-PANEL 3: ANALISIS & REKAPITULASI LOGISTIK -->
+            <!-- OPSI 3: ANALISIS & LOGISTIK -->
             <div id="panelRekap" class="hidden space-y-6">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md space-y-3">
                   <h4 class="font-extrabold text-amber-950 text-sm flex items-center gap-2 border-b pb-2">
-                    <i class="fa-solid fa-boxes-packing text-amber-800"></i> Rekap Rincian Ukuran Kaos (Vendor)
+                    <i class="fa-solid fa-boxes-packing text-amber-800"></i> Rekap Ukuran Kaos (Vendor)
                   </h4>
                   <div class="overflow-x-auto">
                     <table class="w-full text-xs text-left border-collapse">
@@ -393,14 +392,14 @@
               </div>
             </div>
 
-            <!-- SUB-PANEL 4: EKSPOR & LAPORAN -->
+            <!-- OPSI 4: EKSPOR & BERKAS -->
             <div id="panelExport" class="hidden space-y-6">
               <div class="bg-white p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
                 <h3 class="font-extrabold text-amber-950 text-base border-b pb-3 flex items-center gap-2">
                   <i class="fa-solid fa-file-export text-emerald-700"></i> Pusat Ekspor Laporan & Berkas
                 </h3>
                 <p class="text-xs text-slate-500">
-                  Pilih format berkas yang dibutuhkan untuk mengunduh rekap data pendaftaran yang telah terfilter.
+                  Pilih format berkas yang dibutuhkan untuk mengunduh rekap data pendaftaran.
                 </p>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
@@ -435,7 +434,7 @@
     </main>
   </div>
 
-  <!-- MODAL CETAK LEMBAR PENDAFTARAN -->
+  <!-- MODAL CETAK KARTU PENDAFTARAN -->
   <div id="modalKartu" class="fixed inset-0 bg-slate-900/80 hidden flex justify-center items-start sm:items-center p-2 sm:p-4 z-50 overflow-y-auto">
     <div id="modalKartuContent" class="bg-amber-50/20 rounded-2xl p-3 sm:p-4 max-w-2xl w-full relative shadow-2xl border-2 border-amber-800 my-auto flex flex-col justify-between min-h-[95vh] sm:min-h-0">
       
@@ -473,9 +472,6 @@
               <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
               <span>STATUS: TERVERIFIKASI SISTEM</span>
             </div>
-            <p class="text-[9px] text-slate-500 italic text-center font-medium">
-              Harap membawa dokumen cetak ini saat melakukan registrasi ulang di lokasi perkemahan.
-            </p>
           </div>
 
           <div class="grid grid-cols-2 gap-x-3 gap-y-1 text-[10px] sm:text-[11px] text-slate-800 bg-white/95 p-2 rounded-lg border border-amber-900/20 shadow-xs">
@@ -507,11 +503,6 @@
               <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Paket Trip Pahawang</span></div>
               <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Sertifikat & Instruktur Muda</span></div>
             </div>
-          </div>
-
-          <div class="flex justify-between items-center text-[8.5px] text-amber-900 font-semibold px-1 pt-1 border-t border-amber-800/10">
-            <span class="flex items-center gap-1"><i class="fa-solid fa-mountain-sun text-amber-800"></i> Satyaku Kudarmakan, Darmaku Kubaktikan</span>
-            <span class="font-mono text-amber-950 font-bold">KEMBARANAS-2026-OFFICIAL</span>
           </div>
         </div>
 
@@ -548,16 +539,6 @@
             </div>
           </div>
 
-          <div class="space-y-0.5">
-            <div class="border-2 border-emerald-500 bg-emerald-50/90 text-emerald-800 font-extrabold text-center py-1.5 rounded-xl text-xs uppercase tracking-wider shadow-xs flex items-center justify-center gap-2">
-              <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
-              <span>STATUS: TERVERIFIKASI SISTEM</span>
-            </div>
-            <p class="text-[9px] text-slate-500 italic text-center font-medium">
-              Harap membawa dokumen cetak ini saat melakukan registrasi ulang di lokasi perkemahan.
-            </p>
-          </div>
-
           <div class="grid grid-cols-2 gap-x-3 gap-y-1 text-[10px] sm:text-[11px] text-slate-800 bg-white/95 p-2 rounded-lg border border-slate-300 shadow-xs">
             <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">ID Registrasi</span><span id="card2Id" class="font-bold text-amber-950 font-mono"></span></div>
             <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Peran / Status</span><span id="card2Status" class="font-black text-amber-900 uppercase"></span></div>
@@ -567,31 +548,6 @@
             <div class="flex justify-between border-b border-gray-100 pb-0.5 col-span-2"><span class="text-slate-500 font-medium">Asal Pangkalan</span><span id="card2Sekolah" class="font-bold uppercase text-slate-900"></span></div>
             <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Prov / KabKota</span><span id="card2Wilayah" class="font-semibold text-slate-800"></span></div>
             <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Email</span><span id="card2Email" class="font-semibold text-slate-800"></span></div>
-          </div>
-
-          <div class="bg-white/95 p-2 rounded-lg border border-slate-300 space-y-1">
-            <p class="text-[9.5px] sm:text-[10px] font-black text-slate-900 uppercase flex items-center gap-1.5">
-              <i class="fa-regular fa-square-check text-slate-700"></i> Checklist Penyerahan Perlengkapan Lapangan (Verifikasi Manual):
-            </p>
-            <div class="grid grid-cols-3 gap-x-2 gap-y-1 text-[8.5px] sm:text-[9.5px] text-slate-800 font-medium">
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Sewa Tapak Perkemahan</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Tiket Masuk Buper Kwarda</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Sewa Tenda Dome 3–4 Orang</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Scarf Kegiatan</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">ID Card Peserta & Bindamping</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Kaos Kegiatan</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Topi Kegiatan</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Tas Daypack</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Tiska Kembaranas III</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Konsumsi selama Kegiatan</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Paket Trip Pahawang</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Sertifikat & Instruktur Muda</span></div>
-            </div>
-          </div>
-
-          <div class="flex justify-between items-center text-[8.5px] text-slate-600 font-semibold px-1 pt-1 border-t border-slate-200">
-            <span class="flex items-center gap-1"><i class="fa-solid fa-map-location-dot text-slate-700"></i> Posko Sekretariat KEMBARANAS III 2026</span>
-            <span class="font-mono text-slate-800 font-bold">VERIFIED-BY-SYSTEM</span>
           </div>
         </div>
 
@@ -608,7 +564,7 @@
     </div>
   </div>
 
-  <!-- MODAL PREVIEW & UNDUH KWITANSI -->
+  <!-- MODAL KWITANSI -->
   <div id="modalKwitansi" class="fixed inset-0 bg-slate-900/80 hidden flex justify-center items-center p-2 sm:p-4 z-50 overflow-y-auto">
     <div class="bg-white rounded-3xl p-4 sm:p-6 max-w-3xl w-full relative shadow-2xl border border-amber-200 my-auto space-y-4">
       <button onclick="closeModalKwitansi()" class="no-print absolute top-3 right-3 text-slate-500 hover:text-slate-900 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center z-20">
@@ -622,9 +578,6 @@
           </h3>
           <p class="text-xs text-gray-500">Hasil generate otomatis dari data pendaftaran terverifikasi</p>
         </div>
-        <a href="https://drive.google.com/drive/folders/123YsI7qRtt5ILGwB0UryjIt0coF4M63Z?usp=drive_link" target="_blank" rel="noopener noreferrer" class="hidden sm:flex items-center gap-1.5 text-xs text-blue-700 font-bold bg-blue-50 px-3 py-1.5 rounded-xl border border-blue-200 hover:bg-blue-100 transition-all">
-          <i class="fa-brands fa-google-drive text-amber-600"></i> Folder Penampung Drive
-        </a>
       </div>
 
       <div class="relative bg-slate-100 rounded-2xl overflow-hidden border border-slate-300 shadow-inner flex justify-center items-center p-1 min-h-[220px]">
@@ -632,9 +585,6 @@
       </div>
 
       <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-2 border-t text-xs">
-        <a href="https://drive.google.com/drive/folders/123YsI7qRtt5ILGwB0UryjIt0coF4M63Z?usp=drive_link" target="_blank" rel="noopener noreferrer" class="sm:hidden text-blue-700 font-bold underline flex items-center gap-1">
-          <i class="fa-brands fa-google-drive"></i> Buka Folder Penampung Drive
-        </a>
         <div class="flex gap-2 w-full sm:w-auto ml-auto">
           <button onclick="downloadKwitansiFromCanvas('pdf')" class="flex-1 sm:flex-none bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-4 py-2.5 rounded-xl flex items-center justify-center gap-2 shadow-md transition-all">
             <i class="fa-solid fa-file-pdf"></i> Unduh PDF (A5)
