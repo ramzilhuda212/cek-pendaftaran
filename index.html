@@ -3,1787 +3,365 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal Pendaftaran & Admin - KEMBARANAS III 2026</title>
+  <title>Portal Operasional Lapangan - KEMBARANAS III 2026</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/html5-qrcode"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    .scout-bg-pattern {
-      background-image: radial-gradient(#78350f 0.5px, transparent 0.5px);
-      background-size: 24px 24px;
-      opacity: 0.03;
-    }
-
-    @media print {
-      @page {
-        size: A4 portrait;
-        margin: 3mm;
-      }
-      html, body {
-        height: 100%;
-        background: #ffffff !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
-      body * { visibility: hidden; }
-      #modalKartuContent, #modalKartuContent * { visibility: visible; }
-      #modalKartuContent {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100% !important;
-        max-width: 100% !important;
-        height: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        box-shadow: none !important;
-        border: none !important;
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: space-between !important;
-      }
-      .no-print { display: none !important; }
-    }
   </style>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-800 relative antialiased flex flex-col justify-between">
-  
-  <div class="fixed inset-0 scout-bg-pattern pointer-events-none z-0"></div>
+<body class="bg-slate-100 text-slate-800 min-h-screen">
 
-  <div class="relative z-10">
-    <!-- NAVBAR -->
-    <header class="bg-gradient-to-r from-amber-950 via-amber-900 to-amber-950 text-white shadow-lg sticky top-0 z-40 border-b-2 border-amber-500">
-      <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-300 text-xl shadow-inner">
-            <i class="fa-solid fa-compass"></i>
-          </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="font-extrabold text-lg tracking-wider text-amber-100">KEMBARANAS III</span>
-              <span class="bg-amber-500 text-amber-950 text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">2026</span>
-            </div>
-            <p class="text-[11px] text-amber-200/80 font-medium tracking-wide flex items-center gap-1">
-              <i class="fa-solid fa-tree text-[9px] text-emerald-400"></i> Perkemahan Ukhuwah SAKO SIT Indonesia
-            </p>
-          </div>
+  <header class="bg-amber-950 text-white shadow-lg sticky top-0 z-40 border-b-2 border-amber-500">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-300 text-xl">
+          <i class="fa-solid fa-compass"></i>
         </div>
-
-        <div class="flex items-center bg-amber-950/80 p-1 rounded-2xl border border-amber-700/50 w-full sm:w-auto justify-center">
-          <button onclick="switchTab('userTab')" id="btnUserTab" class="flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 flex items-center justify-center gap-2 bg-amber-500 text-amber-950 shadow-md">
-            <i class="fa-solid fa-magnifying-glass"></i> Cek Pendaftaran
-          </button>
-          <button onclick="switchTab('adminTab')" id="btnAdminTab" class="flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 flex items-center justify-center gap-2 text-amber-200 hover:text-white">
-            <i class="fa-solid fa-user-shield"></i> Portal Admin
-          </button>
+        <div>
+          <h1 class="font-black text-base text-amber-100">KEMBARANAS III 2026</h1>
+          <p class="text-[11px] text-amber-300/80">Sistem Operasional & Manajemen Lapangan</p>
         </div>
       </div>
-    </header>
 
-    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
-      <!-- HERO BANNER -->
-      <section class="relative bg-gradient-to-br from-amber-950 via-amber-900 to-emerald-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl overflow-hidden border border-amber-700/40">
-        <div class="relative z-10 max-w-2xl space-y-3">
-          <div class="inline-flex items-center gap-2 bg-amber-500/20 border border-amber-400/30 px-3 py-1 rounded-full text-xs font-semibold text-amber-300">
-            <i class="fa-solid fa-shield-halved text-emerald-400"></i>
-            <span>Satyaku Kudarmakan, Darmaku Kubaktikan</span>
-          </div>
-          <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-snug">
-            Portal Pencarian & Informasi Pendaftaran Kontingen
-          </h1>
-          <p class="text-xs sm:text-sm text-amber-100/80 leading-relaxed">
-            Periksa status kepesertaan Pramuka Penegak, maupun Pembina Pendamping secara mandiri, transparan, dan mudah.
-          </p>
+      <div class="flex items-center bg-amber-900/80 p-1 rounded-2xl border border-amber-700/50">
+        <button onclick="switchTab('userTab')" id="btnUserTab" class="px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 text-amber-950">Peserta / Publik</button>
+        <button onclick="switchTab('adminTab')" id="btnAdminTab" class="px-4 py-2 rounded-xl text-xs font-bold text-amber-200">Posko Admin</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto p-4 sm:p-6 space-y-6">
+
+    <!-- PUBLIK TAB -->
+    <section id="userTab" class="space-y-6">
+      <div class="bg-white p-6 rounded-3xl shadow-md border border-amber-200 text-center max-w-xl mx-auto space-y-4">
+        <h2 class="text-lg font-bold text-amber-950">Pencarian Status Peserta & Plotting Tenda</h2>
+        <form onsubmit="handleSearch(event)" class="flex gap-2">
+          <input type="text" id="searchKeyword" required placeholder="Masukkan ID Registrasi atau Nama Peserta..." class="flex-1 p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs">
+          <button type="submit" class="bg-amber-900 text-white px-5 py-3 rounded-xl font-bold text-xs">Cari</button>
+        </form>
+      </div>
+
+      <div id="pubResult" class="hidden max-w-xl mx-auto space-y-4"></div>
+
+      <!-- BOARD BROADCAST LAPANGAN -->
+      <div class="bg-white p-6 rounded-3xl shadow-md border border-slate-200 space-y-4">
+        <h3 class="font-extrabold text-amber-950 text-sm flex items-center gap-2 border-b pb-2">
+          <i class="fa-solid fa-bullhorn text-amber-600"></i> Pengumuman & Broadcast Lapangan
+        </h3>
+        <div id="broadcastContainer" class="space-y-2 text-xs">
+          <p class="text-slate-400">Memuat pengumuman terbaru...</p>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- TAB 1: CEK PENDAFTARAN -->
-      <section id="userTab" class="space-y-6">
-        <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-lg border border-amber-100 relative max-w-2xl mx-auto">
-          <div class="text-center space-y-2 mb-6">
-            <div class="w-12 h-12 bg-amber-50 text-amber-800 rounded-2xl mx-auto flex items-center justify-center text-xl border border-amber-200">
-              <i class="fa-solid fa-id-card-clip"></i>
-            </div>
-            <h2 class="text-xl font-extrabold text-amber-950">Pencarian Data Pendaftar</h2>
-            <p class="text-xs text-gray-500">Ketikkan Nama Lengkap, Email, atau Asal Sekolah/Pangkalan</p>
-          </div>
+    <!-- ADMIN TAB WITH OPS 1 - 4 -->
+    <section id="adminTab" class="hidden space-y-6">
+      <div id="adminLoginForm" class="max-w-md mx-auto bg-white p-6 rounded-3xl shadow-xl border border-amber-200">
+        <h3 class="text-lg font-bold text-amber-950 mb-4 text-center">Login Posko Operasional</h3>
+        <form onsubmit="handleAdminLogin(event)" class="space-y-3 text-xs">
+          <input type="text" id="adminUser" required placeholder="Username" class="w-full p-3 border rounded-xl bg-slate-50">
+          <input type="password" id="adminPass" required placeholder="Password" class="w-full p-3 border rounded-xl bg-slate-50">
+          <button type="submit" class="w-full bg-amber-900 text-white font-bold py-3 rounded-xl">Masuk Posko</button>
+        </form>
+      </div>
 
-          <form onsubmit="handleSearch(event)" class="space-y-3">
-            <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
-                <i class="fa-solid fa-search"></i>
-              </div>
-              <input type="text" id="searchKeyword" required placeholder="Contoh: Ahmad / email@domain.com / SDIT Al-Hikmah" 
-                     class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-amber-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-amber-500 focus:border-amber-500 font-medium text-sm transition-all">
-            </div>
-            <button type="submit" id="btnCari" class="w-full bg-gradient-to-r from-amber-800 to-amber-900 hover:from-amber-900 hover:to-amber-950 text-white font-bold py-3.5 rounded-2xl text-sm transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
-              <i class="fa-solid fa-magnifying-glass"></i> Cari Data Pendaftar
-            </button>
-          </form>
-        </div>
+      <div id="adminDashboard" class="hidden flex flex-col lg:flex-row gap-6">
+        
+        <!-- SIDEBAR OPSI 1 - 4 -->
+        <aside class="w-full lg:w-64 bg-white p-4 rounded-3xl border border-amber-200 shadow-md space-y-2">
+          <h4 class="font-extrabold text-amber-950 text-xs uppercase px-2 mb-2">Fitur Operasional</h4>
+          <button onclick="switchAdminPanel('panelOps1')" id="btnPanelOps1" class="w-full p-3 rounded-xl text-left text-xs font-bold bg-amber-900 text-white flex items-center gap-2">
+            <i class="fa-solid fa-qrcode"></i> Opsi 1: Scan QR & Presensi
+          </button>
+          <button onclick="switchAdminPanel('panelOps2')" id="btnPanelOps2" class="w-full p-3 rounded-xl text-left text-xs font-bold text-slate-700 hover:bg-amber-50 flex items-center gap-2">
+            <i class="fa-solid fa-campground"></i> Opsi 2: Tapak & Logistik
+          </button>
+          <button onclick="switchAdminPanel('panelOps3')" id="btnPanelOps3" class="w-full p-3 rounded-xl text-left text-xs font-bold text-slate-700 hover:bg-amber-50 flex items-center gap-2">
+            <i class="fa-solid fa-wallet"></i> Opsi 3: Keuangan & WA
+          </button>
+          <button onclick="switchAdminPanel('panelOps4')" id="btnPanelOps4" class="w-full p-3 rounded-xl text-left text-xs font-bold text-slate-700 hover:bg-amber-50 flex items-center gap-2">
+            <i class="fa-solid fa-certificate"></i> Opsi 4: E-Sertifikat & Siaran
+          </button>
+        </aside>
 
-        <div id="searchResult" class="hidden space-y-4 max-w-3xl mx-auto"></div>
-      </section>
-
-      <!-- TAB 2: PORTAL ADMIN DENGAN OPSI 1 - 4 -->
-      <section id="adminTab" class="hidden space-y-6">
-        <!-- FORM LOGIN -->
-        <div id="adminLoginForm" class="max-w-md mx-auto bg-white p-6 sm:p-8 rounded-3xl shadow-xl border border-amber-100">
-          <div class="text-center space-y-2 mb-6">
-            <div class="w-14 h-14 bg-amber-100 text-amber-900 rounded-2xl mx-auto flex items-center justify-center text-2xl border border-amber-300 shadow-sm">
-              <i class="fa-solid fa-user-lock"></i>
-            </div>
-            <h2 class="text-xl font-bold text-amber-950">Autentikasi Administrator</h2>
-            <p class="text-xs text-gray-500">Masuk untuk mengelola dan merekapitulasi data pendaftaran</p>
-          </div>
-
-          <form onsubmit="handleAdminLogin(event)" class="space-y-4">
-            <div>
-              <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Username Admin</label>
-              <div class="relative">
-                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400"><i class="fa-solid fa-user"></i></span>
-                <input type="text" id="adminUser" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-gray-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500 text-sm">
-              </div>
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Kata Sandi</label>
-              <div class="relative">
-                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400"><i class="fa-solid fa-key"></i></span>
-                <input type="password" id="adminPass" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-gray-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500 text-sm">
-              </div>
-            </div>
-            <button type="submit" id="btnLogin" class="w-full bg-amber-900 hover:bg-amber-950 text-white font-bold py-3 rounded-xl text-sm transition-all shadow-md">
-              Masuk Dashboard
-            </button>
-          </form>
-        </div>
-
-        <!-- DASHBOARD ADMIN (SIDEBAR DENGAN OPSI 1 - 4) -->
-        <div id="adminDashboard" class="hidden flex flex-col lg:flex-row gap-6 items-start">
+        <div class="flex-1 w-full">
           
-          <aside class="w-full lg:w-64 bg-white p-4 rounded-3xl border border-amber-200/80 shadow-md space-y-3 lg:sticky lg:top-20">
-            <div class="px-3 py-2 border-b border-gray-100 flex items-center justify-between">
+          <!-- OPSI 1: SCAN QR & PRESENSI LAPANGAN -->
+          <div id="panelOps1" class="bg-white p-6 rounded-3xl border border-amber-200 shadow-md space-y-4">
+            <h3 class="font-bold text-amber-950 border-b pb-2">Opsi 1: Verifikasi Lapangan & Presensi QR Code</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-3">
+                <p class="text-xs font-bold text-slate-600">Arahkan Kamera ke QR Code Kartu Pendaftaran:</p>
+                <div id="reader" class="w-full bg-slate-100 rounded-2xl overflow-hidden border"></div>
+              </div>
+              <div class="space-y-3">
+                <p class="text-xs font-bold text-slate-600">Atau Presensi Manual dengan ID Registrasi:</p>
+                <input type="text" id="manualCheckInId" placeholder="Contoh: REG-2026-001" class="w-full p-3 border rounded-xl text-xs bg-slate-50">
+                <button onclick="executeCheckIn()" class="w-full bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs">Proses Verifikasi Kedatangan</button>
+                <div id="checkInStatusBox" class="p-4 rounded-xl text-xs hidden"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- OPSI 2: PLOTTING TAPAK KEMAH & CONTROL LOGISTIK KIT -->
+          <div id="panelOps2" class="hidden bg-white p-6 rounded-3xl border border-amber-200 shadow-md space-y-4">
+            <h3 class="font-bold text-amber-950 border-b pb-2">Opsi 2: Plotting Tapak Kemah & Kontrol Kit Logistik</h3>
+            <div class="space-y-3 text-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="font-bold">ID Registrasi / Nama</label>
+                  <input type="text" id="logistikTargetId" placeholder="REG-2026-001" class="w-full p-2.5 border rounded-xl bg-slate-50">
+                </div>
+                <div>
+                  <label class="font-bold">Nomor Kavling / Tapak Kemah</label>
+                  <input type="text" id="logistikKavling" placeholder="Contoh: Blok A - Tenda 04" class="w-full p-2.5 border rounded-xl bg-slate-50">
+                </div>
+              </div>
               <div>
-                <h4 class="font-extrabold text-amber-950 text-sm">Menu Admin</h4>
-                <p class="text-[10px] text-gray-400 font-medium">Panel Navigasi & Analisis</p>
+                <label class="font-bold block mb-1">Checklist Kit Logistik Terbagi:</label>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  <label class="flex items-center gap-1.5"><input type="checkbox" class="kitCheck" value="Kaos"> Kaos</label>
+                  <label class="flex items-center gap-1.5"><input type="checkbox" class="kitCheck" value="Scarf"> Scarf</label>
+                  <label class="flex items-center gap-1.5"><input type="checkbox" class="kitCheck" value="ID Card"> ID Card</label>
+                  <label class="flex items-center gap-1.5"><input type="checkbox" class="kitCheck" value="Topi"> Topi</label>
+                  <label class="flex items-center gap-1.5"><input type="checkbox" class="kitCheck" value="Daypack"> Daypack</label>
+                  <label class="flex items-center gap-1.5"><input type="checkbox" class="kitCheck" value="Tiska"> Tiska</label>
+                </div>
               </div>
-              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" title="Sistem Aktif"></span>
+              <button onclick="saveLogistikPlot()" class="bg-amber-900 text-white font-bold py-2.5 px-5 rounded-xl">Simpan Plotting & Logistik</button>
             </div>
+          </div>
 
-            <nav class="space-y-1.5 text-xs font-bold">
-              <button onclick="switchAdminPanel('panelOverview')" id="btnPanelOverview" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all bg-amber-900 text-white shadow-sm">
-                <i class="fa-solid fa-chart-pie text-sm"></i>
-                <span>Opsi 1: Ringkasan & Stat</span>
-              </button>
-              <button onclick="switchAdminPanel('panelDataTable')" id="btnPanelDataTable" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950">
-                <i class="fa-solid fa-table-list text-sm"></i>
-                <span>Opsi 2: Kelola Data</span>
-              </button>
-              <button onclick="switchAdminPanel('panelRekap')" id="btnPanelRekap" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950">
-                <i class="fa-solid fa-chart-column text-sm"></i>
-                <span>Opsi 3: Analisis Logistik</span>
-              </button>
-              <button onclick="switchAdminPanel('panelExport')" id="btnPanelExport" class="w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950">
-                <i class="fa-solid fa-file-export text-sm"></i>
-                <span>Opsi 4: Ekspor Berkas</span>
-              </button>
-            </nav>
-
-            <div class="pt-3 border-t border-gray-100 space-y-2">
-              <a href="https://drive.google.com/drive/folders/123YsI7qRtt5ILGwB0UryjIt0coF4M63Z?usp=drive_link" target="_blank" rel="noopener noreferrer" class="w-full px-3.5 py-2 rounded-2xl flex items-center gap-2.5 text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-all">
-                <i class="fa-brands fa-google-drive text-amber-600"></i>
-                <span class="truncate">Drive Kwitansi</span>
-              </a>
-              <button onclick="logoutAdmin()" class="w-full px-3.5 py-2 rounded-2xl flex items-center gap-2.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 transition-all">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <span>Keluar Admin</span>
-              </button>
+          <!-- OPSI 3: KEUANGAN, TRACKING PEMBAYARAN, & WA GATEWAY -->
+          <div id="panelOps3" class="hidden bg-white p-6 rounded-3xl border border-amber-200 shadow-md space-y-4">
+            <h3 class="font-bold text-amber-950 border-b pb-2">Opsi 3: Keuangan & WhatsApp Gateway</h3>
+            <div class="space-y-3 text-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label class="font-bold">ID Registrasi Target</label>
+                  <input type="text" id="payTargetId" placeholder="REG-2026-001" class="w-full p-2.5 border rounded-xl bg-slate-50">
+                </div>
+                <div>
+                  <label class="font-bold">Status Keuangan</label>
+                  <select id="payStatus" class="w-full p-2.5 border rounded-xl bg-slate-50 font-bold">
+                    <option value="LUNAS">LUNAS</option>
+                    <option value="DP (Belum Lunas)">DP (Belum Lunas)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="font-bold">Sisa Tagihan (Rp)</label>
+                  <input type="number" id="paySisa" value="0" class="w-full p-2.5 border rounded-xl bg-slate-50">
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <button onclick="savePaymentStatus()" class="bg-emerald-800 text-white font-bold py-2.5 px-4 rounded-xl">Update Status Bayar</button>
+                <button onclick="sendWaNotification()" class="bg-green-600 text-white font-bold py-2.5 px-4 rounded-xl flex items-center gap-1.5">
+                  <i class="fa-brands fa-whatsapp text-sm"></i> Kirim Notifikasi WA
+                </button>
+              </div>
             </div>
-          </aside>
+          </div>
 
-          <!-- AREA PANEL UTAMA DARI SIDEBAR -->
-          <div class="flex-1 w-full space-y-6">
+          <!-- OPSI 4: E-SERTIFIKAT DIGITAL, RUNDOWN, & BROADCAST -->
+          <div id="panelOps4" class="hidden bg-white p-6 rounded-3xl border border-amber-200 shadow-md space-y-6">
+            <h3 class="font-bold text-amber-950 border-b pb-2">Opsi 4: E-Sertifikat Digital & Broadcast Lapangan</h3>
             
-            <!-- OPSI 1: RINGKASAN & STATISTIK -->
-            <div id="panelOverview" class="space-y-6">
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md flex items-center justify-between">
-                  <div class="space-y-1">
-                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Total Terdaftar</p>
-                    <h3 id="statTotal" class="text-3xl font-black text-amber-950">0</h3>
-                  </div>
-                  <div class="w-14 h-14 rounded-2xl bg-amber-900 text-amber-300 flex items-center justify-center text-2xl">
-                    <i class="fa-solid fa-fire-flame-curved"></i>
-                  </div>
-                </div>
-                <div class="bg-white p-5 rounded-3xl border border-blue-200/80 shadow-md flex items-center justify-between">
-                  <div class="space-y-1">
-                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Jumlah Peserta</p>
-                    <h3 id="statPeserta" class="text-3xl font-black text-blue-950">0</h3>
-                  </div>
-                  <div class="w-14 h-14 rounded-2xl bg-blue-800 text-blue-200 flex items-center justify-center text-2xl">
-                    <i class="fa-solid fa-child-reaching"></i>
-                  </div>
-                </div>
-                <div class="bg-white p-5 rounded-3xl border border-emerald-200/80 shadow-md flex items-center justify-between">
-                  <div class="space-y-1">
-                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Pembina Pendamping</p>
-                    <h3 id="statPembina" class="text-3xl font-black text-emerald-950">0</h3>
-                  </div>
-                  <div class="w-14 h-14 rounded-2xl bg-emerald-800 text-emerald-200 flex items-center justify-center text-2xl">
-                    <i class="fa-solid fa-user-shield"></i>
-                  </div>
-                </div>
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md space-y-3">
-                  <h4 class="font-extrabold text-amber-950 text-xs uppercase tracking-wider flex items-center gap-2">
-                    <i class="fa-solid fa-venus-mars text-amber-800"></i> Distribusi Jenis Kelamin
-                  </h4>
-                  <div class="space-y-2 text-xs">
-                    <div>
-                      <div class="flex justify-between font-bold mb-1"><span class="text-blue-900">Laki-laki</span><span id="statLakiVal">0 (0%)</span></div>
-                      <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden"><div id="barLaki" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div></div>
-                    </div>
-                    <div>
-                      <div class="flex justify-between font-bold mb-1"><span class="text-pink-900">Perempuan</span><span id="statPerempuanVal">0 (0%)</span></div>
-                      <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden"><div id="barPerempuan" class="bg-pink-500 h-2.5 rounded-full" style="width: 0%"></div></div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md space-y-3">
-                  <h4 class="font-extrabold text-amber-950 text-xs uppercase tracking-wider flex items-center gap-2">
-                    <i class="fa-solid fa-shirt text-emerald-700"></i> Ringkasan Pengadaan Ukuran Kaos
-                  </h4>
-                  <div id="summaryKaosQuick" class="grid grid-cols-4 gap-2 text-center text-xs"></div>
-                </div>
+            <div class="space-y-3 text-xs border-b pb-4">
+              <h4 class="font-bold text-amber-900">1. Generator E-Sertifikat Instruktur / Peserta</h4>
+              <div class="flex gap-2">
+                <input type="text" id="certNama" placeholder="Nama Lengkap Peserta / Pembina" class="flex-1 p-2.5 border rounded-xl bg-slate-50">
+                <button onclick="generatePDFCert()" class="bg-amber-900 text-white font-bold px-4 py-2.5 rounded-xl">Unduh E-Sertifikat PDF</button>
               </div>
             </div>
 
-            <!-- OPSI 2: KELOLA DATA PENDAFTAR -->
-            <div id="panelDataTable" class="hidden space-y-6">
-              <div class="bg-white p-5 sm:p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
-                  <div>
-                    <h3 class="font-extrabold text-amber-950 text-base flex items-center gap-2">
-                      <i class="fa-solid fa-filter text-amber-800"></i> Filter & Pencarian Pendaftar
-                    </h3>
-                  </div>
-                  <div class="flex items-center gap-2 w-full sm:w-auto flex-wrap">
-                    <div class="relative flex items-center">
-                      <button type="button" onclick="toggleAdminSearch()" title="Cari Data Admin" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-xs">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <span class="text-[11px] hidden sm:inline">Cari</span>
-                      </button>
-                      <div id="adminSearchContainer" class="overflow-hidden transition-all duration-300 ease-in-out w-0 opacity-0 flex items-center">
-                        <input type="text" id="adminSearchInput" oninput="applyFilters()" placeholder="Ketik kata kunci..." class="ml-2 py-2 px-3 bg-slate-50 border border-amber-300 rounded-xl text-xs font-medium focus:ring-2 focus:ring-amber-500 focus:bg-white w-48 sm:w-64 transition-all">
-                      </div>
-                    </div>
-
-                    <button onclick="openModalForm()" class="bg-amber-800 hover:bg-amber-900 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow transition-all">
-                      <i class="fa-solid fa-user-plus"></i> Tambah Manual
-                    </button>
-                  </div>
-                </div>
-
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                  <div>
-                    <label class="block font-bold text-gray-700 mb-1">Provinsi</label>
-                    <select id="filterProvinsi" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
-                      <option value="">Semua Provinsi</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block font-bold text-gray-700 mb-1">Kota / Kabupaten</label>
-                    <select id="filterKota" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
-                      <option value="">Semua Kota/Kab</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block font-bold text-gray-700 mb-1">Jenis Kelamin</label>
-                    <select id="filterJK" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
-                      <option value="">Semua Gender</option>
-                      <option value="Laki-laki">Laki-laki</option>
-                      <option value="Perempuan">Perempuan</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block font-bold text-gray-700 mb-1">Ukuran Kaos</label>
-                    <select id="filterKaos" onchange="applyFilters()" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
-                      <option value="">Semua Ukuran</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <div class="bg-white rounded-3xl border border-amber-200/80 shadow-md overflow-hidden space-y-0">
-                <div class="p-4 bg-amber-50/50 border-b border-amber-200/80 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
-                  <div class="flex items-center gap-2 flex-wrap justify-center sm:justify-start">
-                    <span class="font-bold text-slate-700">Tampilkan:</span>
-                    <select id="pageSizeSelect" onchange="changePageSize()" class="p-2 border border-amber-200 rounded-xl bg-white font-bold text-amber-950 focus:ring-2 focus:ring-amber-500 text-xs shadow-xs">
-                      <option value="10" selected>10</option>
-                      <option value="25">25</option>
-                      <option value="50">50</option>
-                      <option value="100">100</option>
-                    </select>
-                    <span class="text-slate-500 font-semibold ml-1" id="paginationInfo">Menampilkan 0 dari 0 data</span>
-                  </div>
-
-                  <div class="flex items-center gap-1.5 flex-wrap justify-center" id="paginationButtons"></div>
-                </div>
-
-                <div class="overflow-x-auto">
-                  <table id="tableAdmin" class="w-full text-left border-collapse text-xs">
-                    <thead id="tableHeader" class="bg-amber-100/70 text-amber-950 uppercase font-bold border-b border-amber-200"></thead>
-                    <tbody id="tableBody" class="divide-y divide-gray-100"></tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
-            <!-- OPSI 3: ANALISIS LOGISTIK -->
-            <div id="panelRekap" class="hidden space-y-6">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md space-y-3">
-                  <h4 class="font-extrabold text-amber-950 text-sm flex items-center gap-2 border-b pb-2">
-                    <i class="fa-solid fa-boxes-packing text-amber-800"></i> Rekap Ukuran Kaos (Vendor)
-                  </h4>
-                  <div class="overflow-x-auto">
-                    <table class="w-full text-xs text-left border-collapse">
-                      <thead>
-                        <tr class="bg-slate-100 text-slate-700 font-bold uppercase">
-                          <th class="p-2.5 rounded-l-xl">Ukuran Kaos</th>
-                          <th class="p-2.5 text-center">Jumlah Pendaftar</th>
-                          <th class="p-2.5 text-right rounded-r-xl">Persentase</th>
-                        </tr>
-                      </thead>
-                      <tbody id="rekapKaosBody" class="divide-y divide-slate-100 font-medium"></tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <div class="bg-white p-5 rounded-3xl border border-amber-200/80 shadow-md space-y-3">
-                  <h4 class="font-extrabold text-amber-950 text-sm flex items-center gap-2 border-b pb-2">
-                    <i class="fa-solid fa-map-location-dot text-emerald-700"></i> Sebaran Kontingen per Provinsi
-                  </h4>
-                  <div class="overflow-x-auto max-h-72 overflow-y-auto">
-                    <table class="w-full text-xs text-left border-collapse">
-                      <thead class="sticky top-0 bg-slate-100 text-slate-700 font-bold uppercase">
-                        <tr>
-                          <th class="p-2.5">Provinsi</th>
-                          <th class="p-2.5 text-center">Jumlah Orang</th>
-                        </tr>
-                      </thead>
-                      <tbody id="rekapProvinsiBody" class="divide-y divide-slate-100 font-medium"></tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- OPSI 4: EKSPOR BERKAS -->
-            <div id="panelExport" class="hidden space-y-6">
-              <div class="bg-white p-6 rounded-3xl border border-amber-200/80 shadow-md space-y-4">
-                <h3 class="font-extrabold text-amber-950 text-base border-b pb-3 flex items-center gap-2">
-                  <i class="fa-solid fa-file-export text-emerald-700"></i> Pusat Ekspor Laporan & Berkas
-                </h3>
-                <p class="text-xs text-slate-500">
-                  Pilih format berkas yang dibutuhkan untuk mengunduh rekap data pendaftaran.
-                </p>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                  <button onclick="exportToExcel()" class="bg-emerald-700 hover:bg-emerald-800 text-white p-5 rounded-2xl font-bold text-xs flex items-center justify-between shadow-md transition-all">
-                    <div class="flex items-center gap-3">
-                      <i class="fa-solid fa-file-excel text-2xl"></i>
-                      <div class="text-left">
-                        <span class="block text-sm">Unduh Format Excel (.xlsx)</span>
-                        <span class="text-[10px] font-normal text-emerald-100">Laporan rekapitulasi data pendaftaran</span>
-                      </div>
-                    </div>
-                    <i class="fa-solid fa-download text-lg"></i>
-                  </button>
-
-                  <button onclick="exportToPDF()" class="bg-red-700 hover:bg-red-800 text-white p-5 rounded-2xl font-bold text-xs flex items-center justify-between shadow-md transition-all">
-                    <div class="flex items-center gap-3">
-                      <i class="fa-solid fa-file-pdf text-2xl"></i>
-                      <div class="text-left">
-                        <span class="block text-sm">Unduh Format PDF</span>
-                        <span class="text-[10px] font-normal text-red-100">Dokumen cetak landscape rekapitulasi</span>
-                      </div>
-                    </div>
-                    <i class="fa-solid fa-download text-lg"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <!-- MODAL CETAK KARTU PENDAFTARAN (A4) -->
-  <div id="modalKartu" class="fixed inset-0 bg-slate-900/80 hidden flex justify-center items-start sm:items-center p-2 sm:p-4 z-50 overflow-y-auto">
-    <div id="modalKartuContent" class="bg-amber-50/20 rounded-2xl p-3 sm:p-4 max-w-2xl w-full relative shadow-2xl border-2 border-amber-800 my-auto flex flex-col justify-between min-h-[95vh] sm:min-h-0">
-      
-      <button onclick="closeModalKartu()" class="no-print absolute top-3 right-3 text-slate-500 hover:text-slate-900 w-8 h-8 rounded-full bg-white shadow flex items-center justify-center z-20">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-
-      <div class="flex-1 flex flex-col justify-between space-y-3">
-        <!-- KARTU 1: LEMBAR PESERTA -->
-        <div class="border-2 border-amber-900 bg-amber-50/90 rounded-xl p-3 relative flex flex-col justify-between space-y-2 shadow-xs flex-1">
-          <div class="bg-gradient-to-r from-amber-950 via-amber-900 to-emerald-950 text-amber-100 p-2.5 rounded-lg border-b-2 border-amber-500 shadow-sm relative overflow-hidden">
-            <div class="flex items-center justify-between gap-2">
-              <div class="flex items-center gap-2.5">
-                <div class="w-9 h-9 rounded-full bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center text-amber-300 text-lg shadow-inner">
-                  <i class="fa-solid fa-compass"></i>
-                </div>
-                <div>
-                  <div class="flex items-center gap-1.5">
-                    <h4 class="font-black text-amber-100 text-xs sm:text-sm tracking-wider uppercase">PERKEMAHAN UKHUWAH KEMBARANAS III</h4>
-                    <span class="bg-amber-500 text-amber-950 text-[9px] font-extrabold px-1.5 py-0.2 rounded uppercase">2026</span>
-                  </div>
-                  <p class="text-[9px] sm:text-[10px] text-amber-200/90 font-semibold tracking-wide flex items-center gap-1">
-                    <i class="fa-solid fa-campground text-emerald-400"></i> SAKO SIT INDONESIA • SCOUT & SURVIVAL EXPEDITION
-                  </p>
-                </div>
-              </div>
-              <span class="bg-amber-500 text-amber-950 font-black text-[9px] sm:text-[10px] px-2.5 py-1 rounded border border-amber-300 uppercase tracking-wider shadow-xs">
-                LEMBAR PESERTA
-              </span>
+            <div class="space-y-3 text-xs">
+              <h4 class="font-bold text-amber-900">2. Siarkan Pengumuman Lapangan Baru</h4>
+              <input type="text" id="bcJudul" placeholder="Judul Pengumuman" class="w-full p-2.5 border rounded-xl bg-slate-50 font-bold">
+              <textarea id="bcPesan" rows="3" placeholder="Isi pesan pengumuman untuk seluruh kontingen..." class="w-full p-2.5 border rounded-xl bg-slate-50"></textarea>
+              <button onclick="publishBroadcast()" class="bg-red-700 text-white font-bold py-2.5 px-5 rounded-xl">Siarkan Sekarang</button>
             </div>
           </div>
 
-          <div class="space-y-0.5">
-            <div class="border-2 border-emerald-500 bg-emerald-50/90 text-emerald-800 font-extrabold text-center py-1.5 rounded-xl text-xs uppercase tracking-wider shadow-xs flex items-center justify-center gap-2">
-              <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
-              <span>STATUS: TERVERIFIKASI SISTEM</span>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-x-3 gap-y-1 text-[10px] sm:text-[11px] text-slate-800 bg-white/95 p-2 rounded-lg border border-amber-900/20 shadow-xs">
-            <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">ID Registrasi</span><span id="card1Id" class="font-bold text-amber-950 font-mono"></span></div>
-            <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">Peran / Status</span><span id="card1Status" class="font-black text-amber-900 uppercase"></span></div>
-            <div class="flex justify-between border-b border-amber-100 pb-0.5 col-span-2"><span class="text-slate-500 font-medium">Nama Lengkap</span><span id="card1Nama" class="font-bold uppercase text-slate-900"></span></div>
-            <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">Jenis Kelamin</span><span id="card1JK" class="font-semibold"></span></div>
-            <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">Ukuran Kaos</span><span id="card1Kaos" class="font-bold text-amber-950"></span></div>
-            <div class="flex justify-between border-b border-amber-100 pb-0.5 col-span-2"><span class="text-slate-500 font-medium">Asal Pangkalan</span><span id="card1Sekolah" class="font-bold uppercase text-slate-900"></span></div>
-            <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">Prov / KabKota</span><span id="card1Wilayah" class="font-semibold text-slate-800"></span></div>
-            <div class="flex justify-between border-b border-amber-100 pb-0.5"><span class="text-slate-500 font-medium">Email</span><span id="card1Email" class="font-semibold text-slate-800"></span></div>
-          </div>
-
-          <div class="bg-white/95 p-2 rounded-lg border border-amber-900/20 space-y-1">
-            <p class="text-[9.5px] sm:text-[10px] font-black text-amber-950 uppercase flex items-center gap-1.5">
-              <i class="fa-regular fa-square-check text-amber-800"></i> Checklist Verifikasi Lapangan (Diisi Panitia Saat Penyerahan):
-            </p>
-            <div class="grid grid-cols-3 gap-x-2 gap-y-1 text-[8.5px] sm:text-[9.5px] text-slate-800 font-medium">
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Sewa Tapak Perkemahan</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Tiket Masuk Buper Kwarda</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Sewa Tenda Dome 3–4 Orang</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Scarf Kegiatan</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">ID Card Peserta & Bindamping</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Kaos Kegiatan</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Topi Kegiatan</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Tas Daypack</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Tiska Kembaranas III</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Konsumsi selama Kegiatan</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Paket Trip Pahawang</span></div>
-              <div class="flex items-center gap-1.5"><span class="w-3 h-3 border-2 border-slate-400 rounded-xs inline-block bg-white flex-shrink-0"></span> <span class="truncate">Sertifikat & Instruktur Muda</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- GARIS POTONG -->
-        <div class="relative flex py-1 items-center justify-center">
-          <div class="flex-grow border-t-2 border-dashed border-amber-800/50"></div>
-          <span class="flex-shrink mx-3 text-[9px] font-bold text-amber-950 uppercase tracking-widest bg-amber-100 px-3 py-1 border border-amber-800/40 rounded-full flex items-center gap-1.5 shadow-xs">
-            <i class="fa-solid fa-scissors"></i> GUNTING DI SINI (POTONGAN ARSIP PANITIA)
-          </span>
-          <div class="flex-grow border-t-2 border-dashed border-amber-800/50"></div>
-        </div>
-
-        <!-- KARTU 2: ARSIP PANITIA -->
-        <div class="border-2 border-slate-700 bg-slate-50/90 rounded-xl p-3 relative flex flex-col justify-between space-y-2 shadow-xs flex-1">
-          <div class="bg-gradient-to-r from-slate-950 via-slate-900 to-amber-950 text-slate-100 p-2.5 rounded-lg border-b-2 border-amber-500 shadow-sm relative overflow-hidden">
-            <div class="flex items-center justify-between gap-2">
-              <div class="flex items-center gap-2.5">
-                <div class="w-9 h-9 rounded-full bg-slate-700/50 border-2 border-slate-400 flex items-center justify-center text-amber-300 text-lg shadow-inner">
-                  <i class="fa-solid fa-tree"></i>
-                </div>
-                <div>
-                  <div class="flex items-center gap-1.5">
-                    <h4 class="font-black text-slate-100 text-xs sm:text-sm tracking-wider uppercase">PERKEMAHAN UKHUWAH KEMBARANAS III</h4>
-                    <span class="bg-emerald-500 text-emerald-950 text-[9px] font-extrabold px-1.5 py-0.2 rounded uppercase">2026</span>
-                  </div>
-                  <p class="text-[9px] sm:text-[10px] text-slate-300 font-semibold tracking-wide flex items-center gap-1">
-                    <i class="fa-solid fa-shield-halved text-emerald-400"></i> REGISTRASI PANITIA LAPANGAN • SAKO SIT INDONESIA
-                  </p>
-                </div>
-              </div>
-              <span class="bg-emerald-500 text-emerald-950 font-black text-[9px] sm:text-[10px] px-2.5 py-1 rounded border border-emerald-300 uppercase tracking-wider shadow-xs">
-                ARSIP PANITIA
-              </span>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-x-3 gap-y-1 text-[10px] sm:text-[11px] text-slate-800 bg-white/95 p-2 rounded-lg border border-slate-300 shadow-xs">
-            <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">ID Registrasi</span><span id="card2Id" class="font-bold text-amber-950 font-mono"></span></div>
-            <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Peran / Status</span><span id="card2Status" class="font-black text-amber-900 uppercase"></span></div>
-            <div class="flex justify-between border-b border-gray-100 pb-0.5 col-span-2"><span class="text-slate-500 font-medium">Nama Lengkap</span><span id="card2Nama" class="font-bold uppercase text-slate-900"></span></div>
-            <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Jenis Kelamin</span><span id="card2JK" class="font-semibold"></span></div>
-            <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Ukuran Kaos</span><span id="card2Kaos" class="font-bold text-amber-950"></span></div>
-            <div class="flex justify-between border-b border-gray-100 pb-0.5 col-span-2"><span class="text-slate-500 font-medium">Asal Pangkalan</span><span id="card2Sekolah" class="font-bold uppercase text-slate-900"></span></div>
-            <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Prov / KabKota</span><span id="card2Wilayah" class="font-semibold text-slate-800"></span></div>
-            <div class="flex justify-between border-b border-gray-100 pb-0.5"><span class="text-slate-500 font-medium">Email</span><span id="card2Email" class="font-semibold text-slate-800"></span></div>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="no-print mt-3 flex gap-2">
-        <button onclick="downloadKartuPDF()" id="btnDownloadPDF" class="flex-1 bg-amber-900 hover:bg-amber-950 text-white font-bold py-3 rounded-2xl text-xs flex justify-center items-center gap-2 shadow-md transition-all">
-          <i class="fa-solid fa-file-pdf"></i> Unduh PDF (Full 1 Halaman A4)
-        </button>
-        <button onclick="window.print()" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-5 py-3 rounded-2xl text-xs flex justify-center items-center gap-2 shadow-md transition-all">
-          <i class="fa-solid fa-print"></i> Cetak A4 Langsung
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL KWITANSI -->
-  <div id="modalKwitansi" class="fixed inset-0 bg-slate-900/80 hidden flex justify-center items-center p-2 sm:p-4 z-50 overflow-y-auto">
-    <div class="bg-white rounded-3xl p-4 sm:p-6 max-w-3xl w-full relative shadow-2xl border border-amber-200 my-auto space-y-4">
-      <button onclick="closeModalKwitansi()" class="no-print absolute top-3 right-3 text-slate-500 hover:text-slate-900 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center z-20">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-
-      <div class="border-b pb-3 flex justify-between items-center pr-8">
-        <div>
-          <h3 class="text-base font-extrabold text-amber-950 flex items-center gap-2">
-            <i class="fa-solid fa-file-invoice-dollar text-emerald-600"></i> Kwitansi Pembayaran Resmi
-          </h3>
-          <p class="text-xs text-gray-500">Hasil generate otomatis dari data pendaftaran terverifikasi</p>
         </div>
       </div>
-
-      <div class="relative bg-slate-100 rounded-2xl overflow-hidden border border-slate-300 shadow-inner flex justify-center items-center p-1 min-h-[220px]">
-        <canvas id="kwitansiCanvas" class="w-full h-auto max-h-[65vh] object-contain rounded-xl shadow-xs"></canvas>
-      </div>
-
-      <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-2 border-t text-xs">
-        <div class="flex gap-2 w-full sm:w-auto ml-auto">
-          <button onclick="downloadKwitansiFromCanvas('pdf')" class="flex-1 sm:flex-none bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-4 py-2.5 rounded-xl flex items-center justify-center gap-2 shadow-md transition-all">
-            <i class="fa-solid fa-file-pdf"></i> Unduh PDF (A5)
-          </button>
-          <button onclick="downloadKwitansiFromCanvas('png')" class="flex-1 sm:flex-none bg-blue-700 hover:bg-blue-800 text-white font-bold px-4 py-2.5 rounded-xl flex items-center justify-center gap-2 shadow-md transition-all">
-            <i class="fa-solid fa-file-image"></i> Unduh PNG
-          </button>
-          <button onclick="printKwitansiCanvas()" class="bg-amber-900 hover:bg-amber-950 text-white font-bold px-4 py-2.5 rounded-xl flex items-center justify-center gap-2 shadow-md transition-all">
-            <i class="fa-solid fa-print"></i> Cetak
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL FORM ADMIN -->
-  <div id="modalFormAdmin" class="fixed inset-0 bg-slate-900/60 hidden flex justify-center items-center p-4 z-50 overflow-y-auto">
-    <div class="bg-white rounded-3xl p-6 max-w-lg w-full relative shadow-2xl border border-amber-200 my-8">
-      <button onclick="closeModalForm()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-
-      <div class="mb-4 border-b pb-3">
-        <h3 id="modalFormTitle" class="text-lg font-bold text-amber-950">Tambah Data Manual</h3>
-        <p class="text-xs text-gray-500">Isi formulir pendaftar atau pembina pendamping secara langsung.</p>
-      </div>
-
-      <form onsubmit="handleSaveData(event)" class="space-y-3 text-xs">
-        <input type="hidden" id="formIsEdit" value="false">
-        <input type="hidden" id="formId" value="">
-
-        <div>
-          <label class="block font-bold text-gray-700 mb-1">Status Pendaftaran</label>
-          <select id="formStatus" required class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
-            <option value="Peserta Penegak">Peserta Penegak</option>
-            <option value="Pembina Pendamping">Pembina Pendamping</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block font-bold text-gray-700 mb-1">Nama Lengkap</label>
-          <input type="text" id="formNama" required placeholder="NAMA LENGKAP" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 uppercase font-medium">
-        </div>
-
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block font-bold text-gray-700 mb-1">Jenis Kelamin</label>
-            <select id="formJK" required class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 font-medium">
-              <option value="Laki-laki">Laki-laki</option>
-              <option value="Perempuan">Perempuan</option>
-            </select>
-          </div>
-          <div>
-            <label class="block font-bold text-gray-700 mb-1">Ukuran Kaos</label>
-            <input type="text" id="formKaos" required placeholder="M / L / XL / XXL" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 uppercase font-medium">
-          </div>
-        </div>
-
-        <div>
-          <label class="block font-bold text-gray-700 mb-1">Asal Sekolah / Pangkalan</label>
-          <input type="text" id="formSekolah" required placeholder="NAMA SCHOOL / PANGKALAN" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 uppercase font-medium">
-        </div>
-
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block font-bold text-gray-700 mb-1">Provinsi</label>
-            <input type="text" id="formProv" required placeholder="PROVINSI" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 uppercase font-medium">
-          </div>
-          <div>
-            <label class="block font-bold text-gray-700 mb-1">Kota / Kabupaten</label>
-            <input type="text" id="formKota" required placeholder="KOTA / KABUPATEN" class="w-full p-2.5 border border-gray-300 rounded-xl bg-slate-50 uppercase font-medium">
-          </div>
-        </div>
-
-        <div class="border-t border-gray-100 pt-2 mt-2">
-          <label class="block font-bold text-gray-700 mb-1">Upload Bukti Transfer (Gambar / PDF)</label>
-          <input type="file" id="formBuktiTransfer" accept="image/*,.pdf" class="w-full p-2 border border-gray-300 rounded-xl bg-slate-50 text-xs font-medium file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-100 file:text-amber-900 hover:file:bg-amber-200">
-          <div id="containerBuktiLama" class="mt-1.5 hidden flex items-center gap-1.5">
-            <span class="text-[11px] text-slate-500">Bukti Transfer Saat Ini:</span>
-            <a id="linkBuktiLama" href="#" target="_blank" class="text-[11px] text-blue-600 font-bold underline flex items-center gap-1">
-              <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> Lihat Berkas
-            </a>
-          </div>
-        </div>
-
-        <div class="pt-4 flex gap-2">
-          <button type="button" onclick="closeModalForm()" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2.5 rounded-xl">Batal</button>
-          <button type="submit" id="btnSaveData" class="flex-1 bg-amber-900 hover:bg-amber-950 text-white font-bold py-2.5 rounded-xl shadow-md">Simpan Data</button>
-        </div>
-      </form>
-    </div>
-  </div>
+    </section>
+  </main>
 
   <script>
-    const SCRIPT_URL = (window.location.href.indexOf('script.google.com') !== -1)
-      ? window.location.href
-      : "https://script.google.com/macros/s/AKfycbyWIuL5JEK7c1kQ4_DoGFew5p_tOgK_X27gFTiKkMddXxu_Vv2UZxh0dTujhqnX0WaS/exec"; 
-    
-    let rawHeaders = [];
-    let rawAdminRows = [];
-    let filteredRows = [];
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyWIuL5JEK7c1kQ4_DoGFew5p_tOgK_X27gFTiKkMddXxu_Vv2UZxh0dTujhqnX0WaS/exec";
 
-    let currentPage = 1;
-    let pageSize = 10;
-    let currentKwitansiData = null;
+    function switchTab(tab) {
+      document.getElementById('userTab').classList.toggle('hidden', tab !== 'userTab');
+      document.getElementById('adminTab').classList.toggle('hidden', tab !== 'adminTab');
+      if (tab === 'userTab') loadBroadcasts();
+    }
 
     function switchAdminPanel(panelId) {
-      const panels = ['panelOverview', 'panelDataTable', 'panelRekap', 'panelExport'];
-      panels.forEach(p => {
-        const el = document.getElementById(p);
-        if (el) el.classList.add('hidden');
-
-        const btn = document.getElementById('btn' + p.charAt(0).toUpperCase() + p.slice(1));
-        if (btn) {
-          btn.className = "w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all text-slate-700 hover:bg-amber-50 hover:text-amber-950";
-        }
-      });
-
-      const activeEl = document.getElementById(panelId);
-      if (activeEl) activeEl.classList.remove('hidden');
-
-      const activeBtn = document.getElementById('btn' + panelId.charAt(0).toUpperCase() + panelId.slice(1));
-      if (activeBtn) {
-        activeBtn.className = "w-full px-3.5 py-2.5 rounded-2xl flex items-center gap-3 transition-all bg-amber-900 text-white shadow-sm";
-      }
+      ['panelOps1', 'panelOps2', 'panelOps3', 'panelOps4'].forEach(p => document.getElementById(p).classList.add('hidden'));
+      document.getElementById(panelId).classList.remove('hidden');
+      if (panelId === 'panelOps1') initQRScanner();
     }
 
-    function toggleAdminSearch() {
-      const container = document.getElementById('adminSearchContainer');
-      const input = document.getElementById('adminSearchInput');
-      const isCollapsed = container.classList.contains('w-0');
-
-      if (isCollapsed) {
-        container.classList.remove('w-0', 'opacity-0');
-        container.classList.add('w-48', 'sm:w-64', 'opacity-100');
-        input.focus();
-      } else {
-        if (input.value !== '') {
-          input.value = '';
-          applyFilters();
-        }
-        container.classList.remove('w-48', 'sm:w-64', 'opacity-100');
-        container.classList.add('w-0', 'opacity-0');
-      }
-    }
-
-    function openUrlSafely(url) {
-      if (!url) return;
-      window.open(encodeURI(url), '_blank', 'noopener,noreferrer');
-    }
-
-    function readFileAsBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const result = reader.result;
-          const base64 = result.split(',')[1];
-          resolve({
-            base64: base64,
-            mimeType: file.type,
-            fileName: file.name
-          });
-        };
-        reader.onerror = error => reject(error);
-        reader.readAsDataURL(file);
+    // OPSI 1: SCAN QR CODE
+    let html5QrcodeScanner = null;
+    function initQRScanner() {
+      if (html5QrcodeScanner) return;
+      html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: { width: 200, height: 200 } });
+      html5QrcodeScanner.render((decodedText) => {
+        document.getElementById('manualCheckInId').value = decodedText;
+        executeCheckIn();
       });
     }
 
-    function formatID(raw) {
-      if (!raw || raw === '-') return 'REG-2026-001';
-      const str = String(raw).trim();
-      if (str.startsWith('REG-') || str.startsWith('KMB-') || str.startsWith('KTA-')) return str;
+    async function executeCheckIn() {
+      const id = document.getElementById('manualCheckInId').value;
+      const box = document.getElementById('checkInStatusBox');
+      if (!id) return alert("Masukkan ID Registrasi!");
 
-      const d = new Date(str);
-      if (!isNaN(d.getTime())) {
-        const pad = (n) => String(n).padStart(2, '0');
-        return `REG-2026-${pad(d.getDate())}${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
-      }
-      return str.length > 15 ? 'REG-2026-' + str.substring(0, 6).toUpperCase() : str;
-    }
+      box.className = "p-4 rounded-xl text-xs bg-amber-50 text-amber-900 border border-amber-200 font-bold block";
+      box.innerText = "Memproses presensi...";
 
-    function terbilang(angka) {
-      const bil = ["", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas"];
-      angka = Math.floor(angka);
-      if (angka < 12) return bil[angka];
-      if (angka < 20) return terbilang(angka - 10) + " Belas";
-      if (angka < 100) return terbilang(Math.floor(angka / 10)) + " Puluh " + terbilang(angka % 10);
-      if (angka < 200) return "Seratus " + terbilang(angka - 100);
-      if (angka < 1000) return terbilang(Math.floor(angka / 100)) + " Ratus " + terbilang(angka % 100);
-      if (angka < 2000) return "Seribu " + terbilang(angka - 1000);
-      if (angka < 1000000) return terbilang(Math.floor(angka / 1000)) + " Ribu " + terbilang(angka % 1000);
-      if (angka < 1000000000) return terbilang(Math.floor(angka / 1000000)) + " Juta " + terbilang(angka % 1000000);
-      return "";
-    }
-
-    function formatTerbilangRupiah(nominal) {
-      if (!nominal || nominal === 0) return "Nol Rupiah";
-      let hasil = terbilang(nominal).replace(/\s+/g, ' ').trim();
-      return hasil + " Rupiah";
-    }
-
-    function switchTab(tabName) {
-      document.getElementById('userTab').classList.toggle('hidden', tabName !== 'userTab');
-      document.getElementById('adminTab').classList.toggle('hidden', tabName !== 'adminTab');
-      
-      const btnUser = document.getElementById('btnUserTab');
-      const btnAdmin = document.getElementById('btnAdminTab');
-
-      if (tabName === 'userTab') {
-        btnUser.className = "flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 flex items-center justify-center gap-2 bg-amber-500 text-amber-950 shadow-md";
-        btnAdmin.className = "flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 flex items-center justify-center gap-2 text-amber-200 hover:text-white";
+      const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'checkIn', id: id }) }).then(r => r.json());
+      if (res.success) {
+        box.className = "p-4 rounded-xl text-xs bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold block";
+        box.innerText = `[SUCCESS] ${res.message} Waktu: ${res.timestamp}`;
       } else {
-        btnAdmin.className = "flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 flex items-center justify-center gap-2 bg-amber-500 text-amber-950 shadow-md";
-        btnUser.className = "flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 flex items-center justify-center gap-2 text-amber-200 hover:text-white";
+        box.className = "p-4 rounded-xl text-xs bg-red-100 text-red-900 border border-red-300 font-bold block";
+        box.innerText = `[FAILED] ${res.message}`;
       }
     }
 
-    async function handleSearch(e) {
-      e.preventDefault();
-      const kw = document.getElementById('searchKeyword').value;
-      const btn = document.getElementById('btnCari');
-      const resBox = document.getElementById('searchResult');
+    // OPSI 2: LOGISTIK
+    async function saveLogistikPlot() {
+      const id = document.getElementById('logistikTargetId').value;
+      const kavling = document.getElementById('logistikKavling').value;
+      const checkedKits = Array.from(document.querySelectorAll('.kitCheck:checked')).map(c => c.value).join(', ');
 
-      btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Memroses Pencarian...`;
-      resBox.classList.add('hidden');
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'updateLogistik', id: id, tapakKemah: kavling, kitLogistik: checkedKits || 'Lengkap' })
+      }).then(r => r.json());
+      alert(res.message);
+    }
 
+    // OPSI 3: KEUANGAN & WA
+    async function savePaymentStatus() {
+      const id = document.getElementById('payTargetId').value;
+      const st = document.getElementById('payStatus').value;
+      const sisa = document.getElementById('paySisa').value;
+
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'updateKeuangan', id: id, statusKeuangan: st, sisaBayar: sisa })
+      }).then(r => r.json());
+      alert(res.message);
+    }
+
+    function sendWaNotification() {
+      const id = document.getElementById('payTargetId').value;
+      const st = document.getElementById('payStatus').value;
+      const sisa = document.getElementById('paySisa').value;
+      const msg = `Halo Peserta KEMBARANAS III (${id}), status pembayaran Anda saat ini: ${st}. Sisa tagihan: Rp ${sisa}. Terima kasih!`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    // OPSI 4: E-SERTIFIKAT & BROADCAST
+    function generatePDFCert() {
+      const nama = document.getElementById('certNama').value || 'Peserta Kembaranas';
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+
+      doc.setLineWidth(3);
+      doc.setDrawColor(120, 53, 15);
+      doc.rect(5, 5, 287, 200);
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(26);
+      doc.setTextColor(120, 53, 15);
+      doc.text("E-SERTIFIKAT PENGHARGAAN", 148, 40, { align: "center" });
+
+      doc.setFontSize(14);
+      doc.setTextColor(51, 65, 85);
+      doc.text("Diberikan kepada:", 148, 60, { align: "center" });
+
+      doc.setFontSize(22);
+      doc.setTextColor(15, 23, 42);
+      doc.text(nama.toUpperCase(), 148, 80, { align: "center" });
+
+      doc.setFontSize(12);
+      doc.text("Atas partisipasi aktif dalam Perkemahan Ukhuwah KEMBARANAS III 2026 di Lampung.", 148, 100, { align: "center" });
+
+      doc.save(`E-Sertifikat_${nama}.pdf`);
+    }
+
+    async function publishBroadcast() {
+      const judul = document.getElementById('bcJudul').value;
+      const pesan = document.getElementById('bcPesan').value;
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'saveBroadcast', judul: judul, pesan: pesan, kategori: 'PENTING' })
+      }).then(r => r.json());
+      alert(res.message);
+      loadBroadcasts();
+    }
+
+    async function loadBroadcasts() {
+      const container = document.getElementById('broadcastContainer');
       try {
-        const response = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          body: JSON.stringify({ action: 'search', keyword: kw })
-        });
-        const res = await response.json();
-
-        resBox.innerHTML = '';
-        resBox.classList.remove('hidden');
-
-        if (res.success && Array.isArray(res.data) && res.data.length > 0) {
-          res.data.forEach(item => {
-            const isPembina = String(item.statusPendaftaran).toLowerCase().includes('pembina');
-            const namaLengkapFinal = item.nama || (isPembina ? item.namaPembina : item.namaPeserta) || '-';
-            const namaSafe = String(namaLengkapFinal).replace(/'/g, "\\'").replace(/"/g, '&quot;');
-            const emailVal = item.email || item.emailAddress || '-';
-
-            const badgeStyle = isPembina 
-              ? 'bg-emerald-100 text-emerald-900 border-emerald-300' 
-              : 'bg-blue-100 text-blue-900 border-blue-300';
-            const roleIcon = isPembina ? 'fa-user-shield' : 'fa-child-reaching';
-
-            const waGroupLink = isPembina 
-              ? 'https://chat.whatsapp.com/EDGV8PFyUcHAgo1t0MFNva' 
-              : 'https://chat.whatsapp.com/GZQ0kukg7tG6MAxje4Yre8';
-
-            resBox.innerHTML += `
-              <div class="bg-white p-5 sm:p-6 rounded-3xl shadow-md border border-amber-200/80 space-y-4 hover:shadow-lg transition-all">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-gray-100 pb-3">
-                  <div>
-                    <span class="${badgeStyle} border text-[10px] font-black px-3 py-1 rounded-full uppercase inline-flex items-center gap-1.5 shadow-xs">
-                      <i class="fa-solid ${roleIcon}"></i> ${item.statusPendaftaran || 'Peserta'}
-                    </span>
-                    <h3 class="text-lg font-extrabold text-amber-950 mt-2 uppercase tracking-wide">${namaLengkapFinal}</h3>
-                  </div>
-                  <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-xl border border-emerald-200 flex items-center gap-1">
-                    <i class="fa-solid fa-circle-check"></i> Terverifikasi
-                  </span>
-                </div>
-
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
-                  <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100"><span class="text-gray-400 block text-[10px]">Jenis Kelamin</span><span class="font-bold text-slate-800">${item.jenisKelamin || '-'}</span></div>
-                  <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100"><span class="text-gray-400 block text-[10px]">Asal Sekolah / Pangkalan</span><span class="font-bold uppercase text-slate-800">${item.asalSekolah || '-'}</span></div>
-                  <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100"><span class="text-gray-400 block text-[10px]">Ukuran Kaos</span><span class="font-bold text-slate-800">${item.ukuranKaos || '-'}</span></div>
-                  <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100"><span class="text-gray-400 block text-[10px]">Provinsi</span><span class="font-bold text-slate-800">${item.provinsi || '-'}</span></div>
-                  <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100 col-span-2 sm:col-span-1"><span class="text-gray-400 block text-[10px]">Kota / Kabupaten</span><span class="font-bold text-slate-800">${item.kotaKabupaten || '-'}</span></div>
-                </div>
-
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pt-2 border-t border-slate-100">
-                  <div class="flex flex-wrap items-center gap-2">
-                    ${item.linkBukti && item.linkBukti !== '-' ? `<button onclick="openUrlSafely('${item.linkBukti}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all"><i class="fa-solid fa-receipt text-amber-800"></i> Bukti Pembayaran</button>` : ''}
-                    <button onclick="openUrlSafely('${waGroupLink}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-md">
-                      <i class="fa-brands fa-whatsapp text-sm"></i> Gabung Group WhatsApp
-                    </button>
-                  </div>
-
-                  <div class="flex flex-col gap-2 w-full sm:w-auto sm:items-end ml-auto">
-                    <button onclick="generateKwitansi('${item.id}', '${namaSafe}', '${item.statusPendaftaran}', '${item.asalSekolah}', '${item.provinsi}', '${item.kotaKabupaten}')" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition-all w-full sm:w-auto">
-                      <i class="fa-solid fa-file-invoice-dollar"></i> Unduh Kwitansi
-                    </button>
-                    <button onclick="openModalKartu('${item.id}', '${namaSafe}', '${item.statusPendaftaran}', '${item.jenisKelamin}', '${item.asalSekolah}', '${item.provinsi}', '${item.kotaKabupaten}', '${item.ukuranKaos}', '${emailVal}')" class="bg-amber-900 hover:bg-amber-950 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition-all w-full sm:w-auto">
-                      <i class="fa-solid fa-id-card"></i> Cetak Lembar Pendaftaran
-                    </button>
-                  </div>
-                </div>
-              </div>
-            `;
-          });
-        } else {
-          resBox.innerHTML = `
-            <div class="bg-white p-8 rounded-3xl text-center border border-red-200 text-red-600 space-y-2 shadow-sm">
-              <i class="fa-solid fa-circle-xmark text-4xl mb-1"></i>
-              <p class="text-sm font-bold">${res.message || 'Data pendaftaran tidak ditemukan.'}</p>
+        const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getBroadcast' }) }).then(r => r.json());
+        if (res.success && res.data.length > 0) {
+          container.innerHTML = res.data.map(b => `
+            <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
+              <span class="font-bold text-amber-950 block">${b.judul}</span>
+              <p class="text-slate-700">${b.pesan}</p>
             </div>
-          `;
+          `).join('');
+        } else {
+          container.innerHTML = `<p class="text-slate-400">Belum ada pengumuman disiarkan.</p>`;
         }
-      } catch (err) {
-        alert("Gagal terhubung ke server: " + err.message);
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i> Cari Data Pendaftar`;
+      } catch (e) {
+        container.innerHTML = `<p class="text-slate-400">Gagal memuat pengumuman.</p>`;
       }
-    }
-
-    function generateKwitansi(id, nama, status, sekolah, prov, kota, jumlahOrang = 1) {
-      const cleanId = formatID(id);
-      const nominalPerOrang = 2500000;
-      const totalNominal = nominalPerOrang * jumlahOrang;
-      const nominalFormatted = totalNominal.toLocaleString('id-ID') + ",00";
-      const terbilangText = formatTerbilangRupiah(totalNominal);
-
-      const kwitansiNo = cleanId.startsWith('REG-') || cleanId.startsWith('KMB-') ? cleanId : `REG-2026-${cleanId}`;
-      const telahTerimaDari = `${sekolah ? sekolah : nama}${prov ? ', ' + prov : ''}`;
-      const untukPembayaran = `Camp Fee Kembaranas III di Lampung Sejumlah ${jumlahOrang} Orang (${nama})`;
-
-      currentKwitansiData = {
-        no: kwitansiNo,
-        nama: nama,
-        sekolah: sekolah,
-        prov: prov,
-        kota: kota,
-        telahTerimaDari: telahTerimaDari,
-        uangSejumlah: terbilangText,
-        untukPembayaran: untukPembayaran,
-        jumlahNominal: nominalFormatted,
-        rawNominal: totalNominal
-      };
-
-      renderKwitansiCanvas(currentKwitansiData);
-      document.getElementById('modalKwitansi').classList.remove('hidden');
-    }
-
-    function renderKwitansiCanvas(data) {
-      const canvas = document.getElementById('kwitansiCanvas');
-      const ctx = canvas.getContext('2d');
-
-      canvas.width = 2000;
-      canvas.height = 980;
-
-      const img = new Image();
-      img.crossOrigin = "Anonymous";
-      img.src = "https://lh3.googleusercontent.com/d/1_dvqCcfLMmd82Df8g_tHaZHYGjskl6uk";
-
-      img.onload = function() {
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        drawKwitansiOverlayText(ctx, data);
-      };
-
-      img.onerror = function() {
-        drawKwitansiVectorFallback(ctx, canvas.width, canvas.height, data);
-      };
-    }
-
-    function drawKwitansiOverlayText(ctx, data) {
-      ctx.fillStyle = "#000000";
-
-      ctx.font = "bold 30px 'Plus Jakarta Sans', monospace, sans-serif";
-      ctx.fillText(`No. : ${data.no}`, 1540, 345);
-
-      ctx.font = "bold 30px 'Plus Jakarta Sans', Arial, sans-serif";
-      ctx.fillText(data.telahTerimaDari, 530, 442);
-
-      ctx.font = "bold 29px 'Plus Jakarta Sans', Arial, sans-serif";
-      ctx.fillText(data.uangSejumlah, 530, 510);
-
-      ctx.font = "bold 29px 'Plus Jakarta Sans', Arial, sans-serif";
-      ctx.fillText(data.untukPembayaran, 530, 580);
-
-      ctx.font = "900 36px 'Plus Jakarta Sans', Arial, sans-serif";
-      ctx.fillText(data.jumlahNominal, 420, 712);
-    }
-
-    function drawKwitansiVectorFallback(ctx, w, h, data) {
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(0, 0, w, h);
-
-      ctx.strokeStyle = "#15803d";
-      ctx.lineWidth = 12;
-      ctx.strokeRect(20, 20, w - 40, h - 40);
-
-      ctx.strokeStyle = "#d97706";
-      ctx.lineWidth = 4;
-      ctx.strokeRect(32, 32, w - 64, h - 64);
-
-      ctx.fillStyle = "#78350f";
-      ctx.font = "900 48px 'Plus Jakarta Sans', sans-serif";
-      ctx.fillText("KEMBARANAS III", 800, 100);
-
-      ctx.font = "bold 28px 'Plus Jakarta Sans', sans-serif";
-      ctx.fillStyle = "#1e293b";
-      ctx.fillText("SAKO PRAMUKA SIT INDONESIA", 800, 140);
-      ctx.font = "italic 22px 'Plus Jakarta Sans', sans-serif";
-      ctx.fillStyle = "#475569";
-      ctx.fillText("Perkemahan Bakti dan Pengembaraan Nasional ke-3", 800, 175);
-      ctx.fillText("📍 Lampung, 27 – 31 Oktober 2026", 800, 210);
-
-      ctx.fillStyle = "#064e3b";
-      ctx.beginPath();
-      ctx.roundRect(580, 260, 840, 90, 20);
-      ctx.fill();
-      ctx.strokeStyle = "#f59e0b";
-      ctx.lineWidth = 6;
-      ctx.stroke();
-
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "900 52px 'Plus Jakarta Sans', sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillText("KWITANSI", 1000, 325);
-      ctx.textAlign = "left";
-
-      ctx.fillStyle = "#f8fafc";
-      ctx.strokeStyle = "#94a3b8";
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.roundRect(1500, 280, 420, 70, 15);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.fillStyle = "#0f172a";
-      ctx.font = "bold 26px monospace";
-      ctx.fillText(`No. : ${data.no}`, 1520, 325);
-
-      let startY = 440;
-      const drawRow = (label, value) => {
-        ctx.fillStyle = "#334155";
-        ctx.font = "bold 28px 'Plus Jakarta Sans', sans-serif";
-        ctx.fillText(label, 120, startY);
-        ctx.fillText(":", 440, startY);
-
-        ctx.fillStyle = "#0f172a";
-        ctx.font = "900 28px 'Plus Jakarta Sans', sans-serif";
-        ctx.fillText(value, 470, startY);
-
-        ctx.strokeStyle = "#cbd5e1";
-        ctx.lineWidth = 2;
-        ctx.setLineDash([6, 6]);
-        ctx.beginPath();
-        ctx.moveTo(470, startY + 10);
-        ctx.lineTo(1880, startY + 10);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        startY += 80;
-      };
-
-      drawRow("Telah terima dari", data.telahTerimaDari);
-      drawRow("Uang sejumlah", data.uangSejumlah);
-      drawRow("Untuk pembayaran", data.untukPembayaran);
-
-      ctx.fillStyle = "#064e3b";
-      ctx.beginPath();
-      ctx.roundRect(120, 690, 220, 80, [15, 0, 0, 15]);
-      ctx.fill();
-
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "bold 32px 'Plus Jakarta Sans', sans-serif";
-      ctx.fillText("Jumlah", 160, 742);
-
-      ctx.fillStyle = "#ecfdf5";
-      ctx.strokeStyle = "#059669";
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.roundRect(340, 690, 700, 80, [0, 15, 15, 0]);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.fillStyle = "#065f46";
-      ctx.font = "900 36px 'Plus Jakarta Sans', sans-serif";
-      ctx.fillText(`Rp.  ${data.jumlahNominal}`, 380, 742);
-
-      ctx.fillStyle = "#047857";
-      ctx.font = "italic bold 22px 'Plus Jakarta Sans', sans-serif";
-      ctx.fillText("Bersama Pramuka SIT Membangun Generasi Berkarakter,", 120, 840);
-      ctx.fillText("Berilmu dan Berdaya Guna", 120, 870);
-
-      ctx.fillStyle = "#0f172a";
-      ctx.font = "bold 26px 'Plus Jakarta Sans', sans-serif";
-      ctx.fillText("Lampung, 19 Oktober 2026", 1480, 680);
-      ctx.fillText("Yang menerima,", 1520, 720);
-
-      ctx.fillStyle = "#0f172a";
-      ctx.font = "bold 26px 'Plus Jakarta Sans', sans-serif";
-      ctx.fillText("( Ramzil Huda, S.Pd.I. )", 1490, 860);
-      ctx.font = "22px 'Plus Jakarta Sans', sans-serif";
-      ctx.fillText("Sekretaris Pelaksana II", 1500, 895);
-    }
-
-    function closeModalKwitansi() {
-      document.getElementById('modalKwitansi').classList.add('hidden');
-    }
-
-    function downloadKwitansiFromCanvas(type = 'pdf') {
-      const canvas = document.getElementById('kwitansiCanvas');
-      if (!canvas || !currentKwitansiData) return;
-
-      const fileNameClean = (currentKwitansiData.nama || 'Kwitansi').trim().replace(/[^a-zA-Z0-9]/g, '_');
-
-      if (type === 'png') {
-        const link = document.createElement('a');
-        link.download = `Kwitansi_Kembaranas_${fileNameClean}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-      } else if (type === 'pdf') {
-        try {
-          const { jsPDF } = window.jspdf;
-          const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a5' });
-          const imgData = canvas.toDataURL('image/jpeg', 0.95);
-          doc.addImage(imgData, 'JPEG', 0, 0, 210, 148);
-          doc.save(`Kwitansi_Kembaranas_${fileNameClean}.pdf`);
-        } catch (err) {
-          alert("Gagal mengunduh PDF: " + err.message);
-        }
-      }
-    }
-
-    function printKwitansiCanvas() {
-      const canvas = document.getElementById('kwitansiCanvas');
-      if (!canvas) return;
-      const win = window.open('', '_blank');
-      win.document.write(`
-        <html>
-          <head>
-            <title>Cetak Kwitansi</title>
-            <style>
-              @page { size: A5 landscape; margin: 0; }
-              body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-              img { width: 100%; height: auto; max-height: 100vh; object-fit: contain; }
-            </style>
-          </head>
-          <body>
-            <img src="${canvas.toDataURL('image/png')}" onload="window.print(); window.close();" />
-          </body>
-        </html>
-      `);
-    }
-
-    function openModalKartu(id, nama, status, jk, sekolah, prov, kota, kaos, email = '-') {
-      const cleanId = formatID(id);
-      const wilayahText = `${prov || '-'} / ${kota || '-'}`;
-
-      document.getElementById('card1Id').innerText = cleanId;
-      document.getElementById('card1Nama').innerText = nama;
-      document.getElementById('card1Status').innerText = status;
-      document.getElementById('card1JK').innerText = jk || '-';
-      document.getElementById('card1Sekolah').innerText = sekolah;
-      document.getElementById('card1Wilayah').innerText = wilayahText;
-      document.getElementById('card1Kaos').innerText = kaos;
-      document.getElementById('card1Email').innerText = email;
-
-      document.getElementById('card2Id').innerText = cleanId;
-      document.getElementById('card2Nama').innerText = nama;
-      document.getElementById('card2Status').innerText = status;
-      document.getElementById('card2JK').innerText = jk || '-';
-      document.getElementById('card2Sekolah').innerText = sekolah;
-      document.getElementById('card2Wilayah').innerText = wilayahText;
-      document.getElementById('card2Kaos').innerText = kaos;
-      document.getElementById('card2Email').innerText = email;
-
-      document.getElementById('modalKartu').classList.remove('hidden');
-    }
-
-    function closeModalKartu() {
-      document.getElementById('modalKartu').classList.add('hidden');
-    }
-
-    function downloadKartuPDF() {
-      const btn = document.getElementById('btnDownloadPDF');
-      const originalText = btn.innerHTML;
-      btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Memuat PDF...`;
-
-      setTimeout(() => {
-        try {
-          const { jsPDF } = window.jspdf;
-          const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-
-          const nama = document.getElementById('card1Nama').innerText || '-';
-          const id = document.getElementById('card1Id').innerText || '-';
-          const status = document.getElementById('card1Status').innerText || '-';
-          const jk = document.getElementById('card1JK').innerText || '-';
-          const sekolah = document.getElementById('card1Sekolah').innerText || '-';
-          const wilayah = document.getElementById('card1Wilayah').innerText || '-';
-          const kaos = document.getElementById('card1Kaos').innerText || '-';
-          const email = document.getElementById('card1Email').innerText || '-';
-
-          const checklistItems = [
-            "1. Sewa Tapak Perkemahan",
-            "2. Tiket Masuk Buper Kwarda",
-            "3. Sewa Tenda Dome (3–4 Orang)",
-            "4. Scarf Kegiatan",
-            "5. ID Card Peserta & Bindamping",
-            "6. Kaos Kegiatan",
-            "7. Topi Kegiatan",
-            "8. Tas Daypack",
-            "9. Tiska Kembaranas III",
-            "10. Konsumsi selama Kegiatan",
-            "11. Paket Trip Pahawang",
-            "12. Sertifikat & Instruktur Muda"
-          ];
-
-          const drawCardPDF = (startY, badgeText, isPanitia = false) => {
-            doc.setDrawColor(isPanitia ? 51 : 120, isPanitia ? 65 : 53, isPanitia ? 85 : 15);
-            doc.setLineWidth(0.8);
-            doc.roundedRect(8, startY, 194, 137, 3, 3, 'S');
-
-            doc.setFillColor(isPanitia ? 15 : 44, isPanitia ? 23 : 28, isPanitia ? 42 : 15);
-            doc.rect(8, startY, 194, 17, 'F');
-
-            doc.setTextColor(255, 255, 255);
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(10);
-            doc.text(`PERKEMAHAN UKHUWAH KEMBARANAS III 2026`, 12, startY + 7.5);
-            
-            doc.setFontSize(7.5);
-            doc.setFont("helvetica", "normal");
-            doc.setTextColor(251, 191, 36);
-            doc.text(`SAKO SIT INDONESIA • SCOUT & SURVIVAL EXPEDITION`, 12, startY + 13);
-
-            doc.setFillColor(isPanitia ? 16 : 245, isPanitia ? 185 : 158, isPanitia ? 129 : 11);
-            doc.roundedRect(154, startY + 4, 44, 9, 2, 2, 'F');
-            doc.setTextColor(15, 23, 42);
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(8);
-            doc.text(badgeText, 176, startY + 10, { align: "center" });
-
-            doc.setDrawColor(16, 185, 129);
-            doc.setFillColor(236, 253, 245);
-            doc.setLineWidth(0.5);
-            doc.roundedRect(12, startY + 20, 186, 9, 2, 2, 'FD');
-
-            doc.setTextColor(6, 95, 70);
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(9);
-            doc.text("[ V ] STATUS: TERVERIFIKASI SISTEM", 105, startY + 26, { align: "center" });
-
-            doc.setFont("helvetica", "italic");
-            doc.setFontSize(7);
-            doc.setTextColor(100, 116, 139);
-            doc.text("Harap membawa dokumen cetak ini saat melakukan registrasi ulang di lokasi perkemahan.", 105, startY + 33, { align: "center" });
-
-            const items = [
-              ["ID Registrasi", id, "Status / Peran", status],
-              ["Nama Lengkap", nama, "Jenis Kelamin", jk],
-              ["Asal Pangkalan / Sekolah", sekolah, "Ukuran Kaos", kaos],
-              ["Prov / KabKota", wilayah, "Email Pendaftar", email]
-            ];
-
-            let rowY = startY + 37;
-            items.forEach(([l1, v1, l2, v2], idx) => {
-              if (idx % 2 === 0) {
-                doc.setFillColor(248, 250, 252);
-                doc.rect(12, rowY - 1, 186, 13, 'F');
-              }
-
-              doc.setFont("helvetica", "normal");
-              doc.setFontSize(7);
-              doc.setTextColor(100, 116, 139);
-              doc.text(l1, 15, rowY + 3);
-              doc.setFont("helvetica", "bold");
-              doc.setFontSize(8);
-              doc.setTextColor(15, 23, 42);
-              doc.text(String(v1), 15, rowY + 8);
-
-              doc.setFont("helvetica", "normal");
-              doc.setFontSize(7);
-              doc.setTextColor(100, 116, 139);
-              doc.text(l2, 110, rowY + 3);
-              doc.setFont("helvetica", "bold");
-              doc.setFontSize(8);
-              doc.setTextColor(15, 23, 42);
-              doc.text(String(v2), 110, rowY + 8);
-
-              rowY += 13.5;
-            });
-
-            doc.setFillColor(255, 255, 255);
-            doc.setDrawColor(203, 213, 225);
-            doc.setLineWidth(0.4);
-            doc.roundedRect(12, startY + 92, 186, 35, 2, 2, 'FD');
-
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(7.5);
-            doc.setTextColor(15, 23, 42);
-            doc.text("CHECKLIST VERIFIKASI LAPANGAN (DIISI PANITIA SAAT PENYERAHAN):", 15, startY + 97);
-
-            let colX = [15, 78, 140];
-            let checkY = startY + 102.5;
-            checklistItems.forEach((item, i) => {
-              const colIdx = i % 3;
-              const lineIdx = Math.floor(i / 3);
-              const currX = colX[colIdx];
-              const currY = checkY + (lineIdx * 6);
-
-              doc.setDrawColor(100, 116, 139);
-              doc.setFillColor(255, 255, 255);
-              doc.setLineWidth(0.4);
-              doc.roundedRect(currX, currY - 3, 3.5, 3.5, 0.5, 0.5, 'FD');
-
-              doc.setTextColor(30, 41, 59);
-              doc.setFont("helvetica", "normal");
-              doc.setFontSize(7);
-              doc.text(item, currX + 5, currY);
-            });
-
-            doc.setDrawColor(226, 232, 240);
-            doc.line(12, startY + 130, 198, startY + 130);
-            doc.setFont("helvetica", "italic");
-            doc.setFontSize(7);
-            doc.setTextColor(120, 53, 15);
-            doc.text("\"Satyaku Kudarmakan, Darmaku Kubaktikan\" • SAKO SIT INDONESIA 2026", 105, startY + 134, { align: "center" });
-          };
-
-          drawCardPDF(5, "LEMBAR PESERTA", false);
-
-          doc.setDrawColor(156, 163, 175);
-          doc.setLineDashPattern([2, 2], 0);
-          doc.line(8, 145.5, 202, 145.5);
-          doc.setFont("helvetica", "bold");
-          doc.setFontSize(7);
-          doc.setTextColor(107, 114, 128);
-          doc.text("- - - GUNTING DI SINI UNTUK ARSIP PANITIA - - -", 105, 144.5, { align: "center" });
-
-          doc.setLineDashPattern([], 0);
-          drawCardPDF(149, "ARSIP PANITIA", true);
-
-          const fileNameClean = nama.trim().replace(/[^a-zA-Z0-9]/g, '_');
-          doc.save(`Bukti_Pendaftaran_A4_${fileNameClean}_${id}.pdf`);
-        } catch (err) {
-          alert("Gagal membuat PDF: " + err.message);
-        } finally {
-          btn.disabled = false;
-          btn.innerHTML = originalText;
-        }
-      }, 100);
     }
 
     async function handleAdminLogin(e) {
       e.preventDefault();
       const u = document.getElementById('adminUser').value;
       const p = document.getElementById('adminPass').value;
-      const btn = document.getElementById('btnLogin');
-
-      btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Memeriksa...`;
-
-      try {
-        const response = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          body: JSON.stringify({ action: 'loginAdmin', username: u, password: p })
-        });
-        const res = await response.json();
-
-        if (res.success) {
-          document.getElementById('adminLoginForm').classList.add('hidden');
-          document.getElementById('adminDashboard').classList.remove('hidden');
-          loadAdminData();
-        } else {
-          alert(res.message);
-        }
-      } catch (err) {
-        alert("Terjadi kesalahan login: " + err.message);
-      } finally {
-        btn.disabled = false;
-        btn.innerText = "Masuk Dashboard";
-      }
+      const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'loginAdmin', username: u, password: p }) }).then(r => r.json());
+      if (res.success) {
+        document.getElementById('adminLoginForm').classList.add('hidden');
+        document.getElementById('adminDashboard').classList.remove('hidden');
+      } else alert(res.message);
     }
 
-    async function loadAdminData() {
-      try {
-        const response = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          body: JSON.stringify({ action: 'getAdminData' })
-        });
-        const res = await response.json();
+    async function handleSearch(e) {
+      e.preventDefault();
+      const kw = document.getElementById('searchKeyword').value;
+      const resBox = document.getElementById('pubResult');
+      resBox.innerHTML = '<p class="text-xs text-center">Mencari data...</p>';
+      resBox.classList.remove('hidden');
 
-        if (res.success) {
-          rawHeaders = res.headers;
-          rawAdminRows = res.rows;
-          filteredRows = [...rawAdminRows];
-
-          populateFilterOptions();
-          updateStats();
-          renderAdminAnalytics();
-          currentPage = 1;
-          renderTable();
-        }
-      } catch (err) {
-        alert("Gagal memuat data admin: " + err.message);
-      }
-    }
-
-    // FUNGSI OPSI 1: RINGKASAN & STATISTIK
-    function updateStats() {
-      document.getElementById('statTotal').innerText = rawAdminRows.length;
-
-      let countPeserta = 0;
-      let countPembina = 0;
-      let countLaki = 0;
-      let countPerempuan = 0;
-
-      rawAdminRows.forEach(row => {
-        const status = String(row[2] || '').toLowerCase();
-        const jk = String(row[9] || '').toLowerCase();
-
-        if (status.includes('pembina')) {
-          countPembina++;
-        } else {
-          countPeserta++;
-        }
-
-        if (jk.includes('laki')) countLaki++;
-        else if (jk.includes('perempuan')) countPerempuan++;
-      });
-
-      document.getElementById('statPeserta').innerText = countPeserta;
-      document.getElementById('statPembina').innerText = countPembina;
-
-      const total = rawAdminRows.length || 1;
-      const pctLaki = Math.round((countLaki / total) * 100);
-      const pctPerempuan = Math.round((countPerempuan / total) * 100);
-
-      document.getElementById('statLakiVal').innerText = `${countLaki} (${pctLaki}%)`;
-      document.getElementById('barLaki').style.width = `${pctLaki}%`;
-
-      document.getElementById('statPerempuanVal').innerText = `${countPerempuan} (${pctPerempuan}%)`;
-      document.getElementById('barPerempuan').style.width = `${pctPerempuan}%`;
-    }
-
-    // FUNGSI OPSI 3: ANALISIS & LOGISTIK
-    function renderAdminAnalytics() {
-      const mapKaos = {};
-      const mapProv = {};
-
-      rawAdminRows.forEach(row => {
-        const kaos = (row[13] || 'Belum Diisi').trim().toUpperCase();
-        const prov = (row[11] || 'Lainnya').trim();
-
-        if (kaos) mapKaos[kaos] = (mapKaos[kaos] || 0) + 1;
-        if (prov) mapProv[prov] = (mapProv[prov] || 0) + 1;
-      });
-
-      const total = rawAdminRows.length || 1;
-
-      const quickKaosBox = document.getElementById('summaryKaosQuick');
-      if (quickKaosBox) {
-        quickKaosBox.innerHTML = Object.entries(mapKaos).slice(0, 4).map(([k, count]) => `
-          <div class="bg-amber-50 p-2 rounded-xl border border-amber-200">
-            <span class="block font-black text-amber-950 text-sm">${k}</span>
-            <span class="text-[10px] text-gray-500 font-bold">${count} pcs</span>
+      const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'search', keyword: kw }) }).then(r => r.json());
+      if (res.success && res.data.length > 0) {
+        resBox.innerHTML = res.data.map(i => `
+          <div class="bg-white p-4 rounded-2xl border shadow-sm text-xs space-y-1">
+            <div class="font-black text-amber-950">${i.nama} (${i.id})</div>
+            <div>Status Kedatangan: <span class="font-bold text-emerald-700">${i.statusKedatangan}</span></div>
+            <div>Tapak Kemah: <span class="font-bold text-blue-900">${i.tapakKemah}</span></div>
+            <div>Kit Logistik: <span class="font-bold">${i.kitLogistik}</span></div>
           </div>
         `).join('');
-      }
-
-      const rekapKaosBody = document.getElementById('rekapKaosBody');
-      if (rekapKaosBody) {
-        rekapKaosBody.innerHTML = Object.entries(mapKaos).map(([k, count]) => {
-          const pct = Math.round((count / total) * 100);
-          return `
-            <tr class="hover:bg-slate-50">
-              <td class="p-2.5 font-bold text-amber-950">${k}</td>
-              <td class="p-2.5 text-center font-extrabold text-slate-800">${count} pcs</td>
-              <td class="p-2.5 text-right font-bold text-emerald-700">${pct}%</td>
-            </tr>
-          `;
-        }).join('');
-      }
-
-      const rekapProvBody = document.getElementById('rekapProvinsiBody');
-      if (rekapProvBody) {
-        rekapProvBody.innerHTML = Object.entries(mapProv).sort((a,b) => b[1] - a[1]).map(([p, count]) => `
-          <tr class="hover:bg-slate-50">
-            <td class="p-2.5 font-semibold text-slate-800">${p}</td>
-            <td class="p-2.5 text-center font-extrabold text-amber-950">${count} Orang</td>
-          </tr>
-        `).join('');
-      }
+      } else resBox.innerHTML = '<p class="text-xs text-center text-red-600">Data tidak ditemukan.</p>';
     }
 
-    // FUNGSI OPSI 2: KELOLA DATA PENDAFTAR (FILTER, PAGINASI, AKSI)
-    function populateFilterOptions() {
-      const setProv = new Set();
-      const setKota = new Set();
-      const setKaos = new Set();
-
-      rawAdminRows.forEach(row => {
-        if (row[11]) setProv.add(row[11]);
-        if (row[12]) setKota.add(row[12]);
-        if (row[13]) setKaos.add(row[13]);
-      });
-
-      fillSelect('filterProvinsi', Array.from(setProv).sort());
-      fillSelect('filterKota', Array.from(setKota).sort());
-      fillSelect('filterKaos', Array.from(setKaos).sort());
-    }
-
-    function fillSelect(id, items) {
-      const select = document.getElementById(id);
-      const defaultText = select.options[0].text;
-      select.innerHTML = `<option value="">${defaultText}</option>`;
-      items.forEach(item => {
-        if (item && item !== '-') select.innerHTML += `<option value="${item}">${item}</option>`;
-      });
-    }
-
-    function applyFilters() {
-      const prov = document.getElementById('filterProvinsi').value;
-      const kota = document.getElementById('filterKota').value;
-      const jk = document.getElementById('filterJK').value;
-      const kaos = document.getElementById('filterKaos').value;
-      
-      const searchInput = document.getElementById('adminSearchInput');
-      const searchKw = searchInput ? searchInput.value.toLowerCase().trim() : '';
-
-      filteredRows = rawAdminRows.filter(row => {
-        const matchProv = !prov || String(row[11]) === prov;
-        const matchKota = !kota || String(row[12]) === kota;
-        const matchJK = !jk || String(row[9]).toLowerCase() === jk.toLowerCase();
-        const matchKaos = !kaos || String(row[13]) === kaos;
-
-        let matchSearch = true;
-        if (searchKw) {
-          matchSearch = row.some(cell => String(cell || '').toLowerCase().includes(searchKw));
-        }
-
-        return matchProv && matchKota && matchJK && matchKaos && matchSearch;
-      });
-
-      currentPage = 1;
-      renderTable();
-    }
-
-    function changePageSize() {
-      const select = document.getElementById('pageSizeSelect');
-      pageSize = parseInt(select.value) || 10;
-      currentPage = 1;
-      renderTable();
-    }
-
-    function goToPage(page) {
-      const totalPages = Math.ceil(filteredRows.length / pageSize) || 1;
-      if (page < 1) page = 1;
-      if (page > totalPages) page = totalPages;
-      currentPage = page;
-      renderTable();
-    }
-
-    function renderTable() {
-      const thead = document.getElementById('tableHeader');
-      thead.innerHTML = '<tr>' + rawHeaders.map(h => `<th class="px-4 py-3">${h}</th>`).join('') + '<th class="px-4 py-3 text-center">Aksi</th></tr>';
-
-      const tbody = document.getElementById('tableBody');
-      const totalRows = filteredRows.length;
-
-      if (totalRows === 0) {
-        tbody.innerHTML = `<tr><td colspan="${rawHeaders.length + 1}" class="text-center py-6 text-gray-400">Tidak ada data yang cocok dengan filter atau pencarian.</td></tr>`;
-        updatePaginationControls(0, 0, 0, 1, 1);
-        return;
-      }
-
-      const totalPages = Math.ceil(totalRows / pageSize) || 1;
-      if (currentPage > totalPages) currentPage = totalPages;
-
-      const startIndex = (currentPage - 1) * pageSize;
-      const endIndex = Math.min(startIndex + pageSize, totalRows);
-      const pageRows = filteredRows.slice(startIndex, endIndex);
-
-      tbody.innerHTML = pageRows.map((row, idx) => {
-        const actualIdx = startIndex + idx;
-        const id = row[0] || '';
-        const namaVal = row[3] || row[7] || '-';
-        const safeNama = String(namaVal).replace(/'/g, "\\'").replace(/"/g, '&quot;');
-
-        return `<tr class="hover:bg-amber-50/50 transition-colors">` + 
-          row.map((cell, cIdx) => `<td class="px-4 py-3 border-b border-gray-100">${cIdx === 0 ? formatID(cell) : (String(cell).startsWith('http') ? `<button onclick="openUrlSafely('${cell}')" class="text-blue-600 font-bold underline">Buka Link</button>` : cell)}</td>`).join('') + 
-          `<td class="px-4 py-3 border-b border-gray-100 text-center">
-            <div class="flex justify-center items-center gap-1.5">
-              <button onclick="editDataByRow(${actualIdx})" class="bg-amber-100 hover:bg-amber-200 text-amber-900 px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all" title="Edit Data">
-                <i class="fa-solid fa-pen-to-square"></i> Edit
-              </button>
-              <button onclick="handleDeleteData('${id}', '${safeNama}')" class="bg-red-100 hover:bg-red-200 text-red-700 px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all" title="Hapus Data">
-                <i class="fa-solid fa-trash-can"></i> Hapus
-              </button>
-            </div>
-          </td>
-        </tr>`;
-      }).join('');
-
-      updatePaginationControls(startIndex + 1, endIndex, totalRows, currentPage, totalPages);
-    }
-
-    function updatePaginationControls(start, end, total, page, totalPages) {
-      const infoEl = document.getElementById('paginationInfo');
-      if (infoEl) {
-        if (total === 0) {
-          infoEl.innerText = 'Menampilkan 0 data';
-        } else {
-          infoEl.innerText = `Menampilkan ${start} - ${end} dari ${total} data`;
-        }
-      }
-
-      const btnContainer = document.getElementById('paginationButtons');
-      if (!btnContainer) return;
-
-      if (total === 0) {
-        btnContainer.innerHTML = '';
-        return;
-      }
-
-      let btnHtml = '';
-
-      const prevDisabled = page <= 1;
-      btnHtml += `<button onclick="goToPage(${page - 1})" ${prevDisabled ? 'disabled' : ''} class="px-2.5 py-1.5 rounded-lg border text-xs font-bold transition-all ${prevDisabled ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed' : 'bg-white text-amber-950 border-gray-300 hover:bg-amber-50 shadow-xs'}" title="Halaman Sebelumnya">
-        <i class="fa-solid fa-chevron-left"></i>
-      </button>`;
-
-      let pagesToShow = [];
-      if (totalPages <= 5) {
-        for (let i = 1; i <= totalPages; i++) pagesToShow.push(i);
-      } else {
-        if (page <= 3) {
-          pagesToShow = [1, 2, 3, 4, '...', totalPages];
-        } else if (page >= totalPages - 2) {
-          pagesToShow = [1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
-        } else {
-          pagesToShow = [1, '...', page - 1, page, page + 1, '...', totalPages];
-        }
-      }
-
-      pagesToShow.forEach(p => {
-        if (p === '...') {
-          btnHtml += `<span class="px-1.5 py-1 text-gray-400 text-xs">...</span>`;
-        } else {
-          const isCurrent = p === page;
-          btnHtml += `<button onclick="goToPage(${p})" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${isCurrent ? 'bg-amber-900 text-white shadow-xs' : 'bg-white text-gray-700 border border-gray-300 hover:bg-amber-50 shadow-xs'}">${p}</button>`;
-        }
-      });
-
-      const nextDisabled = page >= totalPages;
-      btnHtml += `<button onclick="goToPage(${page + 1})" ${nextDisabled ? 'disabled' : ''} class="px-2.5 py-1.5 rounded-lg border text-xs font-bold transition-all ${nextDisabled ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed' : 'bg-white text-amber-950 border-gray-300 hover:bg-amber-50 shadow-xs'}" title="Halaman Selanjutnya">
-        <i class="fa-solid fa-chevron-right"></i>
-      </button>`;
-
-      btnContainer.innerHTML = btnHtml;
-    }
-
-    function openModalForm(row = null) {
-      const isEdit = row !== null;
-      document.getElementById('modalFormTitle').innerText = isEdit ? 'Edit Data Pendaftar' : 'Tambah Data Manual';
-      document.getElementById('formIsEdit').value = isEdit ? "true" : "false";
-      document.getElementById('formId').value = isEdit ? (row[0] || '') : '';
-      
-      document.getElementById('formStatus').value = isEdit ? (row[2] || 'Peserta Penegak') : 'Peserta Penegak';
-      document.getElementById('formNama').value = isEdit ? (row[3] || row[7] || '') : '';
-      document.getElementById('formJK').value = isEdit ? (row[9] || 'Laki-laki') : 'Laki-laki';
-      document.getElementById('formSekolah').value = isEdit ? (row[10] || '') : '';
-      document.getElementById('formProv').value = isEdit ? (row[11] || '') : '';
-      document.getElementById('formKota').value = isEdit ? (row[12] || '') : '';
-      document.getElementById('formKaos').value = isEdit ? (row[13] || '') : '';
-
-      document.getElementById('formBuktiTransfer').value = '';
-
-      const containerBukti = document.getElementById('containerBuktiLama');
-      const linkBukti = document.getElementById('linkBuktiLama');
-
-      if (isEdit && row[14] && String(row[14]).startsWith('http')) {
-        linkBukti.href = row[14];
-        containerBukti.classList.remove('hidden');
-      } else {
-        linkBukti.href = '#';
-        containerBukti.classList.add('hidden');
-      }
-
-      document.getElementById('modalFormAdmin').classList.remove('hidden');
-    }
-
-    function closeModalForm() {
-      document.getElementById('modalFormAdmin').classList.add('hidden');
-    }
-
-    function editDataByRow(idx) {
-      const selectedRow = filteredRows[idx];
-      openModalForm(selectedRow);
-    }
-
-    async function handleSaveData(e) {
-      e.preventDefault();
-      const btn = document.getElementById('btnSaveData');
-      btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...`;
-
-      const isEdit = document.getElementById('formIsEdit').value === "true";
-      const id = document.getElementById('formId').value;
-      const fileInput = document.getElementById('formBuktiTransfer');
-
-      let fileData = null;
-      if (fileInput.files && fileInput.files[0]) {
-        try {
-          fileData = await readFileAsBase64(fileInput.files[0]);
-        } catch (err) {
-          alert("Gagal membaca berkas: " + err.message);
-          btn.disabled = false;
-          btn.innerText = "Simpan Data";
-          return;
-        }
-      }
-
-      const linkBuktiLama = document.getElementById('linkBuktiLama').href;
-
-      const payload = {
-        action: isEdit ? 'editData' : 'addData',
-        id: id,
-        status: document.getElementById('formStatus').value,
-        nama: document.getElementById('formNama').value,
-        jk: document.getElementById('formJK').value,
-        sekolah: document.getElementById('formSekolah').value,
-        prov: document.getElementById('formProv').value,
-        kota: document.getElementById('formKota').value,
-        kaos: document.getElementById('formKaos').value,
-        fileData: fileData,
-        linkBukti: (isEdit && !fileData && linkBuktiLama !== '#') ? linkBuktiLama : ''
-      };
-
-      try {
-        const response = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          body: JSON.stringify(payload)
-        });
-        const res = await response.json();
-
-        if (res.success) {
-          alert(isEdit ? "Data berhasil diperbarui!" : "Data berhasil ditambahkan!");
-          closeModalForm();
-          loadAdminData();
-        } else {
-          alert("Gagal menyimpan: " + res.message);
-        }
-      } catch (err) {
-        alert("Kesalahan koneksi: " + err.message);
-      } finally {
-        btn.disabled = false;
-        btn.innerText = "Simpan Data";
-      }
-    }
-
-    async function handleDeleteData(id, nama) {
-      if (!confirm(`Apakah Anda yakin ingin menghapus data pendaftaran "${nama}"?`)) return;
-
-      try {
-        const response = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          body: JSON.stringify({ action: 'deleteData', id: id, nama: nama })
-        });
-        const res = await response.json();
-
-        if (res.success) {
-          alert("Data berhasil dihapus.");
-          loadAdminData();
-        } else {
-          alert("Gagal menghapus data: " + res.message);
-        }
-      } catch (err) {
-        alert("Kesalahan koneksi: " + err.message);
-      }
-    }
-
-    // FUNGSI OPSI 4: EKSPOR BERKAS EXCEL & PDF
-    function exportToExcel() {
-      if (filteredRows.length === 0) return alert("Tidak ada data untuk diunduh.");
-      const exportData = [rawHeaders, ...filteredRows];
-      const worksheet = XLSX.utils.aoa_to_sheet(exportData);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Rekap Pendaftaran");
-      XLSX.writeFile(workbook, "Rekap_Filtered_KEMBARANAS_III.xlsx");
-    }
-
-    function exportToPDF() {
-      if (filteredRows.length === 0) return alert("Tidak ada data untuk diunduh.");
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({ orientation: 'landscape' });
-      doc.text("Rekap Data Pendaftaran KEMBARANAS III - 2026", 14, 12);
-      doc.autoTable({
-        head: [rawHeaders],
-        body: filteredRows,
-        startY: 18,
-        styles: { fontSize: 7, cellPadding: 2 },
-        headStyles: { fillColor: [120, 53, 15] }
-      });
-      doc.save("Rekap_Filtered_KEMBARANAS_III.pdf");
-    }
-
-    function logoutAdmin() {
-      document.getElementById('adminDashboard').classList.add('hidden');
-      document.getElementById('adminLoginForm').classList.remove('hidden');
-      document.getElementById('adminUser').value = '';
-      document.getElementById('adminPass').value = '';
-    }
+    loadBroadcasts();
   </script>
 </body>
 </html>
