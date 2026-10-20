@@ -364,4 +364,370 @@
     loadBroadcasts();
   </script>
 </body>
+</html><!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Operasional Lapangan - KEMBARANAS III 2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen">
+
+  <header class="bg-amber-950 text-white shadow-lg sticky top-0 z-40 border-b-2 border-amber-500">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-300 text-xl">
+          <i class="fa-solid fa-compass"></i>
+        </div>
+        <div>
+          <h1 class="font-black text-base text-amber-100">KEMBARANAS III 2026</h1>
+          <p class="text-[11px] text-amber-300/80">Sistem Operasional & Manajemen Lapangan</p>
+        </div>
+      </div>
+
+      <div class="flex items-center bg-amber-900/80 p-1 rounded-2xl border border-amber-700/50">
+        <button onclick="switchTab('userTab')" id="btnUserTab" class="px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 text-amber-950">Peserta / Publik</button>
+        <button onclick="switchTab('adminTab')" id="btnAdminTab" class="px-4 py-2 rounded-xl text-xs font-bold text-amber-200">Posko Admin</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto p-4 sm:p-6 space-y-6">
+
+    <!-- PUBLIK TAB -->
+    <section id="userTab" class="space-y-6">
+      <div class="bg-white p-6 rounded-3xl shadow-md border border-amber-200 text-center max-w-xl mx-auto space-y-4">
+        <h2 class="text-lg font-bold text-amber-950">Pencarian Status Peserta & Plotting Tenda</h2>
+        <form onsubmit="handleSearch(event)" class="flex gap-2">
+          <input type="text" id="searchKeyword" required placeholder="Masukkan ID Registrasi atau Nama Peserta..." class="flex-1 p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs">
+          <button type="submit" class="bg-amber-900 text-white px-5 py-3 rounded-xl font-bold text-xs">Cari</button>
+        </form>
+      </div>
+
+      <div id="pubResult" class="hidden max-w-xl mx-auto space-y-4"></div>
+
+      <!-- BOARD BROADCAST LAPANGAN -->
+      <div class="bg-white p-6 rounded-3xl shadow-md border border-slate-200 space-y-4">
+        <h3 class="font-extrabold text-amber-950 text-sm flex items-center gap-2 border-b pb-2">
+          <i class="fa-solid fa-bullhorn text-amber-600"></i> Pengumuman & Broadcast Lapangan
+        </h3>
+        <div id="broadcastContainer" class="space-y-2 text-xs">
+          <p class="text-slate-400">Memuat pengumuman terbaru...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADMIN TAB WITH OPS 1 - 4 -->
+    <section id="adminTab" class="hidden space-y-6">
+      <div id="adminLoginForm" class="max-w-md mx-auto bg-white p-6 rounded-3xl shadow-xl border border-amber-200">
+        <h3 class="text-lg font-bold text-amber-950 mb-4 text-center">Login Posko Operasional</h3>
+        <form onsubmit="handleAdminLogin(event)" class="space-y-3 text-xs">
+          <input type="text" id="adminUser" required placeholder="Username" class="w-full p-3 border rounded-xl bg-slate-50">
+          <input type="password" id="adminPass" required placeholder="Password" class="w-full p-3 border rounded-xl bg-slate-50">
+          <button type="submit" class="w-full bg-amber-900 text-white font-bold py-3 rounded-xl">Masuk Posko</button>
+        </form>
+      </div>
+
+      <div id="adminDashboard" class="hidden flex flex-col lg:flex-row gap-6">
+        
+        <!-- SIDEBAR OPSI 1 - 4 -->
+        <aside class="w-full lg:w-64 bg-white p-4 rounded-3xl border border-amber-200 shadow-md space-y-2">
+          <h4 class="font-extrabold text-amber-950 text-xs uppercase px-2 mb-2">Fitur Operasional</h4>
+          <button onclick="switchAdminPanel('panelOps1')" id="btnPanelOps1" class="w-full p-3 rounded-xl text-left text-xs font-bold bg-amber-900 text-white flex items-center gap-2">
+            <i class="fa-solid fa-qrcode"></i> Opsi 1: Scan QR & Presensi
+          </button>
+          <button onclick="switchAdminPanel('panelOps2')" id="btnPanelOps2" class="w-full p-3 rounded-xl text-left text-xs font-bold text-slate-700 hover:bg-amber-50 flex items-center gap-2">
+            <i class="fa-solid fa-campground"></i> Opsi 2: Tapak & Logistik
+          </button>
+          <button onclick="switchAdminPanel('panelOps3')" id="btnPanelOps3" class="w-full p-3 rounded-xl text-left text-xs font-bold text-slate-700 hover:bg-amber-50 flex items-center gap-2">
+            <i class="fa-solid fa-wallet"></i> Opsi 3: Keuangan & WA
+          </button>
+          <button onclick="switchAdminPanel('panelOps4')" id="btnPanelOps4" class="w-full p-3 rounded-xl text-left text-xs font-bold text-slate-700 hover:bg-amber-50 flex items-center gap-2">
+            <i class="fa-solid fa-certificate"></i> Opsi 4: E-Sertifikat & Siaran
+          </button>
+        </aside>
+
+        <div class="flex-1 w-full">
+          
+          <!-- OPSI 1: SCAN QR & PRESENSI LAPANGAN -->
+          <div id="panelOps1" class="bg-white p-6 rounded-3xl border border-amber-200 shadow-md space-y-4">
+            <h3 class="font-bold text-amber-950 border-b pb-2">Opsi 1: Verifikasi Lapangan & Presensi QR Code</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-3">
+                <p class="text-xs font-bold text-slate-600">Arahkan Kamera ke QR Code Kartu Pendaftaran:</p>
+                <div id="reader" class="w-full bg-slate-100 rounded-2xl overflow-hidden border"></div>
+              </div>
+              <div class="space-y-3">
+                <p class="text-xs font-bold text-slate-600">Atau Presensi Manual dengan ID Registrasi:</p>
+                <input type="text" id="manualCheckInId" placeholder="Contoh: REG-2026-001" class="w-full p-3 border rounded-xl text-xs bg-slate-50">
+                <button onclick="executeCheckIn()" class="w-full bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs">Proses Verifikasi Kedatangan</button>
+                <div id="checkInStatusBox" class="p-4 rounded-xl text-xs hidden"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- OPSI 2: PLOTTING TAPAK KEMAH & CONTROL LOGISTIK KIT -->
+          <div id="panelOps2" class="hidden bg-white p-6 rounded-3xl border border-amber-200 shadow-md space-y-4">
+            <h3 class="font-bold text-amber-950 border-b pb-2">Opsi 2: Plotting Tapak Kemah & Kontrol Kit Logistik</h3>
+            <div class="space-y-3 text-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="font-bold">ID Registrasi / Nama</label>
+                  <input type="text" id="logistikTargetId" placeholder="REG-2026-001" class="w-full p-2.5 border rounded-xl bg-slate-50">
+                </div>
+                <div>
+                  <label class="font-bold">Nomor Kavling / Tapak Kemah</label>
+                  <input type="text" id="logistikKavling" placeholder="Contoh: Blok A - Tenda 04" class="w-full p-2.5 border rounded-xl bg-slate-50">
+                </div>
+              </div>
+              <div>
+                <label class="font-bold block mb-1">Checklist Kit Logistik Terbagi:</label>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  <label class="flex items-center gap-1.5"><input type="checkbox" class="kitCheck" value="Kaos"> Kaos</label>
+                  <label class="flex items-center gap-1.5"><input type="checkbox" class="kitCheck" value="Scarf"> Scarf</label>
+                  <label class="flex items-center gap-1.5"><input type="checkbox" class="kitCheck" value="ID Card"> ID Card</label>
+                  <label class="flex items-center gap-1.5"><input type="checkbox" class="kitCheck" value="Topi"> Topi</label>
+                  <label class="flex items-center gap-1.5"><input type="checkbox" class="kitCheck" value="Daypack"> Daypack</label>
+                  <label class="flex items-center gap-1.5"><input type="checkbox" class="kitCheck" value="Tiska"> Tiska</label>
+                </div>
+              </div>
+              <button onclick="saveLogistikPlot()" class="bg-amber-900 text-white font-bold py-2.5 px-5 rounded-xl">Simpan Plotting & Logistik</button>
+            </div>
+          </div>
+
+          <!-- OPSI 3: KEUANGAN, TRACKING PEMBAYARAN, & WA GATEWAY -->
+          <div id="panelOps3" class="hidden bg-white p-6 rounded-3xl border border-amber-200 shadow-md space-y-4">
+            <h3 class="font-bold text-amber-950 border-b pb-2">Opsi 3: Keuangan & WhatsApp Gateway</h3>
+            <div class="space-y-3 text-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label class="font-bold">ID Registrasi Target</label>
+                  <input type="text" id="payTargetId" placeholder="REG-2026-001" class="w-full p-2.5 border rounded-xl bg-slate-50">
+                </div>
+                <div>
+                  <label class="font-bold">Status Keuangan</label>
+                  <select id="payStatus" class="w-full p-2.5 border rounded-xl bg-slate-50 font-bold">
+                    <option value="LUNAS">LUNAS</option>
+                    <option value="DP (Belum Lunas)">DP (Belum Lunas)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="font-bold">Sisa Tagihan (Rp)</label>
+                  <input type="number" id="paySisa" value="0" class="w-full p-2.5 border rounded-xl bg-slate-50">
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <button onclick="savePaymentStatus()" class="bg-emerald-800 text-white font-bold py-2.5 px-4 rounded-xl">Update Status Bayar</button>
+                <button onclick="sendWaNotification()" class="bg-green-600 text-white font-bold py-2.5 px-4 rounded-xl flex items-center gap-1.5">
+                  <i class="fa-brands fa-whatsapp text-sm"></i> Kirim Notifikasi WA
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- OPSI 4: E-SERTIFIKAT DIGITAL, RUNDOWN, & BROADCAST -->
+          <div id="panelOps4" class="hidden bg-white p-6 rounded-3xl border border-amber-200 shadow-md space-y-6">
+            <h3 class="font-bold text-amber-950 border-b pb-2">Opsi 4: E-Sertifikat Digital & Broadcast Lapangan</h3>
+            
+            <div class="space-y-3 text-xs border-b pb-4">
+              <h4 class="font-bold text-amber-900">1. Generator E-Sertifikat Instruktur / Peserta</h4>
+              <div class="flex gap-2">
+                <input type="text" id="certNama" placeholder="Nama Lengkap Peserta / Pembina" class="flex-1 p-2.5 border rounded-xl bg-slate-50">
+                <button onclick="generatePDFCert()" class="bg-amber-900 text-white font-bold px-4 py-2.5 rounded-xl">Unduh E-Sertifikat PDF</button>
+              </div>
+            </div>
+
+            <div class="space-y-3 text-xs">
+              <h4 class="font-bold text-amber-900">2. Siarkan Pengumuman Lapangan Baru</h4>
+              <input type="text" id="bcJudul" placeholder="Judul Pengumuman" class="w-full p-2.5 border rounded-xl bg-slate-50 font-bold">
+              <textarea id="bcPesan" rows="3" placeholder="Isi pesan pengumuman untuk seluruh kontingen..." class="w-full p-2.5 border rounded-xl bg-slate-50"></textarea>
+              <button onclick="publishBroadcast()" class="bg-red-700 text-white font-bold py-2.5 px-5 rounded-xl">Siarkan Sekarang</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyWIuL5JEK7c1kQ4_DoGFew5p_tOgK_X27gFTiKkMddXxu_Vv2UZxh0dTujhqnX0WaS/exec";
+
+    function switchTab(tab) {
+      document.getElementById('userTab').classList.toggle('hidden', tab !== 'userTab');
+      document.getElementById('adminTab').classList.toggle('hidden', tab !== 'adminTab');
+      if (tab === 'userTab') loadBroadcasts();
+    }
+
+    function switchAdminPanel(panelId) {
+      ['panelOps1', 'panelOps2', 'panelOps3', 'panelOps4'].forEach(p => document.getElementById(p).classList.add('hidden'));
+      document.getElementById(panelId).classList.remove('hidden');
+      if (panelId === 'panelOps1') initQRScanner();
+    }
+
+    // OPSI 1: SCAN QR CODE
+    let html5QrcodeScanner = null;
+    function initQRScanner() {
+      if (html5QrcodeScanner) return;
+      html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: { width: 200, height: 200 } });
+      html5QrcodeScanner.render((decodedText) => {
+        document.getElementById('manualCheckInId').value = decodedText;
+        executeCheckIn();
+      });
+    }
+
+    async function executeCheckIn() {
+      const id = document.getElementById('manualCheckInId').value;
+      const box = document.getElementById('checkInStatusBox');
+      if (!id) return alert("Masukkan ID Registrasi!");
+
+      box.className = "p-4 rounded-xl text-xs bg-amber-50 text-amber-900 border border-amber-200 font-bold block";
+      box.innerText = "Memproses presensi...";
+
+      const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'checkIn', id: id }) }).then(r => r.json());
+      if (res.success) {
+        box.className = "p-4 rounded-xl text-xs bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold block";
+        box.innerText = `[SUCCESS] ${res.message} Waktu: ${res.timestamp}`;
+      } else {
+        box.className = "p-4 rounded-xl text-xs bg-red-100 text-red-900 border border-red-300 font-bold block";
+        box.innerText = `[FAILED] ${res.message}`;
+      }
+    }
+
+    // OPSI 2: LOGISTIK
+    async function saveLogistikPlot() {
+      const id = document.getElementById('logistikTargetId').value;
+      const kavling = document.getElementById('logistikKavling').value;
+      const checkedKits = Array.from(document.querySelectorAll('.kitCheck:checked')).map(c => c.value).join(', ');
+
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'updateLogistik', id: id, tapakKemah: kavling, kitLogistik: checkedKits || 'Lengkap' })
+      }).then(r => r.json());
+      alert(res.message);
+    }
+
+    // OPSI 3: KEUANGAN & WA
+    async function savePaymentStatus() {
+      const id = document.getElementById('payTargetId').value;
+      const st = document.getElementById('payStatus').value;
+      const sisa = document.getElementById('paySisa').value;
+
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'updateKeuangan', id: id, statusKeuangan: st, sisaBayar: sisa })
+      }).then(r => r.json());
+      alert(res.message);
+    }
+
+    function sendWaNotification() {
+      const id = document.getElementById('payTargetId').value;
+      const st = document.getElementById('payStatus').value;
+      const sisa = document.getElementById('paySisa').value;
+      const msg = `Halo Peserta KEMBARANAS III (${id}), status pembayaran Anda saat ini: ${st}. Sisa tagihan: Rp ${sisa}. Terima kasih!`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    // OPSI 4: E-SERTIFIKAT & BROADCAST
+    function generatePDFCert() {
+      const nama = document.getElementById('certNama').value || 'Peserta Kembaranas';
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+
+      doc.setLineWidth(3);
+      doc.setDrawColor(120, 53, 15);
+      doc.rect(5, 5, 287, 200);
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(26);
+      doc.setTextColor(120, 53, 15);
+      doc.text("E-SERTIFIKAT PENGHARGAAN", 148, 40, { align: "center" });
+
+      doc.setFontSize(14);
+      doc.setTextColor(51, 65, 85);
+      doc.text("Diberikan kepada:", 148, 60, { align: "center" });
+
+      doc.setFontSize(22);
+      doc.setTextColor(15, 23, 42);
+      doc.text(nama.toUpperCase(), 148, 80, { align: "center" });
+
+      doc.setFontSize(12);
+      doc.text("Atas partisipasi aktif dalam Perkemahan Ukhuwah KEMBARANAS III 2026 di Lampung.", 148, 100, { align: "center" });
+
+      doc.save(`E-Sertifikat_${nama}.pdf`);
+    }
+
+    async function publishBroadcast() {
+      const judul = document.getElementById('bcJudul').value;
+      const pesan = document.getElementById('bcPesan').value;
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'saveBroadcast', judul: judul, pesan: pesan, kategori: 'PENTING' })
+      }).then(r => r.json());
+      alert(res.message);
+      loadBroadcasts();
+    }
+
+    async function loadBroadcasts() {
+      const container = document.getElementById('broadcastContainer');
+      try {
+        const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getBroadcast' }) }).then(r => r.json());
+        if (res.success && res.data.length > 0) {
+          container.innerHTML = res.data.map(b => `
+            <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
+              <span class="font-bold text-amber-950 block">${b.judul}</span>
+              <p class="text-slate-700">${b.pesan}</p>
+            </div>
+          `).join('');
+        } else {
+          container.innerHTML = `<p class="text-slate-400">Belum ada pengumuman disiarkan.</p>`;
+        }
+      } catch (e) {
+        container.innerHTML = `<p class="text-slate-400">Gagal memuat pengumuman.</p>`;
+      }
+    }
+
+    async function handleAdminLogin(e) {
+      e.preventDefault();
+      const u = document.getElementById('adminUser').value;
+      const p = document.getElementById('adminPass').value;
+      const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'loginAdmin', username: u, password: p }) }).then(r => r.json());
+      if (res.success) {
+        document.getElementById('adminLoginForm').classList.add('hidden');
+        document.getElementById('adminDashboard').classList.remove('hidden');
+      } else alert(res.message);
+    }
+
+    async function handleSearch(e) {
+      e.preventDefault();
+      const kw = document.getElementById('searchKeyword').value;
+      const resBox = document.getElementById('pubResult');
+      resBox.innerHTML = '<p class="text-xs text-center">Mencari data...</p>';
+      resBox.classList.remove('hidden');
+
+      const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'search', keyword: kw }) }).then(r => r.json());
+      if (res.success && res.data.length > 0) {
+        resBox.innerHTML = res.data.map(i => `
+          <div class="bg-white p-4 rounded-2xl border shadow-sm text-xs space-y-1">
+            <div class="font-black text-amber-950">${i.nama} (${i.id})</div>
+            <div>Status Kedatangan: <span class="font-bold text-emerald-700">${i.statusKedatangan}</span></div>
+            <div>Tapak Kemah: <span class="font-bold text-blue-900">${i.tapakKemah}</span></div>
+            <div>Kit Logistik: <span class="font-bold">${i.kitLogistik}</span></div>
+          </div>
+        `).join('');
+      } else resBox.innerHTML = '<p class="text-xs text-center text-red-600">Data tidak ditemukan.</p>';
+    }
+
+    loadBroadcasts();
+  </script>
+</body>
 </html>
